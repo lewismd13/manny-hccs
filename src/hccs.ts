@@ -1783,6 +1783,8 @@ if (!testDone(TEST_ITEM)) {
     } else throw "Something went wrong getting pirate DNA.";
   }
 
+  useDefaultFamiliar();
+
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (getPropertyInt("_reflexHammerUsed") >= 3) error("Out of reflex hammers!");
     equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);

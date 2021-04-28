@@ -77,6 +77,7 @@ import {
   use,
   useFamiliar,
   useSkill,
+  visit,
   visitUrl,
   wait,
 } from "kolmafia";
@@ -1386,11 +1387,48 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Empathy`);
   ensureEffect($effect`robot friends`);
   ensureEffect($effect`human-machine hybrid`);
-
+/*
   if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
     equip($item`cracker`);
   }
+*/
+
+// this is going to be all the gingerbread stuff, it is a work in progress
+if (
+  haveEffect($effect`whole latte love`) === 0 &&
+  availableAmount($item`gingerbread spice latte`) === 0
+) {
+  useFamiliar($familiar`chocolate lab`);
+  maximize("sprinkle drop", false);
+  if (!get("_gingerbreadClockAdvanced")) {
+    visitUrl("adventure.php?snarfblat=477");
+    runChoice(1);
+  }
+  if (availableAmount($item`sprinkles`) < 50) {
+    adventureMacroAuto(
+      $location`Gingerbread Upscale Retail District`,
+      Macro.skill($skill`shattering punch`)
+    );
+    setAutoAttack(0);
+  }
+  if (availableAmount($item`sprinkles`) >= 50) {
+    // equip($slot`acc3`, $item`kremlin's greatest briefcase`);
+    useFamiliar($familiar`frumious bandersnatch`);
+    ensureEffect($effect`ode to booze`);
+    setChoice(1208, 3);
+    while (
+      availableAmount($item`gingerbread spice latte`) === 0 &&
+      haveEffect($effect`whole latte love`) === 0
+    ) {
+      adventureMacro($location`Gingerbread Upscale Retail District`, Macro.step("runaway"));
+    }
+  } else {
+    throw "Something went wrong getting sprinkles";
+  }
+  use($item`gingerbread spice latte`);
+  useDefaultFamiliar();
+}
 
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);
@@ -1484,7 +1522,7 @@ if (!testDone(TEST_WEAPON)) {
     if (availableAmount($item`photocopied monster`) === 0) {
       if (getPropertyBoolean("_photocopyUsed")) error("Already used fax for the day.");
       cliExecute("/whitelist alliance from hell");
-      chatPrivate("cheesefax", "fax ungulith");
+      chatPrivate("easyfax", "ungulith");
       for (let i = 0; i < 2; i++) {
         wait(10);
         cliExecute("fax receive");

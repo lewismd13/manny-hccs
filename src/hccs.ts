@@ -1875,7 +1875,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(4);
 }
 
-cliExecute("pvp fame karmic battle");
+cliExecute("pvp fame select");
 
 print(
   "This loop took " +

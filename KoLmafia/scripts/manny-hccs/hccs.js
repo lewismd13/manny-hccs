@@ -2717,7 +2717,7 @@ if ((0,libram__WEBPACK_IMPORTED_MODULE_5__.get)("_daycareRecruits") === 0 && (0,
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.runChoice)(4);
 }
 
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("pvp fame karmic battle");
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("pvp fame select");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("This loop took " + ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.gametimeToInt)() - START_TIME) / 1000 + " seconds, for a 1 day, " + ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)() - 1) + " turn HCCS run.", "green");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("HP test: " + HP_TURNS, "green");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("Muscle test: " + MUS_TURNS, "green");

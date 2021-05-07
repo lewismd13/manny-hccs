@@ -2750,6 +2750,52 @@ if ((0,libram__WEBPACK_IMPORTED_MODULE_4__.get)("_daycareRecruits") === 0 && (0,
 
 /***/ }),
 
+/***/ "./src/hccsLibrams.ts":
+/*!****************************!*\
+  !*** ./src/hccsLibrams.ts ***!
+  \****************************/
+/*! namespace exports */
+/*! exports [not provided] [maybe used in hccsLibrams (runtime-defined)] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kolmafia */ "kolmafia");
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/template-string.js");
+/* harmony import */ var _hccs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./hccs */ "./src/hccs.ts");
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10;
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+
+function nextLibramCost() {
+  return (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.mpCost)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject || (_templateObject = _taggedTemplateLiteral(["Summon BRICKOs"]))));
+}
+
+function castBestLibram() {
+  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$item)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["green candy heart"])))) < 1 && !(0,_hccs__WEBPACK_IMPORTED_MODULE_1__.testDone)(5)) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["summon candy heart"]))));
+  } else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["love song of icy revenge"])))) < 2 && !(0,_hccs__WEBPACK_IMPORTED_MODULE_1__.testDone)(5)) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["summon love song"]))));
+  } else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["lavendar candy heart"])))) < 1 && !(0,_hccs__WEBPACK_IMPORTED_MODULE_1__.testDone)(9)) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["summon candy heart"]))));
+  } else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$item)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["love song of icy revenge"])))) < 3 && !(0,_hccs__WEBPACK_IMPORTED_MODULE_1__.testDone)(5)) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["summon love song"]))));
+  } else {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_2__.$skill)(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["summon divine favor"]))));
+  }
+}
+
+while ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myMp)() / (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myMaxmp)() > 0.2 && nextLibramCost() <= (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myMp)()) {
+  castBestLibram();
+}
+
+/***/ }),
+
 /***/ "./src/lib.ts":
 /*!********************!*\
   !*** ./src/lib.ts ***!
@@ -3256,7 +3302,7 @@ module.exports = require("kolmafia");;
 /******/ 	// module exports must be returned from runtime so entry inlining is disabled
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__("./src/hccs.ts");
+/******/ 	return __webpack_require__("./src/hccsLibrams.ts");
 /******/ })()
 
 ));

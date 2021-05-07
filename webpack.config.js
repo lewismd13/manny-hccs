@@ -6,6 +6,8 @@ module.exports = {
   entry: {
     // Point "entry" to scripts you want to be CLI-eligible.
     hccs: "./src/hccs.ts",
+    hccsAscend: "./src/hccsAscend.ts",
+    hccsLibrams: "./src/hccsLibrams.ts",
     // macroConsult: "./src/macroConsult.ts",
   },
   mode: "development",

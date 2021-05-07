@@ -50,6 +50,7 @@ import {
   myBasestat,
   myBuffedstat,
   myClass,
+  myFullness,
   myGardenType,
   myHash,
   myHp,
@@ -143,7 +144,7 @@ const justKillTheThing = Macro.trySkill($skill`Curse of Weaksauce`)
   .trySkill($skill`Stuffed Mortar Shell`)
   .skill($skill`candyblast`)
   .step("repeat");
-
+/*
 const defaultFamiliar = $familiar`melodramedary`;
 const defaultFamiliarEquipment = $item`dromedary drinking helmet`;
 // TODO: make this choose camel until 100 spit, then pixie for absinthe, then ???
@@ -151,6 +152,27 @@ function useDefaultFamiliar() {
   useFamiliar(defaultFamiliar);
   if (defaultFamiliarEquipment !== $item`none`) {
     equip(defaultFamiliarEquipment);
+  }
+}
+*/
+
+function useDefaultFamiliar() {
+  if (get("camelSpit") < 100 && !testDone(TEST_WEAPON)) {
+    useFamiliar($familiar`melodramedary`);
+    equip($item`dromedary drinking helmet`);
+  } else if (
+    availableAmount($item`rope`) < 1 &&
+    availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1
+  ) {
+    useFamiliar($familiar`Garbage Fire`);
+  } else if (
+    availableAmount($item`short stack of pancakes`) === 0 &&
+    haveEffect($effect`shortly stacked`) === 0 &&
+    !testDone(TEST_FAMILIAR)
+  ) {
+    useFamiliar($familiar`shorter-order cook`);
+  } else {
+    useFamiliar($familiar`machine elf`);
   }
 }
 
@@ -303,7 +325,7 @@ function fightSausageIfGuaranteed() {
   }
 }
 
-function testDone(testNum: number) {
+export function testDone(testNum: number) {
   print("Checking test " + testNum + "...");
   const text = visitUrl("council.php");
   return !containsText(text, "<input type=hidden name=option value=" + testNum + ">");
@@ -461,6 +483,14 @@ if (!testDone(TEST_HP)) {
   // pulls wrench from deck
   if (getPropertyInt("_deckCardsDrawn") === 0) {
     cliExecute("cheat wrench");
+  }
+
+  // uses familiar jacks to get camel equipment
+  if (availableAmount($item`10580`) === 0 && getPropertyInt("tomeSummons") < 3) {
+    cliExecute("create 1 box of familiar jacks");
+    useFamiliar($familiar`melodramedary`);
+    use(1, $item`box of familiar jacks`);
+    equip($item`dromedary drinking helmet`);
   }
 
   cliExecute("call detective_solver.ash");
@@ -644,17 +674,9 @@ if (!testDone(TEST_HP)) {
   ensureEffect($effect`Fidoxene`);
   ensureEffect($effect`Do I Know You From Somewhere?`);
 
-  // uses familiar jacks to get camel equipment
-  if (availableAmount($item`10580`) === 0 && getPropertyInt("tomeSummons") < 3) {
-    cliExecute("create 1 box of familiar jacks");
-    useFamiliar($familiar`melodramedary`);
-    use(1, $item`box of familiar jacks`);
-    equip($item`dromedary drinking helmet`);
-  }
-
   // 10 snojo fights to while +stat is on, also getting ice rice
   if (get("_snojoFreeFights") < 10) {
-    useFamiliar($familiar`garbage fire`);
+    useDefaultFamiliar();
     setProperty("choiceAdventure1310", "3"); // myst for ice rice, because it sells for more
     visitUrl("place.php?whichplace=snojo&action=snojo_controller");
     if (availableAmount($item`gene tonic: construct`) === 0 && get("dnaSyringe") !== "construct") {
@@ -664,20 +686,10 @@ if (!testDone(TEST_HP)) {
       );
       geneTonic("construct");
     }
-    while (get("_snojoFreeFights") < 5) {
-      adventureMacroAuto($location`The X-32-F Combat Training Snowman`, kill());
-    }
-    useFamiliar($familiar`Melodramedary`);
-    equip($item`dromedary drinking helmet`);
     while (get("_snojoFreeFights") < 10) {
+      useDefaultFamiliar();
       adventureMacroAuto($location`The X-32-F Combat Training Snowman`, kill());
     }
-  }
-  if (
-    availableAmount($item`burning newspaper`) > 0 &&
-    availableAmount($item`burning paper crane`) < 1
-  ) {
-    cliExecute("create 1 burning paper crane");
   }
 
   // Don't use Kramco here.
@@ -860,6 +872,7 @@ if (!testDone(TEST_HP)) {
       setAutoAttack(0);
     }
     while (toInt(getProperty("_witchessFights")) === 2) {
+      useDefaultFamiliar();
       Macro.attack().repeat().setAutoAttack();
       ensureEffect($effect`carol of the bulls`);
       visitUrl("campground.php?action=witchess");
@@ -869,6 +882,7 @@ if (!testDone(TEST_HP)) {
       setAutoAttack(0);
     }
     while (toInt(getProperty("_witchessFights")) === 3) {
+      useDefaultFamiliar();
       Macro.attack().repeat().setAutoAttack();
       ensureEffect($effect`carol of the bulls`);
       visitUrl("campground.php?action=witchess");
@@ -914,6 +928,7 @@ if (!testDone(TEST_HP)) {
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
   while (getProperty("feelNostalgicMonster") === "sausage goblin" && get("_backUpUses") < 11) {
+    useDefaultFamiliar();
     adventureMacroAuto(
       $location`Noob Cave`,
       Macro.trySkill($skill`back-up to your last enemy`).step(justKillTheThing)
@@ -973,6 +988,7 @@ if (!testDone(TEST_HP)) {
 
   // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
   if (toInt(getProperty("_witchessFights")) === 4) {
+    useDefaultFamiliar();
     Macro.attack().repeat().setAutoAttack();
     ensureEffect($effect`carol of the bulls`);
     ensureEffect($effect`song of the north`);
@@ -1010,13 +1026,16 @@ if (!testDone(TEST_HP)) {
 
     ensureMpSausage(100);
     if (getPropertyInt("_neverendingPartyFreeTurns") < 10 && getPropertyInt("_feelPrideUsed") < 3) {
+      useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
         Macro.trySkill($skill`feel pride`).step(justKillTheThing)
       );
     } else if (getPropertyInt("_neverendingPartyFreeTurns") < 10) {
+      useDefaultFamiliar();
       adventureMacroAuto($location`The Neverending Party`, Macro.step(justKillTheThing));
     } else {
+      useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
         Macro.trySkill($skill`chest x-ray`).trySkill($skill`gingerbread mob hit`)
@@ -1392,6 +1411,7 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Empathy`);
   ensureEffect($effect`robot friends`);
   ensureEffect($effect`human-machine hybrid`);
+  ensureEffect($effect`shortly stacked`);
   /*
   if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
@@ -1444,6 +1464,13 @@ if (!testDone(TEST_FAMILIAR)) {
       Macro.trySkill($skill`Meteor Shower`).trySkill($skill`Use the Force`)
     );
     setAutoAttack(0);
+  }
+
+  if (
+    availableAmount($item`burning newspaper`) > 0 &&
+    availableAmount($item`burning paper crane`) < 1
+  ) {
+    cliExecute("create 1 burning paper crane");
   }
 
   // checking here to see if we had a tome summon for a cracker or if we should use BBB
@@ -1882,7 +1909,15 @@ print(
     (gametimeToInt() - START_TIME) / 1000 +
     " seconds, for a 1 day, " +
     (myTurncount() - 1) +
-    " turn HCCS run.",
+    " turn HCCS run. Organ use was " +
+    myFullness() +
+    "/" +
+    myInebriety() +
+    "/" +
+    mySpleenUse() +
+    ". I drank " +
+    (6 - availableAmount($item`astral pilsner`)) +
+    " Astral Pilsners.",
   "green"
 );
 

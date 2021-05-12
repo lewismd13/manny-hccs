@@ -24,6 +24,7 @@ import {
   availableAmount,
   buy,
   chatPrivate,
+  chew,
   cliExecute,
   cliExecuteOutput,
   containsText,
@@ -46,6 +47,7 @@ import {
   logprint,
   max,
   maximize,
+  mpCost,
   myAdventures,
   myBasestat,
   myBuffedstat,
@@ -160,12 +162,12 @@ function useDefaultFamiliar() {
   if (get("camelSpit") < 100 && !testDone(TEST_WEAPON)) {
     useFamiliar($familiar`melodramedary`);
     equip($item`dromedary drinking helmet`);
-  } else if (
+  } /* else if (
     availableAmount($item`rope`) < 1 &&
     availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1
   ) {
     useFamiliar($familiar`Garbage Fire`);
-  } else if (
+  } */ else if (
     availableAmount($item`short stack of pancakes`) === 0 &&
     haveEffect($effect`shortly stacked`) === 0 &&
     !testDone(TEST_FAMILIAR)
@@ -519,6 +521,7 @@ if (!testDone(TEST_HP)) {
 
   // Boxing Daycare
   ensureEffect($effect`Uncucumbered`);
+  cliExecute("daycare item");
 
   // Cast inscrutable gaze
   ensureEffect($effect`Inscrutable Gaze`);
@@ -546,6 +549,7 @@ if (!testDone(TEST_HP)) {
   // if (get_property('_horsery') != 'crazy horse') cli_execute('horsery crazy');
 
   // Tune moon sign to Blender. Have to do this now to get chewing gum.
+  /*
   if (!getPropertyBoolean("moonTuned")) {
     if (getPropertyInt("_campAwaySmileBuffs") === 0) {
       visitUrl("place.php?whichplace=campaway&action=campaway_sky");
@@ -559,7 +563,7 @@ if (!testDone(TEST_HP)) {
     // Actually tune the moon.
     visitUrl("inv_use.php?whichitem=10254&doit=96&whichsign=8");
   }
-
+*/
   cliExecute("retrocape mysticality thrill");
 
   // cross streams for a stat boost
@@ -843,7 +847,21 @@ if (!testDone(TEST_HP)) {
   // spend 5 turns in DMT, skipping joy and cert, just get stats
   while (get("_machineTunnelsAdv") < 5) {
     useFamiliar($familiar`machine elf`);
-    adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
+    if (
+      availableAmount($item`abstraction: action`) === 0 &&
+      availableAmount($item`abstraction: joy`) === 0
+    ) {
+      setAutoAttack("melfgetaction");
+      adv1($location`The Deep Machine Tunnels`, -1, "");
+    } else if (
+      availableAmount($item`abstraction: action`) === 1 &&
+      availableAmount($item`abstraction: joy`) === 0
+    ) {
+      setAutoAttack("melfgetjoy");
+      adv1($location`The Deep Machine Tunnels`, -1, "");
+    } else {
+      adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
+    }
     /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (getProperty("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetthought");
       adv1($location`the deep machine tunnels`, -1, "");
@@ -923,7 +941,7 @@ if (!testDone(TEST_HP)) {
   } else {
     print("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
   }
-
+  /*
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
@@ -935,7 +953,7 @@ if (!testDone(TEST_HP)) {
     );
   }
   setAutoAttack(0);
-
+*/
   // Breakfast
 
   // Visiting Looking Glass in clan VIP lounge
@@ -1085,9 +1103,10 @@ if (!testDone(TEST_MUS)) {
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
   if (myInebriety() === 0) {
-    ensureOde(4);
-    tryUse(1, $item`astral six-pack`);
-    drink(4, $item`astral pilsner`);
+    ensureOde(3);
+    // tryUse(1, $item`astral six-pack`);
+    // drink(4, $item`astral pilsner`);
+    cliExecute("drinksilent hot socks");
   }
 
   ensureEffect($effect`Big`);
@@ -1167,9 +1186,9 @@ if (!testDone(TEST_MOX)) {
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`moxie`) - myBasestat($stat`mysticality`) < 1770
   ) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   } else if (myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`) < 1770) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   }
 
   TEMP_TURNS = myTurncount();
@@ -1322,7 +1341,7 @@ if (!testDone(TEST_HOT_RES)) {
   maximize("hot res, 0.01 familiar weight", false);
 
   if (round(numericModifier("hot resistance")) < 59) {
-    error("Something went wrong building hot res.");
+    throw "Something went wrong building hot res.";
   }
 
   // cli_execute('modtrace Hot Resistance');
@@ -1412,12 +1431,28 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`robot friends`);
   ensureEffect($effect`human-machine hybrid`);
   ensureEffect($effect`shortly stacked`);
+  ensureEffect($effect`joy`);
+  ensureEffect($effect`A Girl Named Sue`);
   /*
   if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
     equip($item`cracker`);
   }
 */
+  // tune moon to opossum for +5lb
+  if (!getPropertyBoolean("moonTuned")) {
+    // Unequip spoon.
+    equip($slot`acc1`, $item`Eight Days a Week Pill Keeper`);
+    equip($slot`acc2`, $item`Powerful Glove`);
+    equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
+
+    // Actually tune the moon.
+    visitUrl("inv_use.php?whichitem=10254&doit=96&whichsign=4");
+  }
+
+  if (get("_deckCardsDrawn") === 5 && availableAmount($item`rope`) === 0) {
+    cliExecute("cheat rope");
+  }
 
   // this is going to be all the gingerbread stuff, it is a work in progress
   if (
@@ -1473,6 +1508,43 @@ if (!testDone(TEST_FAMILIAR)) {
     cliExecute("create 1 burning paper crane");
   }
 
+  while (
+    myMp() > mpCost($skill`Summon BRICKOs`) &&
+    availableAmount($item`green candy heart`) === 0 &&
+    haveEffect($effect`heart of green`) === 0
+  ) {
+    useSkill($skill`summon candy heart`);
+  }
+
+  ensureEffect($effect`heart of green`);
+
+  while (
+    myMp() > mpCost($skill`Summon BRICKOs`) &&
+    availableAmount($item`love song of icy revenge`) < 2 &&
+    haveEffect($effect`cold hearted`) === 0
+  ) {
+    useSkill($skill`summon love song`);
+  }
+
+  if (
+    haveEffect($effect`cold hearted`) === 0 &&
+    availableAmount($item`love song of icy revenge`) > 1
+  ) {
+    cliExecute("pillkeeper extend");
+    use($item`love song of icy revenge`);
+    cliExecute("pillkeeper extend");
+    use($item`love song of icy revenge`);
+  } else throw "You don't have 2 love songs :(";
+
+  wishEffect($effect`healthy green glow`);
+  wishEffect($effect`down with chow`);
+
+  if (haveEffect($effect`boxing day glow`) === 0 && availableAmount($item`body spradium`) > 0)
+    chew($item`body spradium`);
+
+  if (haveEffect($effect`smart drunk`) === 0) drink(1, $item`vintage smart drink`);
+  // drink(1, $item`hot socks`);
+
   // checking here to see if we had a tome summon for a cracker or if we should use BBB
   if (availableAmount($item`cracker`) > 0) {
     useFamiliar($familiar`exotic parrot`);
@@ -1525,6 +1597,9 @@ if (!testDone(TEST_WEAPON)) {
       error("Wrong painting.");
     }
   } */
+
+  if (myInebriety() < 14) cliExecute("drinksilent 1 sockdollager");
+  if (availableAmount($item`glass of raw eggs`) > 0) eat($item`glass of raw eggs`);
 
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
@@ -1641,7 +1716,7 @@ if (!testDone(TEST_WEAPON)) {
   ensureEffect($effect`Blessing of your Favorite Bird`);
   // ensureEffect($effect`Blessing of the Bird`);
 
-  ensureNpcEffect($effect`Engorged Weapon`, 1, $item`Meleegra&trade; pills`);
+  // ensureNpcEffect($effect`Engorged Weapon`, 1, $item`Meleegra&trade; pills`);
 
   // wish_effect($effect[Outer Wolf&trade;]);
 
@@ -1674,7 +1749,7 @@ if (!testDone(TEST_WEAPON)) {
 }
 
 if (!testDone(TEST_SPELL)) {
-  ensureEffect($effect`Simmering`);
+  // ensureEffect($effect`Simmering`);
 
   ensureEffect($effect`Song of Sauce`);
   ensureEffect($effect`Carol of the Hells`);
@@ -1683,6 +1758,14 @@ if (!testDone(TEST_SPELL)) {
   if (availableAmount($item`lov elixir \#6`) > 0) {
     ensureEffect($effect`The Magic of LOV`);
   }
+
+  ensureEffect($effect`AAA-charged`);
+  ensureEffect($effect`AA-charged`);
+  ensureEffect($effect`D-charged`);
+
+  wishEffect($effect`witch breaded`);
+
+  if (haveEffect($effect`gaze of the gazelle`) === 0) eat(1, $item`weird gazelle steak`);
 
   // Pool buff
   ensureEffect($effect`Mental A-cue-ity`);
@@ -1705,6 +1788,23 @@ if (!testDone(TEST_SPELL)) {
   ensureItem(1, $item`obsidian nutcracker`);
 
   cliExecute("briefcase e spell");
+
+  print("HEY GO DO SOME STUFF WITH toxic teacups and backup cam");
+  // abort();
+
+  /*
+  useDefaultFamiliar();
+  equip($slot`acc2`, $item`backup camera`);
+  equip($slot`shirt`, $item`none`);
+  while (getProperty("feelNostalgicMonster") === "sausage goblin" && get("_backUpUses") < 11) {
+    useDefaultFamiliar();
+    adventureMacroAuto(
+      $location`Noob Cave`,
+      Macro.trySkill($skill`back-up to your last enemy`).step(justKillTheThing)
+    );
+  }
+  setAutoAttack(0);
+*/
 
   // Get inner elf for spell damage
   if (haveEffect($effect`inner elf`) === 0 && getPropertyInt("_snokebombUsed") < 3) {
@@ -1787,9 +1887,12 @@ if (!testDone(TEST_ITEM)) {
   // ensureEffect($effect`certainty`);
 
   // pulls wheel of fortune from deck, gets rope and wrench for later
-  if (getPropertyInt("_deckCardsDrawn") === 5) {
+  if (getPropertyInt("_deckCardsDrawn") === 10) {
     cliExecute("cheat buff items");
   }
+
+  useDefaultFamiliar();
+
   // get pirate DNA and make a gene tonic
   if (get("dnaSyringe") !== "pirate" && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
     equip($slot`acc1`, $item`Kremlin\'s Greatest Briefcase`);
@@ -1855,7 +1958,7 @@ if (!testDone(TEST_ITEM)) {
   }
 
   // Use bag of grain.
-  //    ensure_effect($effect[Nearly All-Natural]);
+  ensureEffect($effect`Nearly All-Natural`);
 
   ensureEffect($effect`Feeling Lost`);
   ensureEffect($effect`Steely-Eyed Squint`);
@@ -1893,6 +1996,7 @@ cliExecute("/whitelist alliance from hell");
 visitUrl("peevpee.php?action=smashstone&confirm=on");
 print("Stone smashed. Get your PVP on!", "green");
 // spar for 6 fights
+/*
 if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
   runChoice(3);
@@ -1901,7 +2005,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(5);
   runChoice(4);
 }
-
+*/
 cliExecute("pvp fame select");
 
 print(

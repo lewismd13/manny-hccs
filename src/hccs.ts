@@ -1555,7 +1555,7 @@ if (!testDone(TEST_FAMILIAR)) {
   maximize("familiar weight", false);
 
   // cli_execute('modtrace familiar weight');
-  // abort();
+  abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_FAMILIAR);
   FAMILIAR_TURNS = myTurncount() - TEMP_TURNS;
@@ -1790,7 +1790,7 @@ if (!testDone(TEST_SPELL)) {
   cliExecute("briefcase e spell");
 
   print("HEY GO DO SOME STUFF WITH toxic teacups and backup cam");
-  // abort();
+  abort();
 
   /*
   useDefaultFamiliar();

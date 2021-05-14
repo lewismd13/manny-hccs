@@ -161,7 +161,7 @@ function useDefaultFamiliar() {
 function useDefaultFamiliar() {
   if (get("camelSpit") < 100 && !testDone(TEST_WEAPON)) {
     useFamiliar($familiar`melodramedary`);
-    equip($item`dromedary drinking helmet`);
+    // equip($item`dromedary drinking helmet`);
   } /* else if (
     availableAmount($item`rope`) < 1 &&
     availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1
@@ -173,6 +173,13 @@ function useDefaultFamiliar() {
     !testDone(TEST_FAMILIAR)
   ) {
     useFamiliar($familiar`shorter-order cook`);
+  } else if (
+    availableAmount($item`tiny bottle of absinthe`) === 0 &&
+    haveEffect($effect`man's worst enemy`) === 0 &&
+    availableAmount($item`disintegrating spiky collar`) === 0 &&
+    !testDone(TEST_FAMILIAR)
+  ) {
+    useFamiliar($familiar`green pixie`);
   } else {
     useFamiliar($familiar`machine elf`);
   }
@@ -488,12 +495,12 @@ if (!testDone(TEST_HP)) {
   }
 
   // uses familiar jacks to get camel equipment
-  if (availableAmount($item`10580`) === 0 && getPropertyInt("tomeSummons") < 3) {
+  /* if (availableAmount($item`10580`) === 0 && getPropertyInt("tomeSummons") < 3) {
     cliExecute("create 1 box of familiar jacks");
     useFamiliar($familiar`melodramedary`);
     use(1, $item`box of familiar jacks`);
     equip($item`dromedary drinking helmet`);
-  }
+  } */
 
   cliExecute("call detective_solver.ash");
   buy(1, $item`shoe gum`);
@@ -941,7 +948,7 @@ if (!testDone(TEST_HP)) {
   } else {
     print("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
   }
-  /*
+
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
@@ -953,7 +960,7 @@ if (!testDone(TEST_HP)) {
     );
   }
   setAutoAttack(0);
-*/
+
   // Breakfast
 
   // Visiting Looking Glass in clan VIP lounge
@@ -1168,7 +1175,7 @@ if (!testDone(TEST_MOX)) {
   ensureEffect($effect`Blessing of the Bird`);
 
   // Should be 11% NC and 50% moxie, will fall through to NC test
-  // ensureEffect($effect`Blessing of your favorite Bird`);
+  ensureEffect($effect`Blessing of your favorite Bird`);
 
   ensureEffect($effect`Big`);
   ensureEffect($effect`Song of Bravado`);
@@ -1331,7 +1338,7 @@ if (!testDone(TEST_HOT_RES)) {
   // if (get_property('_horsery') != 'pale horse') cli_execute('horsery pale');
 
   useFamiliar($familiar`Exotic Parrot`);
-  if (availableAmount($item`cracker`) === 0 && getPropertyInt("tomeSummons") < 3) {
+  if (availableAmount($item`cracker`) === 0 && getPropertyInt("tomeSummons") < 2) {
     retrieveItem(1, $item`box of Familiar jacks`);
     use(1, $item`box of Familiar Jacks`);
     equip($item`cracker`);
@@ -1492,6 +1499,8 @@ if (!testDone(TEST_FAMILIAR)) {
     useDefaultFamiliar();
   }
 
+  abort();
+
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);
     adventureMacroAuto(
@@ -1555,7 +1564,7 @@ if (!testDone(TEST_FAMILIAR)) {
   maximize("familiar weight", false);
 
   // cli_execute('modtrace familiar weight');
-  abort();
+
   TEMP_TURNS = myTurncount();
   doTest(TEST_FAMILIAR);
   FAMILIAR_TURNS = myTurncount() - TEMP_TURNS;
@@ -1631,7 +1640,7 @@ if (!testDone(TEST_WEAPON)) {
     if (availableAmount($item`photocopied monster`) === 0) {
       if (getPropertyBoolean("_photocopyUsed")) error("Already used fax for the day.");
       cliExecute("/whitelist alliance from hell");
-      chatPrivate("cheesefax", "ungulith");
+      chatPrivate("easyfax", "ungulith");
       for (let i = 0; i < 2; i++) {
         wait(10);
         cliExecute("fax receive");
@@ -1765,8 +1774,6 @@ if (!testDone(TEST_SPELL)) {
 
   wishEffect($effect`witch breaded`);
 
-  if (haveEffect($effect`gaze of the gazelle`) === 0) eat(1, $item`weird gazelle steak`);
-
   // Pool buff
   ensureEffect($effect`Mental A-cue-ity`);
 
@@ -1775,7 +1782,7 @@ if (!testDone(TEST_SPELL)) {
 
   // Tea party
   ensureSewerItem(1, $item`mariachi hat`);
-  // ensure_effect($effect[Full Bottle in front of Me]);
+  ensureEffect($effect`Full Bottle in front of Me`);
 
   useSkill(1, $skill`Spirit of Cayenne`);
 
@@ -1789,8 +1796,19 @@ if (!testDone(TEST_SPELL)) {
 
   cliExecute("briefcase e spell");
 
-  print("HEY GO DO SOME STUFF WITH toxic teacups and backup cam");
+  print("HEY GO DO SOME STUFF WITH toxic teacups and maybe summon a donut");
   abort();
+
+  if (haveEffect($effect`gaze of the gazelle`) === 0) eat(1, $item`weird gazelle steak`);
+
+  if (
+    haveEffect($effect`filled with magic`) === 0 &&
+    availableAmount($item`occult jelly donut`) === 0 &&
+    get("tomeSummons") < 3
+  ) {
+    cliExecute("create 1 occult jelly donut");
+    eat(1, $item`occult jelly donut`);
+  }
 
   /*
   useDefaultFamiliar();
@@ -1861,7 +1879,7 @@ if (!testDone(TEST_SPELL)) {
   }
 
   // cli_execute('modtrace spell damage');
-  // abort();
+  abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_SPELL);
   SPELL_TURNS = myTurncount() - TEMP_TURNS;

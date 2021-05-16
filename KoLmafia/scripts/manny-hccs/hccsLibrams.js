@@ -2700,9 +2700,9 @@ if (!testDone(TEST_SPELL)) {
 
   while (spellTurns() > (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myAdventures)()) {
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.eat)(1, (0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject572 || (_templateObject572 = _taggedTemplateLiteral(["magical sausage"]))));
-  } // cli_execute('modtrace spell damage');
+  }
 
-
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("modtrace spell damage");
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)();
   TEMP_TURNS = (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)();
   doTest(TEST_SPELL);

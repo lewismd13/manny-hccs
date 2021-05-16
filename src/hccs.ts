@@ -1878,7 +1878,7 @@ if (!testDone(TEST_SPELL)) {
     eat(1, $item`magical sausage`);
   }
 
-  // cli_execute('modtrace spell damage');
+  cliExecute("modtrace spell damage");
   abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_SPELL);

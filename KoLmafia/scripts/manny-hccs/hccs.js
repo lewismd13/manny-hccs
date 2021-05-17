@@ -2376,9 +2376,8 @@ if (!testDone(TEST_FAMILIAR)) {
 
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.use)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject453 || (_templateObject453 = _taggedTemplateLiteral(["gingerbread spice latte"]))));
     useDefaultFamiliar();
-  }
+  } // abort();
 
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)();
 
   if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.haveEffect)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$effect)(_templateObject454 || (_templateObject454 = _taggedTemplateLiteral(["Meteor Showered"])))) === 0) {
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.equip)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject455 || (_templateObject455 = _taggedTemplateLiteral(["Fourth of May Cosplay Saber"]))));
@@ -2421,6 +2420,7 @@ if (!testDone(TEST_FAMILIAR)) {
 
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.maximize)("familiar weight", false); // cli_execute('modtrace familiar weight');
 
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)();
   TEMP_TURNS = (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)();
   doTest(TEST_FAMILIAR);
   FAMILIAR_TURNS = (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)() - TEMP_TURNS;
@@ -2636,8 +2636,8 @@ if (!testDone(TEST_SPELL)) {
 
   (0,_lib__WEBPACK_IMPORTED_MODULE_0__.ensureItem)(1, (0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject548 || (_templateObject548 = _taggedTemplateLiteral(["obsidian nutcracker"]))));
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("briefcase e spell");
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("HEY GO DO SOME STUFF WITH toxic teacups and maybe summon a donut");
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)();
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("HEY GO DO SOME STUFF WITH toxic teacups and maybe summon a donut"); // abort();
+
   if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.haveEffect)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$effect)(_templateObject549 || (_templateObject549 = _taggedTemplateLiteral(["gaze of the gazelle"])))) === 0) (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.eat)(1, (0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject550 || (_templateObject550 = _taggedTemplateLiteral(["weird gazelle steak"]))));
 
   if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.haveEffect)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$effect)(_templateObject551 || (_templateObject551 = _taggedTemplateLiteral(["filled with magic"])))) === 0 && (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject552 || (_templateObject552 = _taggedTemplateLiteral(["occult jelly donut"])))) === 0 && (0,libram__WEBPACK_IMPORTED_MODULE_4__.get)("tomeSummons") < 3) {
@@ -2797,8 +2797,8 @@ if (!testDone(TEST_ITEM)) {
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.equip)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject614 || (_templateObject614 = _taggedTemplateLiteral(["9140"])))); // ninja costume for 150% item
 
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.maximize)("item, 2 booze drop, -equip broken champagne bottle, -equip surprisingly capacious handbag", false); // cli_execute('modtrace item');
-  // abort();
 
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)();
   TEMP_TURNS = (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)();
   doTest(TEST_ITEM);
   ITEM_TURNS = (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)() - TEMP_TURNS;

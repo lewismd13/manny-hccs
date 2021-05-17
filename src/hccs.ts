@@ -1213,7 +1213,7 @@ if (!testDone(TEST_HOT_RES)) {
     setProperty("mappingMonsters", "false");
   }
 
-  // synth hot
+  // synth hot TODO: check for the right candyblast candies and summon candy hearts if not
 
   if (haveEffect($effect`Synthesis: Hot`) == 0) {
     cliExecute("synthesize hot");

@@ -1499,7 +1499,7 @@ if (!testDone(TEST_FAMILIAR)) {
     useDefaultFamiliar();
   }
 
-  abort();
+  // abort();
 
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);
@@ -1564,6 +1564,8 @@ if (!testDone(TEST_FAMILIAR)) {
   maximize("familiar weight", false);
 
   // cli_execute('modtrace familiar weight');
+
+  abort();
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_FAMILIAR);
@@ -1797,7 +1799,7 @@ if (!testDone(TEST_SPELL)) {
   cliExecute("briefcase e spell");
 
   print("HEY GO DO SOME STUFF WITH toxic teacups and maybe summon a donut");
-  abort();
+  // abort();
 
   if (haveEffect($effect`gaze of the gazelle`) === 0) eat(1, $item`weird gazelle steak`);
 
@@ -1995,7 +1997,7 @@ if (!testDone(TEST_ITEM)) {
   );
 
   // cli_execute('modtrace item');
-  // abort();
+  abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_ITEM);
   ITEM_TURNS = myTurncount() - TEMP_TURNS;

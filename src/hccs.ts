@@ -130,6 +130,7 @@ var SPELL_TURNS = 0;
 var NONCOMBAT_TURNS = 0;
 var ITEM_TURNS = 0;
 var HOT_RES_TURNS = 0;
+
 var TEMP_TURNS = 0;
 
 var tempMacro = "";
@@ -833,7 +834,11 @@ if (!testDone(TEST_HP)) {
     setChoice(1226, 2); // Open Heart Surgery
     setChoice(1227, 1); // Fight LOV Equivocator
     setChoice(1228, 3); // Take chocolate
-    setAutoAttack("HCCS_LOV_tunnel");
+    Macro.if_('monstername "LOV enforcer"', Macro.attack().repeat())
+      .if_('monstername "lov engineer"', Macro.skill($skill`saucegeyser`).repeat())
+      .step(justKillTheThing)
+      .setAutoAttack();
+    // setAutoAttack("HCCS_LOV_tunnel");
     adv1($location`The Tunnel of L.O.V.E.`, -1, "");
     setAutoAttack(0);
   }
@@ -1078,6 +1083,7 @@ if (!testDone(TEST_HP)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_HP);
   HP_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsHpTurns", HP_TURNS.toString());
 }
 
 if (!testDone(TEST_MUS)) {
@@ -1922,6 +1928,7 @@ print(
 );
 
 print("HP test: " + HP_TURNS, "green");
+print("Or, put differently, HP test took " + getProperty("_hccsHpTurns") + " turns.", "blue");
 print("Muscle test: " + MUS_TURNS, "green");
 print("Moxie test: " + MOX_TURNS, "green");
 print("Myst test: " + MYS_TURNS, "green");

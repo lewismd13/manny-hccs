@@ -133,8 +133,6 @@ var HOT_RES_TURNS = 0;
 
 var TEMP_TURNS = 0;
 
-var tempMacro = "";
-
 // test order will be stats, hot, item, NC, Fam, weapon, spell
 
 const START_TIME = gametimeToInt();
@@ -148,13 +146,6 @@ const justKillTheThing = Macro.trySkill($skill`Curse of Weaksauce`)
 /*
 const defaultFamiliar = $familiar`melodramedary`;
 const defaultFamiliarEquipment = $item`dromedary drinking helmet`;
-// TODO: make this choose camel until 100 spit, then pixie for absinthe, then ???
-function useDefaultFamiliar() {
-  useFamiliar(defaultFamiliar);
-  if (defaultFamiliarEquipment !== $item`none`) {
-    equip(defaultFamiliarEquipment);
-  }
-}
 */
 
 function useDefaultFamiliar() {
@@ -225,7 +216,7 @@ function geneTonic(ph: string) {
     ) {
       cliExecute("camp dnapotion 1");
       if (availableAmount($item`Gene Tonic: ${ph}`) === 0) {
-        error("something went wrong getting your gene tonic");
+        throw "something went wrong getting your gene tonic";
       } else {
         print("successfully created gene tonic: construct");
       }
@@ -240,7 +231,7 @@ function geneTonic(ph: string) {
     ) {
       cliExecute("camp dnapotion 1");
       if (availableAmount($item`Gene Tonic: ${ph}`) === 0) {
-        error("something went wrong getting your gene tonic");
+        throw "something went wrong getting your gene tonic";
       } else {
         print("successfully created gene tonic: " + ph);
       }
@@ -323,6 +314,7 @@ function fightSausageIfGuaranteed() {
     useDefaultFamiliar();
 
     adventureMacroAuto($location`The Neverending Party`, kill());
+    setAutoAttack(0);
   }
 }
 
@@ -336,7 +328,7 @@ function doTest(testNum: number) {
   if (!testDone(testNum)) {
     visitUrl("choice.php?whichchoice=1089&option=" + testNum);
     if (!testDone(testNum)) {
-      error("Failed to do test " + testNum + ". Maybe we are out of turns.");
+      throw "Failed to do test " + testNum + ". Maybe we are out of turns.";
     }
   } else {
     print("Test " + testNum + " already completed.");
@@ -470,7 +462,7 @@ if (!testDone(TEST_COIL_WIRE)) {
   doTest(TEST_COIL_WIRE);
 }
 
-if (myTurncount() < 60) error("Something went wrong coiling wire.");
+if (myTurncount() < 60) throw "Something went wrong coiling wire.";
 
 if (!testDone(TEST_HP)) {
   // just in case?
@@ -541,6 +533,9 @@ if (!testDone(TEST_HP)) {
     create(1, $item`bitchin\' meatcar`);
   }
 
+  // scrapbook for +exp
+  equip($item`familiar scrapbook`);
+
   // Depends on Ez's Bastille script.
   cliExecute("bastille myst brutalist");
 
@@ -583,7 +578,7 @@ if (!testDone(TEST_HP)) {
     summonBrickoOyster(7) &&
     availableAmount($item`BRICKO oyster`) > 0
   ) {
-    if (availableAmount($item`bag of many confections`) > 0) error("We should not have a bag yet.");
+    if (availableAmount($item`bag of many confections`) > 0) throw "We should not have a bag yet.";
     useFamiliar($familiar`Stocking Mimic`);
     equip($slot`familiar`, $item`none`);
     if (myHp() < 0.8 * myMaxhp()) {
@@ -648,7 +643,7 @@ if (!testDone(TEST_HP)) {
   // SynthesisPlanner.synthesize($effect`Synthesis: Smart`);
 
   if (round(numericModifier("mysticality experience percent")) < 100) {
-    error("Insufficient +stat%.");
+    throw "Insufficient +stat%.";
   }
 
   // Use ten-percent bonus
@@ -822,7 +817,6 @@ if (!testDone(TEST_HP)) {
   cliExecute("mood hccs");
 
   // LOV tunnel for elixirs, epaulettes, and heart surgery
-  // TODO: still need to make this combat better
   if (!getPropertyBoolean("_loveTunnelUsed")) {
     useDefaultFamiliar();
     ensureEffect($effect`carol of the bulls`);
@@ -864,7 +858,7 @@ if (!testDone(TEST_HP)) {
 
   useDefaultFamiliar();
 
-  //witchess fights
+  //witchess fights TODO: Use libram's witchess handling
   if (get("_witchessFights") < 5) {
     equip($item`fourth of may cosplay saber`);
     useDefaultFamiliar();
@@ -911,19 +905,31 @@ if (!testDone(TEST_HP)) {
     equip($slot`acc2`, $item`Brutal brogues`);
     equip($slot`acc3`, $item`Beach Comb`);
 
+    // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
+
+    if (get("_questPartyFairQuest") == "") {
+      setChoice(1322, 6); // Leave
+      adv1($location`The Neverending Party`, -1, "");
+    }
+    if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
+      setChoice(1322, 1); // accept quest
+    } else {
+      setChoice(1322, 2); // just here to party
+    }
+
     while (getPropertyInt("_sausageFights") === 0) {
       if (myHp() < 0.8 * myMaxhp()) {
         visitUrl("clan_viplounge.php?where=hottub");
       }
 
-      // Just here to party.
-      setChoice(1322, 2);
+      // setChoice(1322, 2);
       adventureMacroAuto(
         $location`The Neverending Party`,
         Macro.if_('!monstername "sausage goblin"', new Macro().step("abort"))
           .trySkill(Skill.get("Lecture on Relativity"))
           .step(justKillTheThing)
       );
+      setAutoAttack(0);
     }
   } else {
     print("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
@@ -932,7 +938,7 @@ if (!testDone(TEST_HP)) {
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
-  while (getProperty("feelNostalgicMonster") === "sausage goblin" && get("_backUpUses") < 11) {
+  while (getProperty("lastCopyableMonster") === "sausage goblin" && get("_backUpUses") < 11) {
     useDefaultFamiliar();
     adventureMacroAuto(
       $location`Noob Cave`,
@@ -1078,7 +1084,7 @@ if (!testDone(TEST_HP)) {
 
   // QUEST - Donate Blood (HP)
   if (myMaxhp() - myBuffedstat($stat`muscle`) - 3 < 1770) {
-    error("Not enough HP to cap.");
+    throw "Not enough HP to cap.";
   }
   TEMP_TURNS = myTurncount();
   doTest(TEST_HP);
@@ -1114,9 +1120,9 @@ if (!testDone(TEST_MUS)) {
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`muscle`) - myBasestat($stat`mysticality`) < 1770
   ) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   } else if (myBuffedstat($stat`muscle`) - myBasestat($stat`muscle`) < 1770) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   }
 
   // cli_execute('modtrace mus');
@@ -1124,6 +1130,7 @@ if (!testDone(TEST_MUS)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_MUS);
   MUS_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsMusTurns", MUS_TURNS.toString());
 }
 
 if (!testDone(TEST_MYS)) {
@@ -1137,11 +1144,12 @@ if (!testDone(TEST_MYS)) {
   ensureNpcEffect($effect`Glittering Eyelashes`, 5, $item`glittery mascara`);
   maximize("mysticality", false);
   if (myBuffedstat($stat`mysticality`) - myBasestat($stat`mysticality`) < 1770) {
-    error("Not enough mysticality to cap.");
+    throw "Not enough mysticality to cap.";
   }
   TEMP_TURNS = myTurncount();
   doTest(TEST_MYS);
   MYS_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsMysTurns", MYS_TURNS.toString());
 }
 
 if (!testDone(TEST_MOX)) {
@@ -1173,14 +1181,15 @@ if (!testDone(TEST_MOX)) {
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`moxie`) - myBasestat($stat`mysticality`) < 1770
   ) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   } else if (myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`) < 1770) {
-    error("Not enough moxie to cap.");
+    throw "Not enough moxie to cap.";
   }
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_MOX);
   MOX_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsMoxTurns", MOX_TURNS.toString());
 }
 
 if (!testDone(TEST_HOT_RES)) {
@@ -1328,7 +1337,7 @@ if (!testDone(TEST_HOT_RES)) {
   maximize("hot res, 0.01 familiar weight", false);
 
   if (round(numericModifier("hot resistance")) < 59) {
-    error("Something went wrong building hot res.");
+    throw "Something went wrong building hot res.";
   }
 
   // cli_execute('modtrace Hot Resistance');
@@ -1338,6 +1347,7 @@ if (!testDone(TEST_HOT_RES)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_HOT_RES);
   HOT_RES_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsHotResTurns", HOT_RES_TURNS.toString());
 }
 
 if (!testDone(TEST_NONCOMBAT)) {
@@ -1391,7 +1401,7 @@ if (!testDone(TEST_NONCOMBAT)) {
   maximize("-combat, 0.01 familiar weight", false);
 
   if (round(numericModifier("combat rate")) > -40) {
-    error("Not enough -combat to cap.");
+    throw "Not enough -combat to cap.";
   }
 
   // cli_execute('modtrace combat rate');
@@ -1399,6 +1409,7 @@ if (!testDone(TEST_NONCOMBAT)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_NONCOMBAT);
   NONCOMBAT_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsNoncombatTurns", NONCOMBAT_TURNS.toString());
 }
 
 if (!testDone(TEST_FAMILIAR)) {
@@ -1493,6 +1504,7 @@ if (!testDone(TEST_FAMILIAR)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_FAMILIAR);
   FAMILIAR_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsFamiliarTurns", FAMILIAR_TURNS.toString());
 }
 
 if (!testDone(TEST_WEAPON)) {
@@ -1539,7 +1551,7 @@ if (!testDone(TEST_WEAPON)) {
     useFamiliar($familiar`ghost of crimbo carols`);
     equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
     if (get("_reflexHammerUsed") > 2) {
-      error("You do not have any banishes left");
+      throw "You do not have any banishes left";
     }
     Macro.item($item`DNA extraction syringe`)
       .skill($skill`reflex hammer`)
@@ -1560,7 +1572,7 @@ if (!testDone(TEST_WEAPON)) {
   if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`cowrruption`) === 0) {
     print("Your camel spit level is " + get("camelSpit"), "green");
     if (availableAmount($item`photocopied monster`) === 0) {
-      if (getPropertyBoolean("_photocopyUsed")) error("Already used fax for the day.");
+      if (getPropertyBoolean("_photocopyUsed")) throw "Already used fax for the day.";
       cliExecute("/whitelist alliance from hell");
       chatPrivate("cheesefax", "ungulith");
       for (let i = 0; i < 2; i++) {
@@ -1669,7 +1681,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   if (weaponTurns() > 2) {
-    error("Something went wrong with weapon damage.");
+    throw "Something went wrong with weapon damage.";
   }
 
   // cli_execute('modtrace weapon damage');
@@ -1677,6 +1689,7 @@ if (!testDone(TEST_WEAPON)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_WEAPON);
   WEAPON_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsWeaponTurns", WEAPON_TURNS.toString());
 }
 
 if (!testDone(TEST_SPELL)) {
@@ -1708,6 +1721,7 @@ if (!testDone(TEST_SPELL)) {
     retrieveItem(1, $item`weeping willow wand`);
   }
 
+  // TODO: switch to buying an astral statuette in hccsAscend.js, and using lefty instead of hand
   ensureItem(1, $item`obsidian nutcracker`);
 
   cliExecute("briefcase e spell");
@@ -1771,6 +1785,7 @@ if (!testDone(TEST_SPELL)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_SPELL);
   SPELL_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsSpellTurns", SPELL_TURNS.toString());
 }
 
 if (!testDone(TEST_ITEM)) {
@@ -1800,7 +1815,7 @@ if (!testDone(TEST_ITEM)) {
   if (get("dnaSyringe") !== "pirate" && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
     equip($slot`acc1`, $item`Kremlin\'s Greatest Briefcase`);
     if (get("_kgbTranquilizerDartUses") >= 3) {
-      error("Out of KGB banishes");
+      throw "Out of KGB banishes";
     }
     // adv once for the opening free NC, should check NC queue here
     print($location`Pirates of the Garbage Barges`.noncombatQueue);
@@ -1826,7 +1841,7 @@ if (!testDone(TEST_ITEM)) {
   useDefaultFamiliar();
 
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
-    if (getPropertyInt("_reflexHammerUsed") >= 3) error("Out of reflex hammers!");
+    if (getPropertyInt("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
     equip($item`vampyric cloake`);
     adventureMacroAuto(
@@ -1884,6 +1899,7 @@ if (!testDone(TEST_ITEM)) {
   TEMP_TURNS = myTurncount();
   doTest(TEST_ITEM);
   ITEM_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsItemTurns", ITEM_TURNS.toString());
 }
 
 useSkill(1, $skill`spirit of nothing`);
@@ -1927,14 +1943,19 @@ print(
   "green"
 );
 
-print("HP test: " + HP_TURNS, "green");
-print("Or, put differently, HP test took " + getProperty("_hccsHpTurns") + " turns.", "blue");
-print("Muscle test: " + MUS_TURNS, "green");
-print("Moxie test: " + MOX_TURNS, "green");
-print("Myst test: " + MYS_TURNS, "green");
-print("Hot Res test: " + HOT_RES_TURNS, "green");
-print("Noncombat test: " + NONCOMBAT_TURNS, "green");
-print("Fam Weight test: " + FAMILIAR_TURNS, "green");
-print("Weapon Damage test: " + WEAPON_TURNS, "green");
-print("Spell Damage Test: " + SPELL_TURNS, "green");
-print("Item Drop test: " + ITEM_TURNS, "green");
+print("HP test: " + getProperty("_hccsHpTurns"), "green");
+print("Muscle test: " + getProperty("_hccsHpTurns"), "green");
+print("Moxie test: " + getProperty("_hccsMoxTurns"), "green");
+print("Myst test: " + getProperty("_hccsMysTurns"), "green");
+print("Hot Res test: " + getProperty("_hccsHotResTurns"), "green");
+print("Noncombat test: " + getProperty("_hccsNoncombatTurns"), "green");
+print("Fam Weight test: " + getProperty("_hccsFamiliarTurns"), "green");
+print("Weapon Damage test: " + getProperty("_hccsWeaponTurns"), "green");
+print("Spell Damage Test: " + getProperty("_hccsSpellTurns"), "green");
+print("Item Drop test: " + getProperty("_hccsItemTurns"), "green");
+
+if (get("_questPartyFairQuest") === "food") {
+  print("Hey, go talk to Geraldine!", "blue");
+} else if (get("_questPartyFairQuest") === "booze") {
+  print("Hey, go talk to Gerald!", "blue");
+}

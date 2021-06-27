@@ -658,7 +658,7 @@ if (!testDone(TEST_HP)) {
     runChoice(4);
   }
 
-  // ensure_effect($effect[hulkien]);
+  ensureEffect($effect`hulkien`);
   ensureEffect($effect`Favored by Lyle`);
   ensureEffect($effect`Starry-Eyed`);
   ensureEffect($effect`Triple-Sized`);

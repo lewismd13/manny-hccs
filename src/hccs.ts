@@ -669,7 +669,7 @@ if (!testDone(TEST_HP)) {
   // Plan is for Beach Comb + PK buffs to fall all the way through to item -> hot res -> fam weight.
   ensureEffect($effect`Fidoxene`);
   ensureEffect($effect`Do I Know You From Somewhere?`);
-
+  /*
   // 10 snojo fights to while +stat is on, also getting ice rice
   if (get("_snojoFreeFights") < 10) {
     useDefaultFamiliar();
@@ -687,7 +687,7 @@ if (!testDone(TEST_HP)) {
       adventureMacroAuto($location`The X-32-F Combat Training Snowman`, kill());
     }
   }
-
+*/
   // Don't use Kramco here.
   equip($slot`off-hand`, $item`none`);
 
@@ -934,7 +934,7 @@ if (!testDone(TEST_HP)) {
   } else {
     print("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
   }
-
+  /*
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
@@ -946,7 +946,7 @@ if (!testDone(TEST_HP)) {
     );
   }
   setAutoAttack(0);
-
+*/
   // Breakfast
 
   // Visiting Looking Glass in clan VIP lounge
@@ -1097,9 +1097,9 @@ if (!testDone(TEST_MUS)) {
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
   if (myInebriety() === 0) {
-    ensureOde(4);
+    ensureOde(6);
     tryUse(1, $item`astral six-pack`);
-    drink(4, $item`astral pilsner`);
+    drink(6, $item`astral pilsner`);
   }
 
   ensureEffect($effect`Big`);
@@ -1428,14 +1428,14 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Empathy`);
   ensureEffect($effect`robot friends`);
   ensureEffect($effect`human-machine hybrid`);
-  ensureEffect($effect`shortly stacked`);
+  // ensureEffect($effect`shortly stacked`);
   /*
   if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
     equip($item`cracker`);
   }
 */
-
+  /*
   // this is going to be all the gingerbread stuff, it is a work in progress
   if (
     haveEffect($effect`whole latte love`) === 0 &&
@@ -1473,7 +1473,7 @@ if (!testDone(TEST_FAMILIAR)) {
     use($item`gingerbread spice latte`);
     useDefaultFamiliar();
   }
-
+*/
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);
     adventureMacroAuto(
@@ -1496,6 +1496,8 @@ if (!testDone(TEST_FAMILIAR)) {
   } else if (availableAmount($item`bugged beanie`) === 1) {
     useFamiliar($familiar`baby bugged bugbear`);
   }
+
+  cliExecute("cheat rope");
 
   maximize("familiar weight", false);
 
@@ -1722,7 +1724,7 @@ if (!testDone(TEST_SPELL)) {
   }
 
   // TODO: switch to buying an astral statuette in hccsAscend.js, and using lefty instead of hand
-  ensureItem(1, $item`obsidian nutcracker`);
+  // ensureItem(1, $item`obsidian nutcracker`);
 
   cliExecute("briefcase e spell");
 
@@ -1764,7 +1766,7 @@ if (!testDone(TEST_SPELL)) {
     ensurePotionEffect($effect`Concentration`, $item`cordial of concentration`);
   }
 
-  useFamiliar($familiar`disembodied hand`);
+  useFamiliar($familiar`left-hand man`);
 
   maximize("spell damage", false);
 
@@ -1839,7 +1841,7 @@ if (!testDone(TEST_ITEM)) {
   }
 
   useDefaultFamiliar();
-
+  /*
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (getPropertyInt("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
@@ -1850,7 +1852,7 @@ if (!testDone(TEST_ITEM)) {
     );
     setAutoAttack(0);
   }
-
+*/
   if (!getPropertyBoolean("_clanFortuneBuffUsed")) {
     ensureEffect($effect`There\'s No N In Love`);
   }
@@ -1876,7 +1878,7 @@ if (!testDone(TEST_ITEM)) {
   }
 
   // Use bag of grain.
-  //    ensure_effect($effect[Nearly All-Natural]);
+  ensureEffect($effect`Nearly All-Natural`);
 
   ensureEffect($effect`Feeling Lost`);
   ensureEffect($effect`Steely-Eyed Squint`);
@@ -1911,7 +1913,7 @@ cliExecute("mood default");
 cliExecute("ccs default");
 cliExecute("boombox food");
 cliExecute("/whitelist alliance from hell");
-
+/*
 visitUrl("peevpee.php?action=smashstone&confirm=on");
 print("Stone smashed. Get your PVP on!", "green");
 // spar for 6 fights
@@ -1925,7 +1927,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("pvp fame select");
-
+*/
 print(
   "This loop took " +
     (gametimeToInt() - START_TIME) / 1000 +

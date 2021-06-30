@@ -43,6 +43,7 @@ import {
   inebrietyLimit,
   itemAmount,
   lastChoice,
+  lightningCost,
   logprint,
   max,
   maximize,
@@ -138,10 +139,8 @@ var TEMP_TURNS = 0;
 const START_TIME = gametimeToInt();
 
 const justKillTheThing = Macro.trySkill($skill`Curse of Weaksauce`)
-  .trySkill($skill`Micrometeorite`)
-  .trySkill($skill`Sing Along`)
   .trySkill($skill`Stuffed Mortar Shell`)
-  .skill($skill`candyblast`)
+  .skill($skill`saucegeyser`)
   .step("repeat");
 /*
 const defaultFamiliar = $familiar`melodramedary`;
@@ -301,7 +300,7 @@ function summonBrickoOyster(maxSummons: number) {
 }
 
 function fightSausageIfGuaranteed() {
-  if (sausageFightGuaranteed()) {
+  /* if (sausageFightGuaranteed()) {
     equip($item`Iunion Crown`);
     equip($slot`shirt`, $item`none`);
     equip($item`Fourth of May Cosplay Saber`);
@@ -315,7 +314,8 @@ function fightSausageIfGuaranteed() {
 
     adventureMacroAuto($location`The Neverending Party`, kill());
     setAutoAttack(0);
-  }
+  } */
+  print("Nevermind.", "green");
 }
 
 export function testDone(testNum: number) {
@@ -381,13 +381,14 @@ equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
 
 if (!testDone(TEST_COIL_WIRE)) {
   setClan("Bonus Adventures from Hell");
+  /*
   if (getPropertyInt("_clanFortuneConsultUses") < 3) {
     while (getPropertyInt("_clanFortuneConsultUses") < 3) {
       cliExecute("fortune cheesefax");
       cliExecute("wait 5");
     }
   }
-
+*/
   if (myLevel() === 1 && mySpleenUse() === 0) {
     while (getPropertyInt("_universeCalculated") < getPropertyInt("skillLevel144")) {
       cliExecute("numberology 69");
@@ -1029,7 +1030,7 @@ if (!testDone(TEST_HP)) {
     ensureSong($effect`ur-kel\'s aria of annoyance`);
     ensureEffect($effect`Feeling Excited`);
 
-    cliExecute("mood execute");
+    // cliExecute("mood execute");
 
     // Otherwise fight.
     setChoice(1324, 5);
@@ -1097,9 +1098,9 @@ if (!testDone(TEST_MUS)) {
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
   if (myInebriety() === 0) {
-    ensureOde(6);
+    ensureOde(5);
     tryUse(1, $item`astral six-pack`);
-    drink(6, $item`astral pilsner`);
+    drink(5, $item`astral pilsner`);
   }
 
   ensureEffect($effect`Big`);
@@ -1115,16 +1116,16 @@ if (!testDone(TEST_MUS)) {
   create(1, $item`philter of phorce`);
   ensureEffect($effect`Phorcefullness`);
   maximize("muscle", false);
-
+  /*
   if (
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`muscle`) - myBasestat($stat`mysticality`) < 1770
   ) {
-    throw "Not enough moxie to cap.";
+    throw "Not enough muscle to cap.";
   } else if (myBuffedstat($stat`muscle`) - myBasestat($stat`muscle`) < 1770) {
-    throw "Not enough moxie to cap.";
+    throw "Not enough muscle to cap.";
   }
-
+*/
   // cli_execute('modtrace mus');
   // abort();
   TEMP_TURNS = myTurncount();
@@ -1177,6 +1178,7 @@ if (!testDone(TEST_MOX)) {
     tryUse(1, $item`runproof mascara`);
   }
   maximize("moxie", false);
+  /*
   if (
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`moxie`) - myBasestat($stat`mysticality`) < 1770
@@ -1185,7 +1187,7 @@ if (!testDone(TEST_MOX)) {
   } else if (myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`) < 1770) {
     throw "Not enough moxie to cap.";
   }
-
+*/
   TEMP_TURNS = myTurncount();
   doTest(TEST_MOX);
   MOX_TURNS = myTurncount() - TEMP_TURNS;
@@ -1231,6 +1233,9 @@ if (!testDone(TEST_HOT_RES)) {
   // synth hot TODO: check for the right candyblast candies and summon candy hearts if not
 
   if (haveEffect($effect`Synthesis: Hot`) == 0) {
+    setProperty("autoSatisfyWithNPCs", "true");
+    cliExecute("buy 1 tamarind-flavored chewing gum");
+    cliExecute("buy 1 lime-and-chile-flavored chewing gum");
     cliExecute("synthesize hot");
   }
 
@@ -1292,7 +1297,7 @@ if (!testDone(TEST_HOT_RES)) {
   ensureEffect($effect`Astral Shell`);
 
   // Build up 100 turns of Deep Dark Visions for spell damage later.
-  while (
+  /* while (
     haveSkill($skill`Deep Dark Visions`) &&
     haveEffect($effect`Visions of the Deep Dark Deeps`) < 50
   ) {
@@ -1314,7 +1319,7 @@ if (!testDone(TEST_HOT_RES)) {
       }
     }
     useSkill(1, $skill`Deep Dark Visions`);
-  }
+  } */
 
   // drink hot socks here if you're a tryhard
 
@@ -1336,7 +1341,7 @@ if (!testDone(TEST_HOT_RES)) {
   // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
   maximize("hot res, 0.01 familiar weight", false);
 
-  if (round(numericModifier("hot resistance")) < 59) {
+  if (round(numericModifier("hot resistance")) < 55) {
     throw "Something went wrong building hot res.";
   }
 
@@ -1427,7 +1432,7 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Leash of Linguini`);
   ensureEffect($effect`Empathy`);
   ensureEffect($effect`robot friends`);
-  ensureEffect($effect`human-machine hybrid`);
+  // ensureEffect($effect`human-machine hybrid`);
   // ensureEffect($effect`shortly stacked`);
   /*
   if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
@@ -1571,7 +1576,7 @@ if (!testDone(TEST_WEAPON)) {
   // maybe try just setting autoattack to HCCS_Spit
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
-  if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`cowrruption`) === 0) {
+  /* if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`cowrruption`) === 0) {
     print("Your camel spit level is " + get("camelSpit"), "green");
     if (availableAmount($item`photocopied monster`) === 0) {
       if (getPropertyBoolean("_photocopyUsed")) throw "Already used fax for the day.";
@@ -1604,8 +1609,8 @@ if (!testDone(TEST_WEAPON)) {
       print("your camel is not full enough", "red");
       abort();
     }
-  }
-  /*
+  } */
+
   if (haveEffect($effect`In a Lather`) === 0) {
     if (myInebriety() > inebrietyLimit() - 2) {
       error("Something went wrong. We are too drunk.");
@@ -1614,7 +1619,7 @@ if (!testDone(TEST_WEAPON)) {
     ensureOde(2);
     cliExecute("drink Sockdollager");
   }
-*/
+
   if (availableAmount($item`twinkly nuggets`) > 0) {
     ensureEffect($effect`Twinkly Weapon`);
   }
@@ -1654,7 +1659,9 @@ if (!testDone(TEST_WEAPON)) {
   ensureEffect($effect`Billiards Belligerence`);
 
   // Corrupted marrow
-  ensureEffect($effect`Cowrruption`);
+  wishEffect($effect`Cowrruption`);
+  wishEffect($effect`pyramid power`);
+  wishEffect($effect`spit upon`);
 
   // Pastamancer d1 is weapon damage.
 
@@ -1682,7 +1689,7 @@ if (!testDone(TEST_WEAPON)) {
     );
   }
 
-  if (weaponTurns() > 2) {
+  if (weaponTurns() > 6) {
     throw "Something went wrong with weapon damage.";
   }
 

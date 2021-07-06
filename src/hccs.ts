@@ -1900,7 +1900,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(4);
 }
 
-cliExecute("pvp fame beast");
+cliExecute("swagger");
 
 print(
   "This loop took " +

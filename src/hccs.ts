@@ -46,6 +46,7 @@ import {
   logprint,
   max,
   maximize,
+  mpCost,
   myAdventures,
   myBasestat,
   myBuffedstat,
@@ -57,6 +58,7 @@ import {
   myInebriety,
   myLevel,
   myMaxhp,
+  myMaxmp,
   myMeat,
   myMp,
   mySpleenUse,
@@ -335,6 +337,10 @@ function doTest(testNum: number) {
   }
 }
 
+function nextLibramCost() {
+  return mpCost($skill`Summon BRICKOs`);
+}
+
 export function withMacro<T>(macro: Macro, action: () => T) {
   macro.save();
   try {
@@ -486,7 +492,7 @@ if (!testDone(TEST_HP)) {
     equip($item`dromedary drinking helmet`);
   }
 
-  cliExecute("call detective_solver.ash");
+  cliExecute("call detective solver");
   buy(1, $item`shoe gum`);
 
   // learn extract and digitize
@@ -1014,22 +1020,22 @@ if (!testDone(TEST_HP)) {
 
   equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
 
+  ensureNpcEffect($effect`Glittering Eyelashes`, 5, $item`glittery mascara`);
+  ensureSong($effect`The Magical Mojomuscular Melody`);
+  ensureSong($effect`Polka of Plenty`);
+  ensureEffect($effect`inscrutable gaze`);
+  ensureEffect($effect`pride of the puffin`);
+  ensureEffect($effect`drescher\'s annoying noise`);
+  ensureSong($effect`ur-kel\'s aria of annoyance`);
+  ensureEffect($effect`Feeling Excited`);
+
   // 14 free NEP fights, using mob hit and xray
   while (
     getPropertyInt("_neverendingPartyFreeTurns") < 10 ||
     (haveSkill($skill`Chest X-Ray`) && getPropertyInt("_chestXRayUsed") < 3) ||
     (haveSkill($skill`Gingerbread Mob Hit`) && !getPropertyBoolean("_gingerbreadMobHitUsed"))
   ) {
-    ensureNpcEffect($effect`Glittering Eyelashes`, 5, $item`glittery mascara`);
-    ensureSong($effect`The Magical Mojomuscular Melody`);
-    ensureSong($effect`Polka of Plenty`);
-    ensureEffect($effect`inscrutable gaze`);
-    ensureEffect($effect`pride of the puffin`);
-    ensureEffect($effect`drescher\'s annoying noise`);
-    ensureSong($effect`ur-kel\'s aria of annoyance`);
-    ensureEffect($effect`Feeling Excited`);
-
-    cliExecute("mood execute");
+    // cliExecute("mood execute");
 
     // Otherwise fight.
     setChoice(1324, 5);
@@ -1109,9 +1115,7 @@ if (!testDone(TEST_MUS)) {
   ensureEffect($effect`Rage of the Reindeer`);
   ensureEffect($effect`Quiet Determination`);
   ensureEffect($effect`Disdain of the War Snapper`);
-  // ensure_effect($effect[Tomato Power]);
   ensureNpcEffect($effect`Go Get \'Em, Tiger!`, 5, $item`Ben-Gal&trade; balm`);
-  // ensure_effect($effect[Ham-Fisted]);
   create(1, $item`philter of phorce`);
   ensureEffect($effect`Phorcefullness`);
   maximize("muscle", false);
@@ -1120,13 +1124,11 @@ if (!testDone(TEST_MUS)) {
     myClass() === $class`Pastamancer` &&
     myBuffedstat($stat`muscle`) - myBasestat($stat`mysticality`) < 1770
   ) {
-    throw "Not enough moxie to cap.";
+    throw "Not enough muscle to cap.";
   } else if (myBuffedstat($stat`muscle`) - myBasestat($stat`muscle`) < 1770) {
-    throw "Not enough moxie to cap.";
+    throw "Not enough muscle to cap.";
   }
 
-  // cli_execute('modtrace mus');
-  // abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_MUS);
   MUS_TURNS = myTurncount() - TEMP_TURNS;
@@ -1340,9 +1342,7 @@ if (!testDone(TEST_HOT_RES)) {
     throw "Something went wrong building hot res.";
   }
 
-  // cli_execute('modtrace Hot Resistance');
-  // abort();
-  logprint(cliExecuteOutput("modtrace hot resistance"));
+  // logprint(cliExecuteOutput("modtrace hot resistance"));
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_HOT_RES);
@@ -1497,6 +1497,14 @@ if (!testDone(TEST_FAMILIAR)) {
     useFamiliar($familiar`baby bugged bugbear`);
   }
 
+  while (myMp() / myMaxmp() > 0.3 && nextLibramCost() <= myMp()) {
+    useSkill($skill`summon candy heart`);
+  }
+
+  if (availableAmount($item`green candy heart`) > 0) {
+    ensureEffect($effect`heart of green`);
+  }
+
   maximize("familiar weight", false);
 
   // cli_execute('modtrace familiar weight');
@@ -1524,26 +1532,6 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   // Paint crayon elf for DNA and ghost buff (Saber YR)
-  /*
-  if (!getPropertyBoolean("_chateauMonsterFought")) {
-    const chateauText = visitUrl("place.php?whichplace=chateau", false);
-    const m = createMatcher("alt="Painting of a? ([^(]*) .1."", chateauText);
-    if (find(m) && group(m, 1) === "Black Crayon Crimbo Elf") {
-      cliExecute("mood apathetic");
-      useFamiliar($familiar`ghost of crimbo carols`);
-      equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
-      if (getPropertyInt("_reflexHammerUsed") === 3) {
-        error("You do not have any banishes left");
-      }
-      setHccsCombatMode(MODE_CUSTOM, mSkill(mItem(mNew(), $item`DNA extraction syringe`), $skill`Reflex Hammer`));
-      visitUrl("place.php?whichplace=chateau&action=chateau_painting", false);
-      runCombat();
-      useDefaultFamiliar();
-    } else {
-      error("Wrong painting.");
-    }
-  } */
-
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
     // const match = chateauText.match(/alt="Painting of an? ([^(]*) .1."/);
@@ -1636,8 +1624,6 @@ if (!testDone(TEST_WEAPON)) {
   // make KGB set to weapon
   cliExecute("briefcase e weapon");
 
-  // Hatter buff
-
   // Beach Comb
   if (!containsText(getProperty("_beachHeadsUsed"), "6")) {
     ensureEffect($effect`Lack of Body-Building`);
@@ -1661,11 +1647,6 @@ if (!testDone(TEST_WEAPON)) {
 
   ensureNpcEffect($effect`Engorged Weapon`, 1, $item`Meleegra&trade; pills`);
 
-  // wish_effect($effect[Outer Wolf&trade;]);
-
-  // this is just an assert, effectively.
-  // ensureEffect($effect`Meteor Showered`);
-
   ensureEffect($effect`Bow-Legged Swagger`);
 
   useFamiliar($familiar`disembodied hand`);
@@ -1684,8 +1665,6 @@ if (!testDone(TEST_WEAPON)) {
     throw "Something went wrong with weapon damage.";
   }
 
-  // cli_execute('modtrace weapon damage');
-  // abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_WEAPON);
   WEAPON_TURNS = myTurncount() - TEMP_TURNS;
@@ -1720,9 +1699,6 @@ if (!testDone(TEST_SPELL)) {
   if (availableAmount($item`flimsy hardwood scraps`) > 0) {
     retrieveItem(1, $item`weeping willow wand`);
   }
-
-  // TODO: switch to buying an astral statuette in hccsAscend.js, and using lefty instead of hand
-  ensureItem(1, $item`obsidian nutcracker`);
 
   cliExecute("briefcase e spell");
 
@@ -1764,7 +1740,7 @@ if (!testDone(TEST_SPELL)) {
     ensurePotionEffect($effect`Concentration`, $item`cordial of concentration`);
   }
 
-  useFamiliar($familiar`disembodied hand`);
+  useFamiliar($familiar`left-hand man`);
 
   maximize("spell damage", false);
 
@@ -1924,7 +1900,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(4);
 }
 
-cliExecute("pvp fame select");
+cliExecute("pvp fame beast");
 
 print(
   "This loop took " +

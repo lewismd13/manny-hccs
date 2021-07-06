@@ -1,10 +1,8 @@
-import { availableAmount, mpCost, myMaxmp, myMp, useSkill } from "kolmafia";
+import { availableAmount, mpCost, myMaxmp, myMp, print, useSkill } from "kolmafia";
 import { $item, $skill, get } from "libram";
 import { testDone } from "./hccs";
 
-function nextLibramCost() {
-  return mpCost($skill`Summon BRICKOs`);
-}
+
 
 function castBestLibram() {
   if (availableAmount($item`green candy heart`) < 1 && !testDone(5)) {
@@ -19,7 +17,9 @@ function castBestLibram() {
     useSkill($skill`summon divine favor`);
   }
 }
-
-while (myMp() / myMaxmp() > 0.2 && nextLibramCost() <= myMp()) {
-  castBestLibram();
+export function libramCast() {
+  /*while (myMp() / myMaxmp() > 0.2 && nextLibramCost() <= myMp()) {
+    castBestLibram();
+  } */
+  print("nevermind");
 }

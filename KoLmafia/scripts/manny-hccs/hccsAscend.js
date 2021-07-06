@@ -3,6 +3,185 @@
 /******/ 	"use strict";
 /******/ 	var __webpack_modules__ = ({
 
+/***/ "./node_modules/libram/dist/property.js":
+/*!**********************************************!*\
+  !*** ./node_modules/libram/dist/property.js ***!
+  \**********************************************/
+/*! namespace exports */
+/*! export createMafiaClassPropertyGetter [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export createPropertyGetter [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export get [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getBoolean [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getBounty [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getClass [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getCoinmaster [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getCommaSeparated [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getEffect [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getElement [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getFamiliar [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getItem [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getLocation [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getMonster [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getNumber [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getPhylum [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getServant [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getSkill [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getSlot [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getStat [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getString [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export getThrall [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export set [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__, __webpack_require__.n, __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "createPropertyGetter": () => /* binding */ createPropertyGetter,
+/* harmony export */   "createMafiaClassPropertyGetter": () => /* binding */ createMafiaClassPropertyGetter,
+/* harmony export */   "getString": () => /* binding */ getString,
+/* harmony export */   "getCommaSeparated": () => /* binding */ getCommaSeparated,
+/* harmony export */   "getBoolean": () => /* binding */ getBoolean,
+/* harmony export */   "getNumber": () => /* binding */ getNumber,
+/* harmony export */   "getBounty": () => /* binding */ getBounty,
+/* harmony export */   "getClass": () => /* binding */ getClass,
+/* harmony export */   "getCoinmaster": () => /* binding */ getCoinmaster,
+/* harmony export */   "getEffect": () => /* binding */ getEffect,
+/* harmony export */   "getElement": () => /* binding */ getElement,
+/* harmony export */   "getFamiliar": () => /* binding */ getFamiliar,
+/* harmony export */   "getItem": () => /* binding */ getItem,
+/* harmony export */   "getLocation": () => /* binding */ getLocation,
+/* harmony export */   "getMonster": () => /* binding */ getMonster,
+/* harmony export */   "getPhylum": () => /* binding */ getPhylum,
+/* harmony export */   "getServant": () => /* binding */ getServant,
+/* harmony export */   "getSkill": () => /* binding */ getSkill,
+/* harmony export */   "getSlot": () => /* binding */ getSlot,
+/* harmony export */   "getStat": () => /* binding */ getStat,
+/* harmony export */   "getThrall": () => /* binding */ getThrall,
+/* harmony export */   "get": () => /* binding */ get,
+/* harmony export */   "set": () => /* binding */ set
+/* harmony export */ });
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kolmafia */ "kolmafia");
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _propertyTyping__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./propertyTyping */ "./node_modules/libram/dist/propertyTyping.js");
+
+
+var createPropertyGetter = function createPropertyGetter(transform) {
+  return function (property, default_) {
+    var value = (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getProperty)(property);
+
+    if (default_ !== undefined && value === "") {
+      return default_;
+    }
+
+    return transform(value, property);
+  };
+};
+var createMafiaClassPropertyGetter = function createMafiaClassPropertyGetter(Type) {
+  return createPropertyGetter(function (value) {
+    var v = Type.get(value);
+    return v === Type.get("none") ? null : v;
+  });
+};
+var getString = createPropertyGetter(function (value) {
+  return value;
+});
+var getCommaSeparated = createPropertyGetter(function (value) {
+  return value.split(/, ?/);
+});
+var getBoolean = createPropertyGetter(function (value) {
+  return value === "true";
+});
+var getNumber = createPropertyGetter(function (value) {
+  return Number(value);
+});
+var getBounty = createMafiaClassPropertyGetter(Bounty);
+var getClass = createMafiaClassPropertyGetter(Class);
+var getCoinmaster = createMafiaClassPropertyGetter(Coinmaster);
+var getEffect = createMafiaClassPropertyGetter(Effect);
+var getElement = createMafiaClassPropertyGetter(Element);
+var getFamiliar = createMafiaClassPropertyGetter(Familiar);
+var getItem = createMafiaClassPropertyGetter(Item);
+var getLocation = createMafiaClassPropertyGetter(Location);
+var getMonster = createMafiaClassPropertyGetter(Monster);
+var getPhylum = createMafiaClassPropertyGetter(Phylum);
+var getServant = createMafiaClassPropertyGetter(Servant);
+var getSkill = createMafiaClassPropertyGetter(Skill);
+var getSlot = createMafiaClassPropertyGetter(Slot);
+var getStat = createMafiaClassPropertyGetter(Stat);
+var getThrall = createMafiaClassPropertyGetter(Thrall);
+function get(property, _default) {
+  var value = getString(property);
+
+  if ((0,_propertyTyping__WEBPACK_IMPORTED_MODULE_1__.isMonsterProperty)(property)) {
+    return getMonster(property, _default);
+  }
+
+  if ((0,_propertyTyping__WEBPACK_IMPORTED_MODULE_1__.isLocationProperty)(property)) {
+    return getLocation(property, _default);
+  }
+
+  if (value === "") {
+    return _default === undefined ? "" : _default;
+  }
+
+  if ((0,_propertyTyping__WEBPACK_IMPORTED_MODULE_1__.isBooleanProperty)(property, value)) {
+    return getBoolean(property, _default);
+  }
+
+  if ((0,_propertyTyping__WEBPACK_IMPORTED_MODULE_1__.isNumericProperty)(property, value)) {
+    return getNumber(property, _default);
+  }
+
+  return value;
+}
+function set(property, value) {
+  var stringValue = value === null ? "" : value.toString();
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.setProperty)(property, stringValue);
+}
+
+/***/ }),
+
+/***/ "./node_modules/libram/dist/propertyTyping.js":
+/*!****************************************************!*\
+  !*** ./node_modules/libram/dist/propertyTyping.js ***!
+  \****************************************************/
+/*! namespace exports */
+/*! export isBooleanProperty [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export isLocationProperty [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export isMonsterProperty [provided] [no usage info] [missing usage info prevents renaming] */
+/*! export isNumericProperty [provided] [no usage info] [missing usage info prevents renaming] */
+/*! other exports [not provided] [no usage info] */
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__.* */
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "isNumericProperty": () => /* binding */ isNumericProperty,
+/* harmony export */   "isBooleanProperty": () => /* binding */ isBooleanProperty,
+/* harmony export */   "isLocationProperty": () => /* binding */ isLocationProperty,
+/* harmony export */   "isMonsterProperty": () => /* binding */ isMonsterProperty
+/* harmony export */ });
+function isNumericProperty(property, value) {
+  return !isNaN(Number(value)) && !isNaN(parseFloat(value));
+}
+var fakeBooleans = ["trackVoteMonster", "_jickJarAvailable"];
+function isBooleanProperty(property, value) {
+  if (fakeBooleans.includes(property)) return false;
+  return ["true", "false"].includes(value);
+}
+var otherLocations = ["nextSpookyravenElizabethRoom", "nextSpookyravenStephenRoom"];
+function isLocationProperty(property) {
+  return otherLocations.includes(property) || property.endsWith("Location");
+}
+var otherMonsters = ["romanticTarget"];
+function isMonsterProperty(property) {
+  if (otherMonsters.includes(property)) return true;
+  return property.endsWith("Monster");
+}
+
+/***/ }),
+
 /***/ "./node_modules/libram/dist/template-string.js":
 /*!*****************************************************!*\
   !*** ./node_modules/libram/dist/template-string.js ***!
@@ -313,19 +492,36 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kolmafia */ "kolmafia");
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/template-string.js");
-var _templateObject;
+/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/property.js");
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6;
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
 
 
+var prep = true;
 
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject || (_templateObject = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
+if (prep === true) {
+  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject || (_templateObject = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))), 1);
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))));
+  }
+
+  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() !== "peppermint") {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["peppermint pip packet"]))));
+  }
+}
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
   throw "You have the wrong workshed item";
 }
 
 if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() != "peppermint") {
   throw "You have the wrong garden";
+}
+
+if ((0,libram__WEBPACK_IMPORTED_MODULE_2__.get)("chateauMonster") !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$monster)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["black crayon crimbo elf"])))) {
+  throw "You have the wrong mob painted in the chateau";
 }
 
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("you're about to ascend! wait, is that good?", "green"); // add in checks for chateau and boots, chateau mob has a pref, dunno about the rest
@@ -335,8 +531,9 @@ if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.containsText)((0,kolmafia__WEBPACK
 if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.containsText)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("charpane.php"), "Astral Spirit")) throw "Failed to ascend.";
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=pearlygates");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buydeli&whichitem=5046");
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buyarmory&whichitem=5037");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.userConfirm)("Are you sure you want to ascend? No skills to perm?");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&nopetok=1&noskillsok=1&pwd", true);
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd", true);
 
 /***/ }),
 

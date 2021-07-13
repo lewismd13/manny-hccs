@@ -121,6 +121,7 @@ const TEST_NONCOMBAT = 8;
 const TEST_ITEM = 9;
 const TEST_HOT_RES = 10;
 const TEST_COIL_WIRE = 11;
+const DONATE = 30;
 
 var HP_TURNS = 0;
 var MUS_TURNS = 0;
@@ -937,10 +938,9 @@ if (!testDone(TEST_HP)) {
       );
       setAutoAttack(0);
     }
-  } else {
-    print("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
   }
 
+  // TODO: switch to backing up bishops
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
@@ -1004,6 +1004,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
+  // TODO: use libram witchess handling
   if (toInt(getProperty("_witchessFights")) === 4) {
     useDefaultFamiliar();
     Macro.attack().repeat().setAutoAttack();
@@ -1338,7 +1339,7 @@ if (!testDone(TEST_HOT_RES)) {
   // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
   maximize("hot res, 0.01 familiar weight", false);
 
-  if (round(numericModifier("hot resistance")) < 59) {
+  if (round(numericModifier("hot resistance")) < 58) {
     throw "Something went wrong building hot res.";
   }
 
@@ -1901,6 +1902,8 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("swagger");
+
+doTest(DONATE);
 
 print(
   "This loop took " +

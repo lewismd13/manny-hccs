@@ -8,6 +8,7 @@ module.exports = {
     hccs: "./src/hccs.ts",
     hccsAscend: "./src/hccsAscend.ts",
     hccsLibrams: "./src/hccsLibrams.ts",
+    hccsPre: "./src/hccsPre.ts",
     // macroConsult: "./src/macroConsult.ts",
   },
   mode: "development",

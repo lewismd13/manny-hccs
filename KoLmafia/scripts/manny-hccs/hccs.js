@@ -1163,6 +1163,7 @@ var TEST_NONCOMBAT = 8;
 var TEST_ITEM = 9;
 var TEST_HOT_RES = 10;
 var TEST_COIL_WIRE = 11;
+var DONATE = 30;
 var HP_TURNS = 0;
 var MUS_TURNS = 0;
 var MYS_TURNS = 0;
@@ -1883,9 +1884,8 @@ if (!testDone(TEST_HP)) {
       (0,libram__WEBPACK_IMPORTED_MODULE_2__.adventureMacroAuto)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$location)(_templateObject239 || (_templateObject239 = _taggedTemplateLiteral(["The Neverending Party"]))), libram__WEBPACK_IMPORTED_MODULE_2__.Macro.if_('!monstername "sausage goblin"', new libram__WEBPACK_IMPORTED_MODULE_2__.Macro().step("abort")).trySkill(Skill.get("Lecture on Relativity")).step(justKillTheThing));
       (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setAutoAttack)(0);
     }
-  } else {
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("YOU FUCKED UP THE KRAMCO CHAIN AGAIN, YOU DUMBASS! Go kill crayon elves instead.");
-  }
+  } // TODO: switch to backing up bishops
+
 
   useDefaultFamiliar();
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.equip)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$slot)(_templateObject240 || (_templateObject240 = _taggedTemplateLiteral(["acc2"]))), (0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject241 || (_templateObject241 = _taggedTemplateLiteral(["backup camera"]))));
@@ -1945,6 +1945,7 @@ if (!testDone(TEST_HP)) {
     if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.handlingChoice)()) (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.runChoice)(1);
     (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setAutoAttack)(0);
   } // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
+  // TODO: use libram witchess handling
 
 
   if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.toInt)((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.getProperty)("_witchessFights")) === 4) {
@@ -2235,7 +2236,7 @@ if (!testDone(TEST_HOT_RES)) {
 
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.maximize)("hot res, 0.01 familiar weight", false);
 
-  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.round)((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.numericModifier)("hot resistance")) < 59) {
+  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.round)((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.numericModifier)("hot resistance")) < 58) {
     throw "Something went wrong building hot res.";
   } // logprint(cliExecuteOutput("modtrace hot resistance"));
 
@@ -2732,6 +2733,7 @@ if ((0,libram__WEBPACK_IMPORTED_MODULE_4__.get)("_daycareRecruits") === 0 && (0,
 }
 
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("swagger");
+doTest(DONATE);
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("This loop took " + ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.gametimeToInt)() - START_TIME) / 1000 + " seconds, for a 1 day, " + ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myTurncount)() - 1) + " turn HCCS run. Organ use was " + (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myFullness)() + "/" + (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myInebriety)() + "/" + (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.mySpleenUse)() + ". I drank " + (6 - (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_3__.$item)(_templateObject589 || (_templateObject589 = _taggedTemplateLiteral(["astral pilsner"]))))) + " Astral Pilsners.", "green");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("HP test: " + (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.getProperty)("_hccsHpTurns"), "green");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.print)("Muscle test: " + (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.getProperty)("_hccsHpTurns"), "green");

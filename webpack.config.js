@@ -1,7 +1,7 @@
-var path = require("path");
-var webpack = require("webpack");
-var packageData = require("./package.json");
+// eslint-disable-next-line no-undef
+const path = require("path");
 
+// eslint-disable-next-line no-undef
 module.exports = {
   entry: {
     // Point "entry" to scripts you want to be CLI-eligible.
@@ -15,7 +15,8 @@ module.exports = {
   devtool: false,
   output: {
     // Change the final string here to the name you want your script to use in mafia.
-    path: path.resolve(__dirname, "KoLmafia", "scripts", packageData.name),
+    // eslint-disable-next-line no-undef
+    path: path.resolve(__dirname, "KoLmafia", "scripts", "manny-hccs"),
     filename: "[name].js",
     libraryTarget: "commonjs",
   },

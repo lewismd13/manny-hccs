@@ -478,6 +478,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // Grab fish hatchett here, for fam wt, -combat, and muscle tests
+  // TODO: see if you can cut this
   retrieveItem(1, $item`fish hatchet`);
 
   // pulls wrench from deck

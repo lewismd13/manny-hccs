@@ -101,6 +101,7 @@ import {
   adventureMacroAuto,
   get,
   Macro,
+  Witchess,
 } from "libram";
 import { error } from "libram/dist/console";
 
@@ -342,6 +343,7 @@ function nextLibramCost() {
   return mpCost($skill`Summon BRICKOs`);
 }
 
+// TODO: combat filter functions SHOULD make this unnecessary
 export function withMacro<T>(macro: Macro, action: () => T) {
   macro.save();
   try {
@@ -866,39 +868,50 @@ if (!testDone(TEST_HP)) {
 
   useDefaultFamiliar();
 
-  //witchess fights TODO: Use libram's witchess handling
+  //witchess fights
   if (get("_witchessFights") < 5) {
     equip($item`fourth of may cosplay saber`);
     useDefaultFamiliar();
-    while (toInt(getProperty("_witchessFights")) < 2) {
+    while (toInt(getProperty("_witchessFights")) === 0) {
       Macro.step(justKillTheThing).setAutoAttack();
-      visitUrl("campground.php?action=witchess");
-      runChoice(1);
-      visitUrl("choice.php?option=1&pwd=" + myHash() + "&whichchoice=1182&piece=1942", false);
-      runCombat();
+      Witchess.fightPiece($monster`witchess bishop`);
+      setAutoAttack(0);
+    }
+    while (toInt(getProperty("_witchessFights")) === 1) {
+      useDefaultFamiliar();
+      Macro.attack().repeat().setAutoAttack();
+      ensureEffect($effect`carol of the bulls`);
+      Witchess.fightPiece($monster`witchess king`);
       setAutoAttack(0);
     }
     while (toInt(getProperty("_witchessFights")) === 2) {
       useDefaultFamiliar();
       Macro.attack().repeat().setAutoAttack();
       ensureEffect($effect`carol of the bulls`);
-      visitUrl("campground.php?action=witchess");
-      runChoice(1);
-      visitUrl("choice.php?option=1&pwd=" + myHash() + "&whichchoice=1182&piece=1940", false);
-      runCombat();
+      Witchess.fightPiece($monster`witchess witch`);
       setAutoAttack(0);
     }
     while (toInt(getProperty("_witchessFights")) === 3) {
       useDefaultFamiliar();
-      Macro.attack().repeat().setAutoAttack();
-      ensureEffect($effect`carol of the bulls`);
-      visitUrl("campground.php?action=witchess");
-      runChoice(1);
-      visitUrl("choice.php?option=1&pwd=" + myHash() + "&whichchoice=1182&piece=1941", false);
-      runCombat();
+      Macro.step(justKillTheThing).setAutoAttack();
+      Witchess.fightPiece($monster`witchess bishop`);
       setAutoAttack(0);
     }
   }
+  // backing up bishops - leaving a few backups for garbo
+  useDefaultFamiliar();
+  equip($slot`acc2`, $item`backup camera`);
+  equip($slot`shirt`, $item`none`);
+  while (get("lastCopyableMonster") === $monster`witchess bishop` && get("_backUpUses") < 9) {
+    useDefaultFamiliar();
+    adventureMacroAuto(
+      $location`Noob Cave`,
+      Macro.trySkill($skill`back-up to your last enemy`).step(justKillTheThing)
+    );
+  }
+  setAutoAttack(0);
+
+  equip($item`makeshift garbage shirt`);
 
   // get witchess buff, this should fall all the way through to fam wt
   if (haveEffect($effect`puzzle champ`) === 0) {
@@ -940,19 +953,6 @@ if (!testDone(TEST_HP)) {
       setAutoAttack(0);
     }
   }
-
-  // TODO: switch to backing up bishops
-  useDefaultFamiliar();
-  equip($slot`acc2`, $item`backup camera`);
-  equip($slot`shirt`, $item`none`);
-  while (getProperty("lastCopyableMonster") === "sausage goblin" && get("_backUpUses") < 11) {
-    useDefaultFamiliar();
-    adventureMacroAuto(
-      $location`Noob Cave`,
-      Macro.trySkill($skill`back-up to your last enemy`).step(justKillTheThing)
-    );
-  }
-  setAutoAttack(0);
 
   // Breakfast
 
@@ -1005,16 +1005,12 @@ if (!testDone(TEST_HP)) {
   }
 
   // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
-  // TODO: use libram witchess handling
   if (toInt(getProperty("_witchessFights")) === 4) {
     useDefaultFamiliar();
     Macro.attack().repeat().setAutoAttack();
     ensureEffect($effect`carol of the bulls`);
     ensureEffect($effect`song of the north`);
-    visitUrl("campground.php?action=witchess");
-    runChoice(1);
-    visitUrl("choice.php?option=1&pwd=" + myHash() + "&whichchoice=1182&piece=1939", false);
-    runCombat();
+    Witchess.fightPiece($monster`witchess queen`);
     setAutoAttack(0);
   }
 
@@ -1174,6 +1170,7 @@ if (!testDone(TEST_MOX)) {
   ensureSong($effect`Stevedave\'s Shanty of Superiority`);
   ensureSong($effect`The Moxious Madrigal`);
   ensureEffect($effect`Quiet Desperation`);
+  ensureEffect($effect`disco fever`);
   // ensure_effect($effect[Tomato Power]);
   ensureNpcEffect($effect`Butt-Rock Hair`, 5, $item`hair spray`);
   use(availableAmount($item`rhinestone`), $item`rhinestone`);
@@ -1206,6 +1203,7 @@ if (!testDone(TEST_HOT_RES)) {
   equip($slot`acc2`, $item`Powerful Glove`);
   equip($slot`acc3`, $item`Lil\' Doctor&trade; Bag`);
 
+  //TODO: Make sure short order cook doesn't kill the thing
   if (availableAmount($item`heat-resistant gloves`) === 0) {
     adv1($location`LavaCo&trade; Lamp Factory`, -1, "");
     if (

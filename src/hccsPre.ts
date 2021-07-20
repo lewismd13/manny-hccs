@@ -16,6 +16,7 @@ import {
   myMaxmp,
   myMp,
   print,
+  putShop,
   putStash,
   takeStash,
   use,
@@ -46,6 +47,8 @@ if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {
 while (myAdventures() > 4) {
   cliExecute("dungeonfist");
 }
+
+putShop(0, 0, availableAmount($item`game grid ticket`), $item`game grid ticket`);
 
 if (getWorkshed() !== $item`little geneticist DNA-splicing lab`) {
   takeStash($item`little geneticist DNA-splicing lab`, 1);

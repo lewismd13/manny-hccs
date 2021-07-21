@@ -39432,6 +39432,7 @@ if (!testDone(TEST_ITEM)) {
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("autoSatisfyWithNPCs", "true");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("autoSatisfyWithCoinmasters", (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.getProperty)("_saved_autoSatisfyWithCoinmasters"));
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("hpAutoRecovery", "0.8");
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("_meteorShowerUses", "4");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("mood default");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("ccs default");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.cliExecute)("boombox food");

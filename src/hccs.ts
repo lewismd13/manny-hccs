@@ -1882,6 +1882,7 @@ useSkill(1, $skill`spirit of nothing`);
 setProperty("autoSatisfyWithNPCs", "true");
 setProperty("autoSatisfyWithCoinmasters", getProperty("_saved_autoSatisfyWithCoinmasters"));
 setProperty("hpAutoRecovery", "0.8");
+setProperty("_meteorShowerUses", "4");
 
 cliExecute("mood default");
 cliExecute("ccs default");

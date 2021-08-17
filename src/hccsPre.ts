@@ -7,14 +7,11 @@ import {
   getClanId,
   getWorkshed,
   inebrietyLimit,
-  mpCost,
   myAdventures,
   myFamiliar,
   myFullness,
   myGardenType,
   myInebriety,
-  myMaxmp,
-  myMp,
   print,
   putShop,
   putStash,
@@ -23,7 +20,7 @@ import {
   useFamiliar,
   useSkill,
 } from "kolmafia";
-import { $item, $skill, get, $familiar } from "libram";
+import { $item, $skill, $familiar } from "libram";
 
 if (getClanId() !== 40382) {
   cliExecute("/whitelist alliance from hell");
@@ -40,6 +37,8 @@ if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {
   create($item`grogtini`);
   drinksilent($item`grogtini`);
   putStash($item`tiny plastic sword`, 1);
+} else if (myInebriety() >= inebrietyLimit() && myFullness() === fullnessLimit()) {
+  print("You're all set on drinking");
 } else {
   throw "are you sure you want to ascend? you have some open organ space";
 }

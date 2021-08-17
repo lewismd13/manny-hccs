@@ -37874,6 +37874,8 @@ if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() === (0,kolmafia__WEB
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.create)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["grogtini"]))));
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.drinksilent)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["grogtini"]))));
   (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.putStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["tiny plastic sword"]))), 1);
+} else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() >= (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inebrietyLimit)() && (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFullness)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fullnessLimit)()) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("You're all set on drinking");
 } else {
   throw "are you sure you want to ascend? you have some open organ space";
 }

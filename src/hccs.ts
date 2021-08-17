@@ -25,7 +25,6 @@ import {
   buy,
   chatPrivate,
   cliExecute,
-  cliExecuteOutput,
   containsText,
   create,
   drink,
@@ -33,18 +32,13 @@ import {
   equip,
   floor,
   gametimeToInt,
-  getCampground,
-  getInventory,
   getProperty,
   handlingChoice,
   haveEffect,
   haveSkill,
   hippyStoneBroken,
-  inebrietyLimit,
   itemAmount,
   lastChoice,
-  logprint,
-  max,
   maximize,
   mpCost,
   myAdventures,
@@ -53,7 +47,6 @@ import {
   myClass,
   myFullness,
   myGardenType,
-  myHash,
   myHp,
   myInebriety,
   myLevel,
@@ -73,25 +66,19 @@ import {
   setLocation,
   setProperty,
   sweetSynthesis,
-  sweetSynthesisResult,
   toInt,
-  toString,
   totalFreeRests,
   use,
   useFamiliar,
   useSkill,
-  visit,
   visitUrl,
   wait,
 } from "kolmafia";
 import {
   $class,
   $effect,
-  $effects,
   $familiar,
-  $familiars,
   $item,
-  $items,
   $location,
   $monster,
   $skill,
@@ -357,6 +344,8 @@ export function withMacro<T>(macro: Macro, action: () => T) {
 setProperty("_saved_autoSatisfyWithNPCs", getProperty("autoSatisfyWithNPCs"));
 setProperty("autoSatisfyWithNPCs", "false");
 
+setProperty("recoveryScript", "");
+
 // Do buy stuff from coinmasters (hermit).
 setProperty("_saved_autoSatisfyWithCoinmasters", getProperty("autoSatisfyWithCoinmasters"));
 setProperty("autoSatisfyWithCoinmasters", "true");
@@ -398,7 +387,7 @@ if (!testDone(TEST_COIL_WIRE)) {
   }
 
   if (myLevel() === 1 && mySpleenUse() === 0) {
-    while (getPropertyInt("_universeCalculated") < getPropertyInt("skillLevel144")) {
+    while (get("_universeCalculated") < get("skillLevel144")) {
       cliExecute("numberology 69");
     }
   }
@@ -407,6 +396,15 @@ if (!testDone(TEST_COIL_WIRE)) {
 
   // get cowboy boots
   visitUrl("place.php?whichplace=town_right&action=townright_ltt");
+
+  // Vote.
+  // TODO: make this also work for PM
+  if (itemAmount($item`&quot;I Voted!&quot; sticker`) === 0) {
+    visitUrl("place.php?whichplace=town_right&action=townright_vote");
+    visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=1&local%5B%5D=3");
+    // Make sure initiative-tracking works.
+    // visitUrl("place.php?whichplace=town_right&action=townright_vote");
+  }
 
   // Chateau piggy bank
   visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
@@ -1230,10 +1228,14 @@ if (!testDone(TEST_HOT_RES)) {
     setProperty("mappingMonsters", "false");
   }
 
-  // synth hot TODO: check for the right candyblast candies and summon candy hearts if not
+  // synth hot
 
   if (haveEffect($effect`Synthesis: Hot`) == 0) {
     cliExecute("synthesize hot");
+    while (haveEffect($effect`Synthesis: Hot`) == 0) {
+      useSkill($skill`summon candy heart`);
+      cliExecute("synthesize hot");
+    }
   }
 
   /*
@@ -1826,15 +1828,16 @@ if (!testDone(TEST_ITEM)) {
     );
     setAutoAttack(0);
   }
-
+  /*
   if (!getPropertyBoolean("_clanFortuneBuffUsed")) {
     ensureEffect($effect`There\'s No N In Love`);
   }
-
+*/
   ensureEffect($effect`Fat Leon\'s Phat Loot Lyric`);
   ensureEffect($effect`Singer\'s Faithful Ocelot`);
   ensureEffect($effect`The Spirit of Taking`);
   ensureEffect($effect`items.enh`);
+  ensureEffect($effect`El Aroma de Salsa`);
 
   // synthesis: collection
   // cliExecute("create 1 peppermint twist");
@@ -1882,6 +1885,7 @@ useSkill(1, $skill`spirit of nothing`);
 setProperty("autoSatisfyWithNPCs", "true");
 setProperty("autoSatisfyWithCoinmasters", getProperty("_saved_autoSatisfyWithCoinmasters"));
 setProperty("hpAutoRecovery", "0.8");
+setProperty("mpAutoRecovery", "0.1");
 setProperty("_meteorShowerUses", "4");
 
 cliExecute("mood default");

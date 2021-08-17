@@ -37890,7 +37890,7 @@ if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.containsText)((0,kolmafia__WEBPACK
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=pearlygates");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buydeli&whichitem=5046");
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buyarmory&whichitem=5037");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.userConfirm)("Are you sure you want to ascend? No skills to perm?");
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.userConfirm)("Are you sure you want to ascend? No skills to perm?", 60000, true);
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd", true);
 
 /***/ }),

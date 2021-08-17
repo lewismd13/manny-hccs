@@ -46,7 +46,7 @@ if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) throw "Failed to a
 visitUrl("afterlife.php?action=pearlygates");
 visitUrl("afterlife.php?action=buydeli&whichitem=5046");
 visitUrl("afterlife.php?action=buyarmory&whichitem=5037");
-userConfirm("Are you sure you want to ascend? No skills to perm?");
+userConfirm("Are you sure you want to ascend? No skills to perm?", 60000, true);
 visitUrl(
   "afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd",
   true

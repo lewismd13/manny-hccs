@@ -15,6 +15,7 @@ import {
   print,
   putShop,
   putStash,
+  pvpAttacksLeft,
   takeStash,
   use,
   useFamiliar,
@@ -24,6 +25,10 @@ import { $item, $skill, $familiar } from "libram";
 
 if (getClanId() !== 40382) {
   cliExecute("/whitelist alliance from hell");
+}
+if (pvpAttacksLeft() > 0) {
+  cliExecute("uberpvpoptimizer");
+  cliExecute("swagger");
 }
 
 if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {

@@ -79,9 +79,7 @@ var WHITELIST_DEGREE_PATTERN = /*#__PURE__*/_wrapRegExp(/(.*?) \(\xB0([0-9]+)\)/
   degree: 2
 });
 
-var Clan =
-/** @class */
-function () {
+var Clan = function () {
   function Clan(id, name) {
     this.id = id;
     this.name = name;
@@ -294,9 +292,7 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.Copier = void 0;
 
-var Copier =
-/** @class */
-function () {
+var Copier = function () {
   function Copier(couldCopy, prepare, canCopy, copiedMonster, fightCopy) {
     this.fightCopy = null;
     this.couldCopy = couldCopy;
@@ -409,9 +405,7 @@ function skillBallsMacroName(skillOrName) {
  */
 
 
-var Macro =
-/** @class */
-function () {
+var Macro = function () {
   function Macro() {
     this.components = [];
   }
@@ -1816,9 +1810,7 @@ var template_string_1 = __webpack_require__(/*! ./template-string */ "./node_mod
 
 var utils_1 = __webpack_require__(/*! ./utils */ "./node_modules/libram/dist/utils.js");
 
-var MpSource =
-/** @class */
-function () {
+var MpSource = function () {
   function MpSource() {}
 
   MpSource.prototype.usesRemaining = function () {
@@ -1834,9 +1826,7 @@ function () {
 
 exports.MpSource = MpSource;
 
-var OscusSoda =
-/** @class */
-function (_super) {
+var OscusSoda = function (_super) {
   __extends(OscusSoda, _super);
 
   function OscusSoda() {
@@ -1869,9 +1859,7 @@ function (_super) {
 
 exports.OscusSoda = OscusSoda;
 
-var MagicalSausages =
-/** @class */
-function (_super) {
+var MagicalSausages = function (_super) {
   __extends(MagicalSausages, _super);
 
   function MagicalSausages() {
@@ -1901,9 +1889,7 @@ function (_super) {
 
 exports.MagicalSausages = MagicalSausages;
 
-var MoodElement =
-/** @class */
-function () {
+var MoodElement = function () {
   function MoodElement() {}
 
   MoodElement.prototype.mpCostPerTurn = function () {
@@ -1917,9 +1903,7 @@ function () {
   return MoodElement;
 }();
 
-var SkillMoodElement =
-/** @class */
-function (_super) {
+var SkillMoodElement = function (_super) {
   __extends(SkillMoodElement, _super);
 
   function SkillMoodElement(skill) {
@@ -1974,9 +1958,7 @@ function (_super) {
   return SkillMoodElement;
 }(MoodElement);
 
-var PotionMoodElement =
-/** @class */
-function (_super) {
+var PotionMoodElement = function (_super) {
   __extends(PotionMoodElement, _super);
 
   function PotionMoodElement(potion, maxPricePerTurn) {
@@ -2012,9 +1994,7 @@ function (_super) {
   return PotionMoodElement;
 }(MoodElement);
 
-var GenieMoodElement =
-/** @class */
-function (_super) {
+var GenieMoodElement = function (_super) {
   __extends(GenieMoodElement, _super);
 
   function GenieMoodElement(effect) {
@@ -2041,9 +2021,7 @@ function (_super) {
   return GenieMoodElement;
 }(MoodElement);
 
-var CustomMoodElement =
-/** @class */
-function (_super) {
+var CustomMoodElement = function (_super) {
   __extends(CustomMoodElement, _super);
 
   function CustomMoodElement(effect, gainEffect) {
@@ -2076,9 +2054,7 @@ function (_super) {
  */
 
 
-var Mood =
-/** @class */
-function () {
+var Mood = function () {
   /**
    * Construct a new Mood instance.
    * @param options Options for mood.
@@ -3750,9 +3726,7 @@ var kolmafia_1 = __webpack_require__(/*! kolmafia */ "kolmafia");
  */
 
 
-var KolmafiaVersionError =
-/** @class */
-function (_super) {
+var KolmafiaVersionError = function (_super) {
   __extends(KolmafiaVersionError, _super);
 
   function KolmafiaVersionError(message) {
@@ -5354,6 +5328,80 @@ $({
 
 /***/ }),
 
+/***/ "./src/hccsPre.ts":
+/*!************************!*\
+  !*** ./src/hccsPre.ts ***!
+  \************************/
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kolmafia */ "kolmafia");
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/index.js");
+/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(libram__WEBPACK_IMPORTED_MODULE_1__);
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15;
+
+function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
+
+
+
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanId)() !== 40382) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("/whitelist alliance from hell");
+}
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.pvpAttacksLeft)() > 0) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("uberpvpoptimizer");
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("swagger");
+}
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inebrietyLimit)() && (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFullness)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fullnessLimit)()) {
+  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFamiliar)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$familiar)(_templateObject || (_templateObject = _taggedTemplateLiteral(["stooper"])))) {
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useFamiliar)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$familiar)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["stooper"]))));
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$skill)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["the ode to booze"]))), 1);
+    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.drinksilent)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["elemental caipiroska"]))));
+  }
+
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$skill)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["the ode to booze"]))), 1);
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["tiny plastic sword"]))), 1);
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.create)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["grogtini"]))));
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.drinksilent)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["grogtini"]))));
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.putStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["tiny plastic sword"]))), 1);
+} else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() >= (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inebrietyLimit)() && (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFullness)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fullnessLimit)()) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("You're all set on drinking");
+} else {
+  throw "are you sure you want to ascend? you have some open organ space";
+}
+
+while ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myAdventures)() > 4) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("dungeonfist");
+}
+
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.putShop)(0, 0, (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["game grid ticket"])))), (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["game grid ticket"]))));
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))), 1);
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))));
+}
+
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() !== "peppermint") {
+  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["peppermint pip packet"]))));
+}
+
+/***/ }),
+
+/***/ "kolmafia":
+/*!***************************!*\
+  !*** external "kolmafia" ***!
+  \***************************/
+/***/ ((module) => {
+
+"use strict";
+module.exports = require("kolmafia");
+
+/***/ }),
+
 /***/ "./node_modules/lodash-es/_DataView.js":
 /*!*********************************************!*\
   !*** ./node_modules/lodash-es/_DataView.js ***!
@@ -6173,9 +6221,7 @@ function arrayLikeKeys(value, inherited) {
 
   for (var key in value) {
     if ((inherited || hasOwnProperty.call(value, key)) && !(skipIndexes && ( // Safari 9 has enumerable `arguments.length` in strict mode.
-    key == 'length' || // Node.js 0.10 has enumerable non-index properties on buffers.
-    isBuff && (key == 'offset' || key == 'parent') || // PhantomJS 2 has enumerable non-index properties on typed arrays.
-    isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset') || // Skip index properties.
+    key == 'length' || isBuff && (key == 'offset' || key == 'parent') || isType && (key == 'buffer' || key == 'byteLength' || key == 'byteOffset') || // Skip index properties.
     (0,_isIndex_js__WEBPACK_IMPORTED_MODULE_5__.default)(key, length)))) {
       result.push(key);
     }
@@ -17924,8 +17970,8 @@ var stringToPath = (0,_memoizeCapped_js__WEBPACK_IMPORTED_MODULE_0__.default)(fu
   if (string.charCodeAt(0) === 46
   /* . */
   ) {
-      result.push('');
-    }
+    result.push('');
+  }
 
   string.replace(rePropName, function (match, number, quote, subString) {
     result.push(quote ? subString.replace(reEscapeChar, '$1') : number || match);
@@ -34530,8 +34576,8 @@ function template(string, options, guard) {
   } // Throw an error if a forbidden character was found in `variable`, to prevent
   // potential command injection attacks.
   else if (reForbiddenIdentifierChars.test(variable)) {
-      throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
-    } // Cleanup code by stripping empty strings.
+    throw new Error(INVALID_TEMPL_VAR_ERROR_TEXT);
+  } // Cleanup code by stripping empty strings.
 
 
   source = (isEvaluating ? source.replace(reEmptyStringLeading, '') : source).replace(reEmptyStringMiddle, '$1').replace(reEmptyStringTrailing, '$1;'); // Frame code as the function body.
@@ -37836,75 +37882,6 @@ var zipWith = (0,_baseRest_js__WEBPACK_IMPORTED_MODULE_0__.default)(function (ar
   return (0,_unzipWith_js__WEBPACK_IMPORTED_MODULE_1__.default)(arrays, iteratee);
 });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (zipWith);
-
-/***/ }),
-
-/***/ "./src/hccsPre.ts":
-/*!************************!*\
-  !*** ./src/hccsPre.ts ***!
-  \************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! kolmafia */ "kolmafia");
-/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/index.js");
-/* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(libram__WEBPACK_IMPORTED_MODULE_1__);
-var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10, _templateObject11, _templateObject12, _templateObject13, _templateObject14, _templateObject15;
-
-function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
-
-
-
-
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getClanId)() !== 40382) {
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("/whitelist alliance from hell");
-}
-
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inebrietyLimit)() && (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFullness)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fullnessLimit)()) {
-  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFamiliar)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$familiar)(_templateObject || (_templateObject = _taggedTemplateLiteral(["stooper"])))) {
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useFamiliar)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$familiar)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["stooper"]))));
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$skill)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["the ode to booze"]))), 1);
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.drinksilent)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["elemental caipiroska"]))));
-  }
-
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.useSkill)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$skill)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["the ode to booze"]))), 1);
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["tiny plastic sword"]))), 1);
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.create)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["grogtini"]))));
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.drinksilent)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["grogtini"]))));
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.putStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["tiny plastic sword"]))), 1);
-} else if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myInebriety)() >= (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.inebrietyLimit)() && (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myFullness)() === (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.fullnessLimit)()) {
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("You're all set on drinking");
-} else {
-  throw "are you sure you want to ascend? you have some open organ space";
-}
-
-while ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myAdventures)() > 4) {
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.cliExecute)("dungeonfist");
-}
-
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.putShop)(0, 0, (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.availableAmount)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["game grid ticket"])))), (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject11 || (_templateObject11 = _taggedTemplateLiteral(["game grid ticket"]))));
-
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject12 || (_templateObject12 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject13 || (_templateObject13 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))), 1);
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject14 || (_templateObject14 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))));
-}
-
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() !== "peppermint") {
-  (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject15 || (_templateObject15 = _taggedTemplateLiteral(["peppermint pip packet"]))));
-}
-
-/***/ }),
-
-/***/ "kolmafia":
-/*!***************************!*\
-  !*** external "kolmafia" ***!
-  \***************************/
-/***/ ((module) => {
-
-"use strict";
-module.exports = require("kolmafia");
 
 /***/ })
 

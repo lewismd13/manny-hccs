@@ -1,38 +1,37 @@
 import {
-  getProperty,
-  toInt,
-  setProperty,
-  familiarWeight,
-  myFamiliar,
-  weightAdjustment,
   availableAmount,
   buy,
-  use,
-  retrieveItem,
-  haveEffect,
-  cliExecute,
-  print,
-  myMp,
-  myMaxmp,
-  eat,
-  totalTurnsPlayed,
-  getClanName,
-  visitUrl,
-  getFuel,
-  create,
-  haveSkill,
-  useSkill,
-  toUrl,
   buyUsingStorage,
+  cliExecute,
+  create,
+  eat,
   equip,
+  familiarWeight,
+  getClanName,
+  getFuel,
+  getProperty,
+  haveEffect,
+  haveSkill,
+  myFamiliar,
+  myLocation,
+  myMaxmp,
+  myMp,
+  print,
   pullsRemaining,
+  retrieveItem,
+  setProperty,
   shopAmount,
   storageAmount,
   takeShop,
-  toString as toStringAsh,
   toEffect,
-  toString,
-  myLocation,
+  toInt,
+  toString as toStringAsh,
+  totalTurnsPlayed,
+  toUrl,
+  use,
+  useSkill,
+  visitUrl,
+  weightAdjustment,
 } from "kolmafia";
 import { $effect, $effects, $item, $location, $skill, Macro } from "libram";
 
@@ -247,7 +246,7 @@ export function mapMonster(location: Location, monster: Monster) {
   const fightPage = visitUrl(
     `choice.php?pwd&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`
   );
-  if (!fightPage.includes("You're fighting") && myLocation() !== $location`the haiku dungeon`)
+  if (!fightPage.includes("You're fighting") && myLocation() !== $location`The Haiku Dungeon`)
     throw "Something went wrong starting the fight.";
 }
 
@@ -311,7 +310,7 @@ const songSlots = [
 const allKnownSongs = ([] as Effect[]).concat(...songSlots);
 const allSongs = Skill.all()
   .filter(
-    (skill) => toStringAsh((skill.class as unknown) as string) === "Accordion Thief" && skill.buff
+    (skill) => toStringAsh(skill.class as unknown as string) === "Accordion Thief" && skill.buff
   )
   .map((skill) => toEffect(skill));
 export function openSongSlot(song: Effect) {

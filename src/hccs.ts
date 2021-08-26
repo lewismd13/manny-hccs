@@ -5,17 +5,17 @@ import {
   ensureMpSausage,
   ensureMpTonic,
   ensureNpcEffect,
+  ensureOde,
   ensurePotionEffect,
   ensureSewerItem,
+  ensureSong,
   getPropertyBoolean,
   getPropertyInt,
+  kill,
+  mapMonster,
   sausageFightGuaranteed,
   setChoice,
   setClan,
-  kill,
-  mapMonster,
-  ensureOde,
-  ensureSong,
 } from "./lib";
 import {
   abort,
@@ -52,7 +52,6 @@ import {
   myLevel,
   myMaxhp,
   myMaxmp,
-  myMeat,
   myMp,
   myPathId,
   mySpleenUse,
@@ -91,7 +90,6 @@ import {
   Macro,
   Witchess,
 } from "libram";
-import { error } from "libram/dist/console";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -112,18 +110,18 @@ const TEST_HOT_RES = 10;
 const TEST_COIL_WIRE = 11;
 const DONATE = 30;
 
-var HP_TURNS = 0;
-var MUS_TURNS = 0;
-var MYS_TURNS = 0;
-var MOX_TURNS = 0;
-var FAMILIAR_TURNS = 0;
-var WEAPON_TURNS = 0;
-var SPELL_TURNS = 0;
-var NONCOMBAT_TURNS = 0;
-var ITEM_TURNS = 0;
-var HOT_RES_TURNS = 0;
+let HP_TURNS = 0;
+let MUS_TURNS = 0;
+let MYS_TURNS = 0;
+let MOX_TURNS = 0;
+let FAMILIAR_TURNS = 0;
+let WEAPON_TURNS = 0;
+let SPELL_TURNS = 0;
+let NONCOMBAT_TURNS = 0;
+let ITEM_TURNS = 0;
+let HOT_RES_TURNS = 0;
 
-var TEMP_TURNS = 0;
+let TEMP_TURNS = 0;
 
 // test order will be stats, hot, item, NC, Fam, weapon, spell
 
@@ -168,10 +166,6 @@ function tryUse(quantity: number, it: Item) {
   }
 }
 
-function useAll(it: Item) {
-  return use(availableAmount(it), it);
-}
-
 function tryEquip(it: Item) {
   if (availableAmount(it) > 0) {
     return equip(it);
@@ -180,20 +174,29 @@ function tryEquip(it: Item) {
   }
 }
 
-function assertMeat(meat: number) {
-  if (myMeat() < meat) error("Not enough meat.");
-}
-
-function autosellAll(it: Item) {
-  autosell(itemAmount(it), it);
-}
-
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 function wishEffect(ef: Effect) {
   if (haveEffect(ef) === 0) {
-    cliExecute("genie effect " + ef.name);
+    cliExecute(`genie effect ${ef.name}`);
   } else {
-    print("Already have effect " + ef.name + ".");
+    print(`Already have effect ${ef.name}.`);
   }
+}
+
+function weaponTurns() {
+  return (
+    60 -
+    floor(numericModifier("weapon damage") / 25 + 0.001) -
+    floor(numericModifier("weapon damage percent") / 25 + 0.001)
+  );
+}
+
+function spellTurns() {
+  return (
+    60 -
+    floor(numericModifier("spell damage") / 50 + 0.001) -
+    floor(numericModifier("spell damage percent") / 50 + 0.001)
+  );
 }
 
 // Checks that you don't already have the tonic or effect and if your syringe has the right phylum and if so, makes the appropriate tonic.
@@ -225,10 +228,10 @@ function geneTonic(ph: string) {
       if (availableAmount($item`Gene Tonic: ${ph}`) === 0) {
         throw "something went wrong getting your gene tonic";
       } else {
-        print("successfully created gene tonic: " + ph);
+        print(`successfully created gene tonic: ${ph}`);
       }
     } else {
-      print("You already have " + ph + " DNA");
+      print(`You already have ${ph} DNA`);
     }
   }
 }
@@ -274,12 +277,6 @@ function geneTonic1(ph: string) {
 }
 */
 
-function shrug(ef: Effect) {
-  if (haveEffect(ef) > 0) {
-    cliExecute("shrug " + ef.name);
-  }
-}
-
 function summonBrickoOyster(maxSummons: number) {
   if (getPropertyInt("_brickoFights") >= 3) return false;
   if (availableAmount($item`BRICKO oyster`) > 0) return true;
@@ -311,19 +308,19 @@ function fightSausageIfGuaranteed() {
 }
 
 export function testDone(testNum: number) {
-  print("Checking test " + testNum + "...");
+  print(`Checking test ${testNum}...`);
   const text = visitUrl("council.php");
-  return !containsText(text, "<input type=hidden name=option value=" + testNum + ">");
+  return !containsText(text, `<input type=hidden name=option value=${testNum}>`);
 }
 
 function doTest(testNum: number) {
   if (!testDone(testNum)) {
-    visitUrl("choice.php?whichchoice=1089&option=" + testNum);
+    visitUrl(`choice.php?whichchoice=1089&option=${testNum}`);
     if (!testDone(testNum)) {
-      throw "Failed to do test " + testNum + ". Maybe we are out of turns.";
+      throw `Failed to do test ${testNum}. Maybe we are out of turns.`;
     }
   } else {
-    print("Test " + testNum + " already completed.");
+    print(`Test ${testNum} already completed.`);
   }
 }
 
@@ -510,7 +507,7 @@ if (!testDone(TEST_HP)) {
     if (availableAmount(lovePotion) === 0) {
       useSkill(1, $skill`Love Mixology`);
     }
-    visitUrl("desc_effect.php?whicheffect=" + loveEffect.descid);
+    visitUrl(`desc_effect.php?whicheffect=${loveEffect.descid}`);
     if (
       numericModifier(loveEffect, "mysticality") > 10 &&
       numericModifier(loveEffect, "muscle") > -30 &&
@@ -646,7 +643,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // synthesis: smart
-  if (haveEffect($effect`Synthesis: Smart`) == 0) {
+  if (haveEffect($effect`Synthesis: Smart`) === 0) {
     sweetSynthesis($item`bag of many confections`, $item`chubby and plump bar`);
   }
   // This is the sequence of synthesis effects; synthesis_plan will, if possible, come up with a plan for allocating candy to each of these.
@@ -862,7 +859,7 @@ if (!testDone(TEST_HP)) {
       setAutoAttack("melfgetcertainty");
       adv1($location`the deep machine tunnels`, -1, "");
       setAutoAttack(0);
-    } else { 
+    } else {
       adventureKill($location`the deep machine tunnels`);
     } */
   }
@@ -929,7 +926,7 @@ if (!testDone(TEST_HP)) {
 
     // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
 
-    if (get("_questPartyFairQuest") == "") {
+    if (get("_questPartyFairQuest") === "") {
       setChoice(1322, 6); // Leave
       adv1($location`The Neverending Party`, -1, "");
     }
@@ -1233,9 +1230,9 @@ if (!testDone(TEST_HOT_RES)) {
 
   // synth hot
 
-  if (haveEffect($effect`Synthesis: Hot`) == 0) {
+  if (haveEffect($effect`Synthesis: Hot`) === 0) {
     cliExecute("synthesize hot");
-    while (haveEffect($effect`Synthesis: Hot`) == 0) {
+    while (haveEffect($effect`Synthesis: Hot`) === 0) {
       useSkill($skill`summon candy heart`);
       cliExecute("synthesize hot");
     }
@@ -1563,7 +1560,7 @@ if (!testDone(TEST_WEAPON)) {
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
   if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`cowrruption`) === 0) {
-    print("Your camel spit level is " + get("camelSpit"), "green");
+    print(`Your camel spit level is ${get("camelSpit")}`, "green");
     if (availableAmount($item`photocopied monster`) === 0) {
       if (getPropertyBoolean("_photocopyUsed")) throw "Already used fax for the day.";
       cliExecute("/whitelist alliance from hell");
@@ -1658,14 +1655,6 @@ if (!testDone(TEST_WEAPON)) {
 
   maximize("weapon damage", false);
 
-  function weaponTurns() {
-    return (
-      60 -
-      floor(numericModifier("weapon damage") / 25 + 0.001) -
-      floor(numericModifier("weapon damage percent") / 25 + 0.001)
-    );
-  }
-
   if (weaponTurns() > 2) {
     throw "Something went wrong with weapon damage.";
   }
@@ -1748,14 +1737,6 @@ if (!testDone(TEST_SPELL)) {
   useFamiliar($familiar`left-hand man`);
 
   maximize("spell damage", false);
-
-  function spellTurns() {
-    return (
-      60 -
-      floor(numericModifier("spell damage") / 50 + 0.001) -
-      floor(numericModifier("spell damage percent") / 50 + 0.001)
-    );
-  }
 
   while (spellTurns() > myAdventures()) {
     eat(1, $item`magical sausage`);
@@ -1913,32 +1894,24 @@ cliExecute("swagger");
 doTest(DONATE);
 
 print(
-  "This loop took " +
-    (gametimeToInt() - START_TIME) / 1000 +
-    " seconds, for a 1 day, " +
-    (myTurncount() - 1) +
-    " turn HCCS run. Organ use was " +
-    myFullness() +
-    "/" +
-    myInebriety() +
-    "/" +
-    mySpleenUse() +
-    ". I drank " +
-    (6 - availableAmount($item`astral pilsner`)) +
-    " Astral Pilsners.",
+  `This loop took ${(gametimeToInt() - START_TIME) / 1000} seconds, for a 1 day, ${
+    myTurncount() - 1
+  } turn HCCS run. Organ use was ${myFullness()}/${myInebriety()}/${mySpleenUse()}. I drank ${
+    6 - availableAmount($item`astral pilsner`)
+  } Astral Pilsners.`,
   "green"
 );
 
-print("HP test: " + getProperty("_hccsHpTurns"), "green");
-print("Muscle test: " + getProperty("_hccsHpTurns"), "green");
-print("Moxie test: " + getProperty("_hccsMoxTurns"), "green");
-print("Myst test: " + getProperty("_hccsMysTurns"), "green");
-print("Hot Res test: " + getProperty("_hccsHotResTurns"), "green");
-print("Noncombat test: " + getProperty("_hccsNoncombatTurns"), "green");
-print("Fam Weight test: " + getProperty("_hccsFamiliarTurns"), "green");
-print("Weapon Damage test: " + getProperty("_hccsWeaponTurns"), "green");
-print("Spell Damage Test: " + getProperty("_hccsSpellTurns"), "green");
-print("Item Drop test: " + getProperty("_hccsItemTurns"), "green");
+print(`HP test: ${getProperty("_hccsHpTurns")}`, "green");
+print(`Muscle test: ${getProperty("_hccsHpTurns")}`, "green");
+print(`Moxie test: ${getProperty("_hccsMoxTurns")}`, "green");
+print(`Myst test: ${getProperty("_hccsMysTurns")}`, "green");
+print(`Hot Res test: ${getProperty("_hccsHotResTurns")}`, "green");
+print(`Noncombat test: ${getProperty("_hccsNoncombatTurns")}`, "green");
+print(`Fam Weight test: ${getProperty("_hccsFamiliarTurns")}`, "green");
+print(`Weapon Damage test: ${getProperty("_hccsWeaponTurns")}`, "green");
+print(`Spell Damage Test: ${getProperty("_hccsSpellTurns")}`, "green");
+print(`Item Drop test: ${getProperty("_hccsItemTurns")}`, "green");
 
 if (get("_questPartyFairQuest") === "food") {
   print("Hey, go talk to Geraldine!", "blue");

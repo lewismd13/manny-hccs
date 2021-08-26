@@ -18556,69 +18556,65 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! libram */ "./node_modules/libram/dist/index.js");
 /* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(libram__WEBPACK_IMPORTED_MODULE_1__);
-var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6;
+var _templateObject, _templateObject2, _templateObject3, _templateObject4, _templateObject5, _templateObject6, _templateObject7, _templateObject8, _templateObject9, _templateObject10;
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
-var prep = true;
+/*
+const prep = true;
 
 if (prep === true) {
-  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject || (_templateObject = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.takeStash)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))), 1);
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"]))));
+  if (getWorkshed() !== $item`little geneticist DNA-splicing lab`) {
+    takeStash($item`little geneticist DNA-splicing lab`, 1);
+    use($item`little geneticist DNA-splicing lab`);
   }
 
-  if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() !== "peppermint") {
-    (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.use)((0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["peppermint pip packet"]))));
+  if (myGardenType() !== "peppermint") {
+    use($item`peppermint pip packet`);
   }
 }
 
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.getWorkshed)() !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["little geneticist DNA-splicing lab"])))) {
+if (getWorkshed() !== $item`little geneticist DNA-splicing lab`) {
   throw "You have the wrong workshed item";
 }
-
-if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.myGardenType)() != "peppermint") {
+if (myGardenType() != "peppermint") {
   throw "You have the wrong garden";
 }
+*/
 
-if ((0,libram__WEBPACK_IMPORTED_MODULE_1__.get)("chateauMonster") !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$monster)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["black crayon crimbo elf"])))) {
+if ((0,libram__WEBPACK_IMPORTED_MODULE_1__.get)("chateauMonster") !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$monster)(_templateObject || (_templateObject = _taggedTemplateLiteral(["Black Crayon Crimbo Elf"])))) {
   throw "You have the wrong mob painted in the chateau";
 }
 
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("you're about to ascend! wait, is that good?", "green"); // add in checks for chateau and boots, chateau mob has a pref, dunno about the rest
-// const pg = visitUrl("charpane.php");
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("you're about to ascend! wait, is that good?", "green"); // add in check for boots
 
-if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.containsText)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("charpane.php"), "Astral Spirit")) (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on");
-if (!(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.containsText)((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("charpane.php"), "Astral Spirit")) throw "Failed to ascend.";
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=pearlygates");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buydeli&whichitem=5046");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=buyarmory&whichitem=5037");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.userConfirm)("Are you sure you want to ascend? No skills to perm?", 60000, true);
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.visitUrl)("afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd", true);
 /*
-prepareAscension(
-  {
-    workshed: $item`little geneticist DNA-splicing lab`,
-    garden: $item`Peppermint pip packet`,
-    eudora: $item`Our Daily Candles™ order form`,
-  },
-  {
-    desk: $item`Swiss piggy bank`,
-    nightstand: $item`foreign language tapes`,
-    ceiling: $item`ceiling fan`,
-  }
+if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
+  visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
+if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) throw "Failed to ascend.";
+visitUrl("afterlife.php?action=pearlygates");
+visitUrl("afterlife.php?action=buydeli&whichitem=5046");
+visitUrl("afterlife.php?action=buyarmory&whichitem=5037");
+userConfirm("Are you sure you want to ascend? No skills to perm?", 60000, true);
+visitUrl(
+  "afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd",
+  true
 );
+*/
 
-ascend(
-  Paths.CommunityService,
-  $class`sauceror`,
-  Lifestyle.hardcore,
-  "wallaby",
-  $item`astral six-pack`,
-  $item`astral statuette`
-); */
+(0,libram__WEBPACK_IMPORTED_MODULE_1__.prepareAscension)({
+  workshed: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["Little Geneticist DNA-Splicing Lab"]))),
+  garden: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject3 || (_templateObject3 = _taggedTemplateLiteral(["Peppermint Pip Packet"]))),
+  eudora: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject4 || (_templateObject4 = _taggedTemplateLiteral(["Our Daily Candles\u2122 order form"])))
+}, {
+  desk: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject5 || (_templateObject5 = _taggedTemplateLiteral(["Swiss piggy bank"]))),
+  nightstand: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["foreign language tapes"]))),
+  ceiling: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["ceiling fan"])))
+});
+(0,libram__WEBPACK_IMPORTED_MODULE_1__.ascend)(libram__WEBPACK_IMPORTED_MODULE_1__.Paths.CommunityService, (0,libram__WEBPACK_IMPORTED_MODULE_1__.$class)(_templateObject8 || (_templateObject8 = _taggedTemplateLiteral(["Sauceror"]))), libram__WEBPACK_IMPORTED_MODULE_1__.Lifestyle.hardcore, "wallaby", (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject9 || (_templateObject9 = _taggedTemplateLiteral(["astral six-pack"]))), (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject10 || (_templateObject10 = _taggedTemplateLiteral(["astral statuette"]))));
 
 /***/ }),
 

@@ -6,7 +6,7 @@
     "allowUnusedLabels": false,
     "declaration": false,
     "forceConsistentCasingInFileNames": true,
-    "lib": ["es2018"],
+    "lib": ["es2020"],
     "module": "commonjs",
     "noEmitOnError": true,
     "noFallthroughCasesInSwitch": true,
@@ -16,7 +16,7 @@
     "target": "es2018",
     "types": []
   },
-  "include": ["src/**/hccs.ts", "src/**/lib.ts", "src/**/macroConsult.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": [""],
   "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 }

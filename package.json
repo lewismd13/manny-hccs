@@ -6,14 +6,15 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "postinstall": "patch-package",
-    "build": "npm run build:types && npm run build:js",
+    "build": "yarn run build:types && yarn run build:js",
     "build:types": "tsc",
     "build:js": "webpack",
+    "lint": "eslint src && prettier --check .",
     "watch": "webpack --watch --progress"
   },
   "devDependencies": {
     "@babel/cli": "^7.12.8",
-    "@babel/compat-data": "7.12.13",
+    "@babel/compat-data": "^7.12.13",
     "@babel/core": "^7.12.9",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
@@ -21,6 +22,8 @@
     "@babel/preset-typescript": "^7.12.7",
     "babel-loader": "^8.2.2",
     "eslint": "^7.28.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-libram": "^0.1.6",
     "patch-package": "^6.2.2",
     "prettier": "^2.3.1",
     "typescript": "^4.0.3",
@@ -30,7 +33,7 @@
   "dependencies": {
     "core-js": "^3.8.0",
     "kolmafia": "^1.0.11",
-    "libram": "^0.0.9"
+    "libram": "^0.2.7"
   },
   "author": "Manendra 148308",
   "license": "ISC",
@@ -41,7 +44,7 @@
     "TS"
   ],
   "bugs": {
-    "url": "https://github.com/docrostov/kol-js-starter/issues"
+    "url": "https://github.com/lewismd13/manny-hccs/issues"
   },
-  "homepage": "https://github.com/docrostov/kol-js-starter#readme"
+  "homepage": "https://github.com/lewismd13/manny-hccs"
 }

@@ -51,3 +51,25 @@ visitUrl(
   "afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd",
   true
 );
+/*
+prepareAscension(
+  {
+    workshed: $item`little geneticist DNA-splicing lab`,
+    garden: $item`Peppermint pip packet`,
+    eudora: $item`Our Daily Candles™ order form`,
+  },
+  {
+    desk: $item`Swiss piggy bank`,
+    nightstand: $item`foreign language tapes`,
+    ceiling: $item`ceiling fan`,
+  }
+);
+
+ascend(
+  Paths.CommunityService,
+  $class`sauceror`,
+  Lifestyle.hardcore,
+  "wallaby",
+  $item`astral six-pack`,
+  $item`astral statuette`
+); */

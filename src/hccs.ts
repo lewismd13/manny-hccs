@@ -54,6 +54,7 @@ import {
   myMaxmp,
   myMeat,
   myMp,
+  myPathId,
   mySpleenUse,
   myTurncount,
   numericModifier,
@@ -339,6 +340,8 @@ export function withMacro<T>(macro: Macro, action: () => T) {
     Macro.clearSaved();
   }
 }
+
+if (myPathId() !== 25) abort();
 
 // Don't buy stuff from NPC stores.
 setProperty("_saved_autoSatisfyWithNPCs", getProperty("autoSatisfyWithNPCs"));

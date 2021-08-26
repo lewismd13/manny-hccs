@@ -5575,7 +5575,8 @@ function withMacro(macro, action) {
   } finally {
     libram__WEBPACK_IMPORTED_MODULE_2__.Macro.clearSaved();
   }
-} // Don't buy stuff from NPC stores.
+}
+if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.myPathId)() !== 25) (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.abort)(); // Don't buy stuff from NPC stores.
 
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("_saved_autoSatisfyWithNPCs", (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.getProperty)("autoSatisfyWithNPCs"));
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_1__.setProperty)("autoSatisfyWithNPCs", "false");

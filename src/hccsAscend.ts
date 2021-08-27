@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import {
   containsText,
+  equippedItem,
   getWorkshed,
   myGardenType,
   print,
@@ -8,8 +9,19 @@ import {
   use,
   userConfirm,
   visitUrl,
+  wait,
 } from "kolmafia";
-import { $class, $item, $monster, ascend, get, Lifestyle, Paths, prepareAscension } from "libram";
+import {
+  $class,
+  $item,
+  $monster,
+  $slot,
+  ascend,
+  get,
+  Lifestyle,
+  Paths,
+  prepareAscension,
+} from "libram";
 /*
 const prep = true;
 
@@ -35,7 +47,17 @@ if (get("chateauMonster") !== $monster`Black Crayon Crimbo Elf`) {
   throw "You have the wrong mob painted in the chateau";
 }
 
+if (equippedItem($slot`bootskin`) !== $item`frontwinder skin`) {
+  throw "Your cowboy boots have the wrong skin";
+}
+
+if (equippedItem($slot`bootspur`) !== $item`thicksilver spurs`) {
+  throw "Your cowboy boots have the wrong spurs";
+}
+
 print("you're about to ascend! wait, is that good?", "green");
+
+wait(15);
 
 // add in check for boots
 /*

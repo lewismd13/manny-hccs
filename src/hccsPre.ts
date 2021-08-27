@@ -21,7 +21,7 @@ import {
   useFamiliar,
   useSkill,
 } from "kolmafia";
-import { $familiar, $item, $skill } from "libram";
+import { $familiar, $item, $skill, get } from "libram";
 
 if (getClanId() !== 40382) {
   cliExecute("/whitelist alliance from hell");
@@ -29,6 +29,10 @@ if (getClanId() !== 40382) {
 if (pvpAttacksLeft() > 0) {
   cliExecute("uberpvpoptimizer");
   cliExecute("swagger");
+}
+
+if (get("_freeBeachWalksUsed") < 11) {
+  cliExecute("combbeach free");
 }
 
 if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {

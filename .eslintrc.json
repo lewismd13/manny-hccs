@@ -25,7 +25,7 @@
     "node/no-unpublished-import": "off",
     "no-unused-vars": "off",
     "@typescript-eslint/no-unused-vars": "error",
-    "libram/verify-constants": "off",
+    "libram/verify-constants": "error",
     "@typescript-eslint/explicit-module-boundary-types": "off"
   }
 }

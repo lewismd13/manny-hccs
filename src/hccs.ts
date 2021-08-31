@@ -139,7 +139,10 @@ const defaultFamiliarEquipment = $item`dromedary drinking helmet`;
 */
 
 function useDefaultFamiliar() {
-  if (get("camelSpit") < 100 && !testDone(TEST_WEAPON)) {
+  if (
+    get("camelSpit") < 100 &&
+    !get("csServicesPerformed").split(",").includes("Reduce Gazelle Population")
+  ) {
     useFamiliar($familiar`Melodramedary`);
     equip($item`dromedary drinking helmet`);
   } else if (
@@ -150,7 +153,7 @@ function useDefaultFamiliar() {
   } else if (
     availableAmount($item`short stack of pancakes`) === 0 &&
     haveEffect($effect`Shortly Stacked`) === 0 &&
-    !testDone(TEST_FAMILIAR)
+    !get("csServicesPerformed").split(",").includes("Breed More Collies")
   ) {
     useFamiliar($familiar`Shorter-Order Cook`);
   } else {

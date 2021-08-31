@@ -1907,6 +1907,7 @@ function ascend(path, playerClass, lifestyle, moon) {
   var pet = arguments.length > 5 && arguments[5] !== undefined ? arguments[5] : undefined;
 
   if (!(0, _kolmafia.containsText)((0, _kolmafia.visitUrl)("charpane.php"), "Astral Spirit")) {
+    (0, _kolmafia.print)("It'd really be better if you were already through the gash. Oh well!", "blue");
     (0, _kolmafia.visitUrl)("ascend.php?action=ascend&confirm=on&confirm2=on");
   }
 
@@ -4631,6 +4632,8 @@ __webpack_require__(/*! core-js/modules/es.array.includes.js */ "./node_modules/
 
 __webpack_require__(/*! core-js/modules/es.string.includes.js */ "./node_modules/libram/node_modules/core-js/modules/es.string.includes.js");
 
+__webpack_require__(/*! core-js/modules/es.array.map.js */ "./node_modules/libram/node_modules/core-js/modules/es.array.map.js");
+
 var _kolmafia = __webpack_require__(/*! kolmafia */ "kolmafia");
 
 var _lib = __webpack_require__(/*! ./lib */ "./node_modules/libram/dist/lib.js");
@@ -5263,9 +5266,11 @@ var Mood = /*#__PURE__*/function () {
   _createClass(Mood, [{
     key: "availableMp",
     value: function availableMp() {
-      return (0, _utils.sum)(this.options.mpSources, function (mpSource) {
+      return this.options.mpSources.map(function (mpSource) {
         return mpSource.availableMpMin();
-      });
+      }).reduce(function (x, y) {
+        return x + y;
+      }, 0);
     }
   }, {
     key: "moreMp",
@@ -5353,9 +5358,11 @@ var Mood = /*#__PURE__*/function () {
     value: function execute() {
       var ensureTurns = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : 1;
       var availableMp = this.availableMp();
-      var totalMpPerTurn = (0, _utils.sum)(this.elements, function (element) {
+      var totalMpPerTurn = this.elements.map(function (element) {
         return element.mpCostPerTurn();
-      });
+      }).reduce(function (x, y) {
+        return x + y;
+      }, 0);
       var potentialTurns = Math.floor(availableMp / totalMpPerTurn);
       var completeSuccess = true;
 
@@ -5372,7 +5379,7 @@ var Mood = /*#__PURE__*/function () {
             elementTurns = Math.min(ensureTurns, elementPotentialTurns);
           }
 
-          completeSuccess = element.execute(this, elementTurns) && completeSuccess;
+          completeSuccess = element.execute(this, elementTurns) || completeSuccess;
         }
       } catch (err) {
         _iterator3.e(err);
@@ -6527,9 +6534,13 @@ function changeNightstand(nightstand) {
 "use strict";
 
 
+__webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/libram/node_modules/core-js/modules/es.object.to-string.js");
+
 __webpack_require__(/*! core-js/modules/es.symbol.js */ "./node_modules/libram/node_modules/core-js/modules/es.symbol.js");
 
 __webpack_require__(/*! core-js/modules/es.symbol.description.js */ "./node_modules/libram/node_modules/core-js/modules/es.symbol.description.js");
+
+__webpack_require__(/*! core-js/modules/es.array.iterator.js */ "./node_modules/libram/node_modules/core-js/modules/es.array.iterator.js");
 
 Object.defineProperty(exports, "__esModule", ({
   value: true
@@ -6566,10 +6577,6 @@ __webpack_require__(/*! core-js/modules/es.array.slice.js */ "./node_modules/lib
 __webpack_require__(/*! core-js/modules/es.array.map.js */ "./node_modules/libram/node_modules/core-js/modules/es.array.map.js");
 
 __webpack_require__(/*! core-js/modules/es.array.filter.js */ "./node_modules/libram/node_modules/core-js/modules/es.array.filter.js");
-
-__webpack_require__(/*! core-js/modules/es.array.iterator.js */ "./node_modules/libram/node_modules/core-js/modules/es.array.iterator.js");
-
-__webpack_require__(/*! core-js/modules/es.object.to-string.js */ "./node_modules/libram/node_modules/core-js/modules/es.object.to-string.js");
 
 __webpack_require__(/*! core-js/modules/es.regexp.exec.js */ "./node_modules/libram/node_modules/core-js/modules/es.regexp.exec.js");
 
@@ -6838,7 +6845,25 @@ function isCurrentSkill(skills) {
  */
 
 
-var Items = new Map([[(0, _templateString.$item)(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["browser cookie"]))), "food.ext"], [(0, _templateString.$item)(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["hacked gibson"]))), "booze.ext"], [(0, _templateString.$item)(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["Source shades"]))), "goggles.ext"], [(0, _templateString.$item)(_templateObject21 || (_templateObject21 = _taggedTemplateLiteral(["Source terminal GRAM chip"]))), "gram.ext"], [(0, _templateString.$item)(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral(["Source terminal PRAM chip"]))), "pram.ext"], [(0, _templateString.$item)(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral(["Source terminal SPAM chip"]))), "spam.ext"], [(0, _templateString.$item)(_templateObject24 || (_templateObject24 = _taggedTemplateLiteral(["Source terminal CRAM chip"]))), "cram.ext"], [(0, _templateString.$item)(_templateObject25 || (_templateObject25 = _taggedTemplateLiteral(["Source terminal DRAM chip"]))), "dram.ext"], [(0, _templateString.$item)(_templateObject26 || (_templateObject26 = _taggedTemplateLiteral(["Source terminal TRAM chip"]))), "tram.ext"], [(0, _templateString.$item)(_templateObject27 || (_templateObject27 = _taggedTemplateLiteral(["software bug"]))), "familiar.ext"]]);
+var Items = {
+  /** 4 fullness EPIC food */
+  BrowserCookie: (0, _templateString.$item)(_templateObject18 || (_templateObject18 = _taggedTemplateLiteral(["browser cookie"]))),
+
+  /** 4 potency EPIC booze */
+  HackedGibson: (0, _templateString.$item)(_templateObject19 || (_templateObject19 = _taggedTemplateLiteral(["hacked gibson"]))),
+
+  /** +10% item drop, improved yield from extraction skill */
+  Shades: (0, _templateString.$item)(_templateObject20 || (_templateObject20 = _taggedTemplateLiteral(["Source shades"]))),
+  GRAM: (0, _templateString.$item)(_templateObject21 || (_templateObject21 = _taggedTemplateLiteral(["Source terminal GRAM chip"]))),
+  PRAM: (0, _templateString.$item)(_templateObject22 || (_templateObject22 = _taggedTemplateLiteral(["Source terminal PRAM chip"]))),
+  SPAM: (0, _templateString.$item)(_templateObject23 || (_templateObject23 = _taggedTemplateLiteral(["Source terminal SPAM chip"]))),
+  CRAM: (0, _templateString.$item)(_templateObject24 || (_templateObject24 = _taggedTemplateLiteral(["Source terminal CRAM chip"]))),
+  DRAM: (0, _templateString.$item)(_templateObject25 || (_templateObject25 = _taggedTemplateLiteral(["Source terminal DRAM chip"]))),
+
+  /** Increase maximum daily casts of Digitze by one, usable once per player */
+  TRAM: (0, _templateString.$item)(_templateObject26 || (_templateObject26 = _taggedTemplateLiteral(["Source terminal TRAM chip"]))),
+  SoftwareBug: (0, _templateString.$item)(_templateObject27 || (_templateObject27 = _taggedTemplateLiteral(["software bug"])))
+};
 /**
  * Collect an item from the Source Terminal (up to three times a day)
  * @param item Item to collect
@@ -6848,9 +6873,11 @@ var Items = new Map([[(0, _templateString.$item)(_templateObject18 || (_template
 exports.Items = Items;
 
 function extrude(item) {
-  var fileName = Items.get(item);
-  if (!fileName) return false;
-  return (0, _kolmafia.cliExecute)("terminal extrude ".concat(fileName));
+  if (!Object.values(Items).includes(item)) {
+    return false;
+  }
+
+  return (0, _kolmafia.cliExecute)("terminal extrude ".concat(item.name));
 }
 /**
  * Return chips currently installed to player's Source Terminal
@@ -8416,8 +8443,6 @@ exports.chunk = chunk;
 exports.arrayToCountedMap = arrayToCountedMap;
 exports.countedMapToArray = countedMapToArray;
 exports.countedMapToString = countedMapToString;
-exports.sum = sum;
-exports.sumNumbers = sumNumbers;
 
 __webpack_require__(/*! core-js/modules/es.number.parse-int.js */ "./node_modules/libram/node_modules/core-js/modules/es.number.parse-int.js");
 
@@ -8582,24 +8607,6 @@ function countedMapToString(map) {
 
     return "".concat(quantity, " x ").concat(item);
   }).join(", ");
-}
-/**
- * Sum an array of numbers.
- * @param addends Addends to sum.
- * @param mappingFunction function to turn elements into numbers
- */
-
-
-function sum(addends, mappingFunction) {
-  return addends.reduce(function (subtotal, element) {
-    return subtotal + mappingFunction(element);
-  }, 0);
-}
-
-function sumNumbers(addends) {
-  return sum(addends, function (x) {
-    return x;
-  });
 }
 
 /***/ }),

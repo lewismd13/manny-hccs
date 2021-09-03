@@ -18734,6 +18734,7 @@ if (!testDone(TEST_HOT_RES)) {
   (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject367 || (_templateObject367 = hccs_taggedTemplateLiteral(["acc1"]))), (0,dist.$item)(_templateObject368 || (_templateObject368 = hccs_taggedTemplateLiteral(["Eight Days a Week Pill Keeper"]))));
   (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject369 || (_templateObject369 = hccs_taggedTemplateLiteral(["acc2"]))), (0,dist.$item)(_templateObject370 || (_templateObject370 = hccs_taggedTemplateLiteral(["Powerful Glove"]))));
   (0,external_kolmafia_.equip)((0,dist.$slot)(_templateObject371 || (_templateObject371 = hccs_taggedTemplateLiteral(["acc3"]))), (0,dist.$item)(_templateObject372 || (_templateObject372 = hccs_taggedTemplateLiteral(["Lil' Doctor\u2122 bag"])))); //TODO: Make sure short order cook doesn't kill the thing
+  //TODO: add in a fire extinguisher charge here for +30
 
   if ((0,external_kolmafia_.availableAmount)((0,dist.$item)(_templateObject373 || (_templateObject373 = hccs_taggedTemplateLiteral(["heat-resistant gloves"])))) === 0) {
     (0,external_kolmafia_.adv1)((0,dist.$location)(_templateObject374 || (_templateObject374 = hccs_taggedTemplateLiteral(["LavaCo\u2122 Lamp Factory"]))), -1, "");
@@ -19012,7 +19013,7 @@ if (!testDone(TEST_WEAPON)) {
   fightSausageIfGuaranteed(); // Get inner elf for weapon damage
 
   if ((0,external_kolmafia_.haveEffect)((0,dist.$effect)(_templateObject480 || (_templateObject480 = hccs_taggedTemplateLiteral(["Inner Elf"])))) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    (0,external_kolmafia_.cliExecute)("/whitelist hobopolis vacation home");
+    (0,external_kolmafia_.cliExecute)("/whitelist beldungeon");
     ensureEffect((0,dist.$effect)(_templateObject481 || (_templateObject481 = hccs_taggedTemplateLiteral(["Blood Bubble"]))));
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(_templateObject482 || (_templateObject482 = hccs_taggedTemplateLiteral(["Machine Elf"]))));
     (0,external_kolmafia_.setProperty)("choiceAdventure326", "1");
@@ -19044,8 +19045,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   geneTonic("elf");
-  ensureEffect((0,dist.$effect)(_templateObject490 || (_templateObject490 = hccs_taggedTemplateLiteral(["Human-Elf Hybrid"])))); // maybe try just setting autoattack to HCCS_Spit
-  // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
+  ensureEffect((0,dist.$effect)(_templateObject490 || (_templateObject490 = hccs_taggedTemplateLiteral(["Human-Elf Hybrid"])))); // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
 
   if ((0,external_kolmafia_.availableAmount)((0,dist.$item)(_templateObject491 || (_templateObject491 = hccs_taggedTemplateLiteral(["corrupted marrow"])))) === 0 && (0,external_kolmafia_.haveEffect)((0,dist.$effect)(_templateObject492 || (_templateObject492 = hccs_taggedTemplateLiteral(["Cowrruption"])))) === 0) {
     (0,external_kolmafia_.print)("Your camel spit level is ".concat((0,dist.get)("camelSpit")), "green");
@@ -19179,7 +19179,7 @@ if (!testDone(TEST_SPELL)) {
   (0,external_kolmafia_.cliExecute)("briefcase e spell"); // Get inner elf for spell damage
 
   if ((0,external_kolmafia_.haveEffect)((0,dist.$effect)(_templateObject539 || (_templateObject539 = hccs_taggedTemplateLiteral(["Inner Elf"])))) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    (0,external_kolmafia_.cliExecute)("/whitelist hobopolis vacation home");
+    (0,external_kolmafia_.cliExecute)("/whitelist beldungeon");
     ensureEffect((0,dist.$effect)(_templateObject540 || (_templateObject540 = hccs_taggedTemplateLiteral(["Blood Bubble"]))));
     (0,external_kolmafia_.useFamiliar)((0,dist.$familiar)(_templateObject541 || (_templateObject541 = hccs_taggedTemplateLiteral(["Machine Elf"]))));
     (0,external_kolmafia_.setProperty)("choiceAdventure326", "1");

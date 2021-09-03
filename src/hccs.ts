@@ -1171,6 +1171,7 @@ if (!testDone(TEST_HOT_RES)) {
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
 
   //TODO: Make sure short order cook doesn't kill the thing
+  //TODO: add in a fire extinguisher charge here for +30
   if (availableAmount($item`heat-resistant gloves`) === 0) {
     adv1($location`LavaCo™ Lamp Factory`, -1, "");
     if (
@@ -1488,7 +1489,7 @@ if (!testDone(TEST_WEAPON)) {
 
   // Get inner elf for weapon damage
   if (haveEffect($effect`Inner Elf`) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    cliExecute("/whitelist hobopolis vacation home");
+    cliExecute("/whitelist beldungeon");
     ensureEffect($effect`Blood Bubble`);
     useFamiliar($familiar`Machine Elf`);
     setProperty("choiceAdventure326", "1");
@@ -1521,8 +1522,6 @@ if (!testDone(TEST_WEAPON)) {
 
   geneTonic("elf");
   ensureEffect($effect`Human-Elf Hybrid`);
-
-  // maybe try just setting autoattack to HCCS_Spit
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
   if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`Cowrruption`) === 0) {
@@ -1664,7 +1663,7 @@ if (!testDone(TEST_SPELL)) {
 
   // Get inner elf for spell damage
   if (haveEffect($effect`Inner Elf`) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    cliExecute("/whitelist hobopolis vacation home");
+    cliExecute("/whitelist beldungeon");
     ensureEffect($effect`Blood Bubble`);
     useFamiliar($familiar`Machine Elf`);
     setProperty("choiceAdventure326", "1");
@@ -1862,8 +1861,12 @@ cliExecute("swagger");
 
 doTest(DONATE);
 
+const totalSeconds = (gametimeToInt() - START_TIME) / 1000;
+const min = Math.floor(totalSeconds / 60);
+const sec = totalSeconds % 60;
+
 print(
-  `This loop took ${(gametimeToInt() - START_TIME) / 1000} seconds, for a 1 day, ${
+  `This loop took ${min} minutes and ${sec} seconds, for a 1 day, ${
     myTurncount() - 1
   } turn HCCS run. Organ use was ${myFullness()}/${myInebriety()}/${mySpleenUse()}. I drank ${
     6 - availableAmount($item`astral pilsner`)

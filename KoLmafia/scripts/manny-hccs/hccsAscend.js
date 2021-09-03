@@ -17452,30 +17452,8 @@ var _templateObject, _templateObject2, _templateObject3, _templateObject4, _temp
 
 function _taggedTemplateLiteral(strings, raw) { if (!raw) { raw = strings.slice(0); } return Object.freeze(Object.defineProperties(strings, { raw: { value: Object.freeze(raw) } })); }
 
-/* eslint-disable @typescript-eslint/no-unused-vars */
 
 
-/*
-const prep = true;
-
-if (prep === true) {
-  if (getWorkshed() !== $item`little geneticist DNA-splicing lab`) {
-    takeStash($item`little geneticist DNA-splicing lab`, 1);
-    use($item`little geneticist DNA-splicing lab`);
-  }
-
-  if (myGardenType() !== "peppermint") {
-    use($item`peppermint pip packet`);
-  }
-}
-
-if (getWorkshed() !== $item`little geneticist DNA-splicing lab`) {
-  throw "You have the wrong workshed item";
-}
-if (myGardenType() != "peppermint") {
-  throw "You have the wrong garden";
-}
-*/
 
 if ((0,libram__WEBPACK_IMPORTED_MODULE_1__.get)("chateauMonster") !== (0,libram__WEBPACK_IMPORTED_MODULE_1__.$monster)(_templateObject || (_templateObject = _taggedTemplateLiteral(["Black Crayon Crimbo Elf"])))) {
   throw "You have the wrong mob painted in the chateau";
@@ -17490,22 +17468,7 @@ if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.equippedItem)((0,libram__WEBPACK_IM
 }
 
 (0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.print)("you're about to ascend! wait, is that good?", "green");
-(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.wait)(15); // add in check for boots
-
-/*
-if (!containsText(visitUrl("charpane.php"), "Astral Spirit"))
-  visitUrl("ascend.php?action=ascend&confirm=on&confirm2=on");
-if (!containsText(visitUrl("charpane.php"), "Astral Spirit")) throw "Failed to ascend.";
-visitUrl("afterlife.php?action=pearlygates");
-visitUrl("afterlife.php?action=buydeli&whichitem=5046");
-visitUrl("afterlife.php?action=buyarmory&whichitem=5037");
-userConfirm("Are you sure you want to ascend? No skills to perm?", 60000, true);
-visitUrl(
-  "afterlife.php?action=ascend&confirmascend=1&whichsign=2&gender=1&whichclass=4&whichpath=25&asctype=3&noskillsok=1&pwd",
-  true
-);
-*/
-
+(0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.wait)(15);
 (0,libram__WEBPACK_IMPORTED_MODULE_1__.prepareAscension)({
   workshed: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject6 || (_templateObject6 = _taggedTemplateLiteral(["Little Geneticist DNA-Splicing Lab"]))),
   garden: (0,libram__WEBPACK_IMPORTED_MODULE_1__.$item)(_templateObject7 || (_templateObject7 = _taggedTemplateLiteral(["Peppermint Pip Packet"]))),

@@ -1180,12 +1180,14 @@ if (!testDone(TEST_HOT_RES)) {
       throw "Something went wrong at LavaCo.";
     }
     equip($item`Fourth of May Cosplay Saber`);
+    equip($item`industrial fire extinguisher`, $slot`offhand`);
     equip($item`vampyric cloake`);
     setProperty("choiceAdventure1387", "3");
     mapMonster($location`LavaCo™ Lamp Factory`, $monster`factory worker (female)`);
     withMacro(
       Macro.skill($skill`Become a Cloud of Mist`)
         .skill($skill`Meteor Shower`)
+        .skill($skill`Fire Extinguisher: Foam Yourself`)
         .skill($skill`Use the Force`),
       runCombat
     );
@@ -1219,7 +1221,7 @@ if (!testDone(TEST_HOT_RES)) {
   } */
 
   // add +5 hot res to KGB, relies on Ezandora's script, naturally
-  cliExecute("briefcase e hot");
+  // cliExecute("briefcase e hot");
 
   // set retrocape to elemental resistance
   cliExecute("retrocape mus hold");
@@ -1293,7 +1295,7 @@ if (!testDone(TEST_HOT_RES)) {
   ensureEffect($effect`Hot-Headed`);
 
   // Use pocket maze
-  if (availableAmount($item`pocket maze`) > 0) ensureEffect($effect`Amazing`);
+  // if (availableAmount($item`pocket maze`) > 0) ensureEffect($effect`Amazing`);
 
   // if (get_property('_horsery') != 'pale horse') cli_execute('horsery pale');
 
@@ -1311,7 +1313,7 @@ if (!testDone(TEST_HOT_RES)) {
     throw "Something went wrong building hot res.";
   }
 
-  // logprint(cliExecuteOutput("modtrace hot resistance"));
+  logprint(cliExecuteOutput("modtrace hot resistance"));
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_HOT_RES);

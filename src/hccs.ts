@@ -38,6 +38,7 @@ import {
   haveSkill,
   hippyStoneBroken,
   itemAmount,
+  itemDropModifier,
   lastChoice,
   maximize,
   mpCost,
@@ -109,6 +110,11 @@ const TEST_ITEM = 9;
 const TEST_HOT_RES = 10;
 const TEST_COIL_WIRE = 11;
 const DONATE = 30;
+
+let hotPrediction = "";
+let ncPrediction = "";
+let weaponPrediction = "";
+let itemPrediction = "";
 
 let HP_TURNS = 0;
 let MUS_TURNS = 0;
@@ -1186,7 +1192,7 @@ if (!testDone(TEST_HOT_RES)) {
     mapMonster($location`LavaCo™ Lamp Factory`, $monster`factory worker (female)`);
     withMacro(
       Macro.skill($skill`Become a Cloud of Mist`)
-        .skill($skill`Meteor Shower`)
+        // .skill($skill`Meteor Shower`)
         .skill($skill`Fire Extinguisher: Foam Yourself`)
         .skill($skill`Use the Force`),
       runCombat
@@ -1198,7 +1204,7 @@ if (!testDone(TEST_HOT_RES)) {
   }
 
   // synth hot
-
+  /*
   if (haveEffect($effect`Synthesis: Hot`) === 0) {
     cliExecute("synthesize hot");
     while (haveEffect($effect`Synthesis: Hot`) === 0) {
@@ -1207,7 +1213,6 @@ if (!testDone(TEST_HOT_RES)) {
     }
   }
 
-  /*
   if (haveEffect($effect`Synthesis: Hot`) == 0) {
     setProperty("autoSatisfyWithNPCs", "true");
     buy($item`tamarind-flavored chewing gum`, 1);
@@ -1233,7 +1238,7 @@ if (!testDone(TEST_HOT_RES)) {
 
   // Pool buff. This will fall through to fam weight.
   ensureEffect($effect`Billiards Belligerence`);
-
+  /*
   if (
     availableAmount($item`metal meteoroid`) > 0 &&
     availableAmount($item`meteorite guard`) === 0
@@ -1257,7 +1262,7 @@ if (!testDone(TEST_HOT_RES)) {
   ) {
     ensurePotionEffect($effect`Sleazy Hands`, $item`lotion of sleaziness`);
   }
-
+*/
   // wish for healthy green glow, should fall through
   // wish_effect($effect[healthy green glow]);
 
@@ -1292,7 +1297,7 @@ if (!testDone(TEST_HOT_RES)) {
   // drink hot socks here if you're a tryhard
 
   // Beach comb buff.
-  ensureEffect($effect`Hot-Headed`);
+  //ensureEffect($effect`Hot-Headed`);
 
   // Use pocket maze
   // if (availableAmount($item`pocket maze`) > 0) ensureEffect($effect`Amazing`);
@@ -1313,7 +1318,9 @@ if (!testDone(TEST_HOT_RES)) {
     throw "Something went wrong building hot res.";
   }
 
-  logprint(cliExecuteOutput("modtrace hot resistance"));
+  hotPrediction = String(round(numericModifier("hot resistance")));
+
+  // logprint(cliExecuteOutput("modtrace hot resistance"));
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_HOT_RES);
@@ -1374,6 +1381,8 @@ if (!testDone(TEST_NONCOMBAT)) {
   if (round(numericModifier("combat rate")) > -40) {
     throw "Not enough -combat to cap.";
   }
+
+  ncPrediction = String(round(numericModifier("combat rate")));
 
   // cli_execute('modtrace combat rate');
   // abort();
@@ -1625,6 +1634,7 @@ if (!testDone(TEST_WEAPON)) {
   if (weaponTurns() > 2) {
     throw "Something went wrong with weapon damage.";
   }
+  weaponPrediction = String(weaponTurns());
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_WEAPON);
@@ -1829,6 +1839,9 @@ if (!testDone(TEST_ITEM)) {
 
   // cli_execute('modtrace item');
   // abort();
+
+  itemPrediction = String(itemDropModifier());
+
   TEMP_TURNS = myTurncount();
   doTest(TEST_ITEM);
   ITEM_TURNS = myTurncount() - TEMP_TURNS;
@@ -1865,7 +1878,7 @@ doTest(DONATE);
 
 const totalSeconds = (gametimeToInt() - START_TIME) / 1000;
 const min = Math.floor(totalSeconds / 60);
-const sec = totalSeconds % 60;
+const sec = Math.floor(totalSeconds % 60);
 
 print(
   `This loop took ${min} minutes and ${sec} seconds, for a 1 day, ${
@@ -1880,11 +1893,15 @@ print(`HP test: ${getProperty("_hccsHpTurns")}`, "green");
 print(`Muscle test: ${getProperty("_hccsHpTurns")}`, "green");
 print(`Moxie test: ${getProperty("_hccsMoxTurns")}`, "green");
 print(`Myst test: ${getProperty("_hccsMysTurns")}`, "green");
+print(hotPrediction);
 print(`Hot Res test: ${getProperty("_hccsHotResTurns")}`, "green");
+print(ncPrediction);
 print(`Noncombat test: ${getProperty("_hccsNoncombatTurns")}`, "green");
 print(`Fam Weight test: ${getProperty("_hccsFamiliarTurns")}`, "green");
+print(weaponPrediction);
 print(`Weapon Damage test: ${getProperty("_hccsWeaponTurns")}`, "green");
 print(`Spell Damage Test: ${getProperty("_hccsSpellTurns")}`, "green");
+print(itemPrediction);
 print(`Item Drop test: ${getProperty("_hccsItemTurns")}`, "green");
 
 if (get("_questPartyFairQuest") === "food") {

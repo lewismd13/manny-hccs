@@ -62,7 +62,7 @@ if (getWorkshed() !== $item`Little Geneticist DNA-Splicing Lab`) {
   takeStash($item`Little Geneticist DNA-Splicing Lab`, 1);
   use($item`Little Geneticist DNA-Splicing Lab`);
 }
-
+// TODO: pick garden if has growth
 if (myGardenType() !== "peppermint") {
   use($item`Peppermint Pip Packet`);
 }

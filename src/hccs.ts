@@ -9,8 +9,7 @@ import {
   ensurePotionEffect,
   ensureSewerItem,
   ensureSong,
-  getPropertyBoolean,
-  getPropertyInt,
+  fax,
   kill,
   mapMonster,
   sausageFightGuaranteed,
@@ -23,7 +22,6 @@ import {
   autosell,
   availableAmount,
   buy,
-  chatPrivate,
   cliExecute,
   containsText,
   create,
@@ -73,7 +71,6 @@ import {
   useFamiliar,
   useSkill,
   visitUrl,
-  wait,
 } from "kolmafia";
 import {
   $class,
@@ -87,7 +84,9 @@ import {
   $stat,
   adventureMacro,
   adventureMacroAuto,
+  Clan,
   get,
+  have,
   Macro,
   Witchess,
 } from "libram";
@@ -232,7 +231,7 @@ function geneTonic(ph: string) {
     if (
       haveEffect($effect`Human-${ph}Hybrid`) === 0 &&
       availableAmount($item`Gene Tonic:${ph}`) === 0 &&
-      getProperty("dnaSyringe") === ph
+      get("dnaSyringe") === ph
     ) {
       cliExecute("camp dnapotion 1");
       if (availableAmount($item`Gene Tonic:${ph}`) === 0) {
@@ -248,10 +247,10 @@ function geneTonic(ph: string) {
 /* eslint-enable libram/verify-constants */
 
 function summonBrickoOyster(maxSummons: number) {
-  if (getPropertyInt("_brickoFights") >= 3) return false;
+  if (get("_brickoFights") >= 3) return false;
   if (availableAmount($item`BRICKO oyster`) > 0) return true;
   while (
-    getPropertyInt("libramSummons") < maxSummons &&
+    get("libramSummons") < maxSummons &&
     (availableAmount($item`BRICKO eye brick`) < 1 || availableAmount($item`BRICKO brick`) < 8)
   ) {
     useSkill(1, $skill`Summon BRICKOs`);
@@ -349,13 +348,14 @@ equip($slot`acc3`, $item`Lil' Doctor™ bag`);
 
 if (!testDone(TEST_COIL_WIRE)) {
   setClan("Bonus Adventures from Hell");
-  if (getPropertyInt("_clanFortuneConsultUses") < 3) {
-    while (getPropertyInt("_clanFortuneConsultUses") < 3) {
+  /*
+  if (get("_clanFortuneConsultUses") < 3) {
+    while (get("_clanFortuneConsultUses") < 3) {
       cliExecute("fortune cheesefax");
       cliExecute("wait 5");
     }
   }
-
+*/
   if (myLevel() === 1 && mySpleenUse() === 0) {
     while (get("_universeCalculated") < get("skillLevel144")) {
       cliExecute("numberology 69");
@@ -452,15 +452,12 @@ if (!testDone(TEST_HP)) {
   retrieveItem(1, $item`fish hatchet`);
 
   // pulls wrench from deck
-  if (getPropertyInt("_deckCardsDrawn") === 0) {
+  if (get("_deckCardsDrawn") === 0) {
     cliExecute("cheat wrench");
   }
 
   // uses familiar jacks to get camel equipment
-  if (
-    availableAmount($item`dromedary drinking helmet`) === 0 &&
-    getPropertyInt("tomeSummons") < 3
-  ) {
+  if (availableAmount($item`dromedary drinking helmet`) === 0 && get("tomeSummons") < 3) {
     cliExecute("create 1 box of familiar jacks");
     useFamiliar($familiar`Melodramedary`);
     use(1, $item`box of Familiar Jacks`);
@@ -473,7 +470,7 @@ if (!testDone(TEST_HP)) {
   // learn extract and digitize
   cliExecute("terminal educate extract");
   cliExecute("terminal educate digitize");
-
+  /*
   const lovePotion = $item`Love Potion #0`;
   const loveEffect = $effect`Tainted Love Potion`;
   if (haveEffect(loveEffect) === 0) {
@@ -490,7 +487,7 @@ if (!testDone(TEST_HP)) {
       use(1, lovePotion);
     }
   }
-
+*/
   // Boxing Daycare
   ensureEffect($effect`Uncucumbered`);
 
@@ -523,8 +520,8 @@ if (!testDone(TEST_HP)) {
   // if (get_property('_horsery') != 'crazy horse') cli_execute('horsery crazy');
 
   // Tune moon sign to Blender. Have to do this now to get chewing gum.
-  if (!getPropertyBoolean("moonTuned")) {
-    if (getPropertyInt("_campAwaySmileBuffs") === 0) {
+  if (!get("moonTuned")) {
+    if (get("_campAwaySmileBuffs") === 0) {
       visitUrl("place.php?whichplace=campaway&action=campaway_sky");
     }
 
@@ -540,7 +537,7 @@ if (!testDone(TEST_HP)) {
   cliExecute("retrocape mysticality thrill");
 
   // cross streams for a stat boost
-  if (!getPropertyBoolean("_streamsCrossed")) {
+  if (!get("_streamsCrossed")) {
     cliExecute("crossstreams");
   }
 
@@ -555,7 +552,7 @@ if (!testDone(TEST_HP)) {
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
 
   if (
-    getPropertyInt("_brickoFights") === 0 &&
+    get("_brickoFights") === 0 &&
     summonBrickoOyster(7) &&
     availableAmount($item`BRICKO oyster`) > 0
   ) {
@@ -584,7 +581,7 @@ if (!testDone(TEST_HP)) {
     );
   }
 
-  if (getPropertyInt("_candySummons") === 0) {
+  if (get("_candySummons") === 0) {
     useSkill(1, $skill`Summon Crimbo Candy`);
   }
   if (get("_chubbyAndPlumpUsed") === false) {
@@ -672,7 +669,7 @@ if (!testDone(TEST_HP)) {
   // Don't use Kramco here.
   equip($slot`off-hand`, $item`none`);
 
-  if (haveEffect($effect`Holiday Yoked`) === 0 && getPropertyInt("_kgbTranquilizerDartUses") < 3) {
+  if (haveEffect($effect`Holiday Yoked`) === 0 && get("_kgbTranquilizerDartUses") < 3) {
     equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
     useFamiliar($familiar`Ghost of Crimbo Carols`);
     adventureMacroAuto($location`Noob Cave`, Macro.trySkill($skill`KGB tranquilizer dart`));
@@ -680,7 +677,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // Chateau rest
-  while (getPropertyInt("timesRested") < totalFreeRests()) {
+  while (get("timesRested") < totalFreeRests()) {
     visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
   }
 
@@ -701,7 +698,7 @@ if (!testDone(TEST_HP)) {
 
   ensureEffect($effect`Song of Bravado`);
 
-  if (getProperty("boomBoxSong") !== "Total Eclipse of Your Meat") {
+  if (get("boomBoxSong") !== "Total Eclipse of Your Meat") {
     cliExecute("boombox meat");
   }
 
@@ -798,7 +795,7 @@ if (!testDone(TEST_HP)) {
   cliExecute("mood hccs");
 
   // LOV tunnel for elixirs, epaulettes, and heart surgery
-  if (!getPropertyBoolean("_loveTunnelUsed")) {
+  if (!get("_loveTunnelUsed")) {
     useDefaultFamiliar();
     ensureEffect($effect`Carol of the Bulls`);
     ensureEffect($effect`Carol of the Hells`);
@@ -824,11 +821,11 @@ if (!testDone(TEST_HP)) {
   while (get("_machineTunnelsAdv") < 5) {
     useFamiliar($familiar`Machine Elf`);
     adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
-    /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (getProperty("_machineTunnelsAdv") < 5)) {
+    /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (get("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetthought");
       adv1($location`the deep machine tunnels`, -1, "");
       setAutoAttack(0);
-    } else if ((availableAmount($item`abstraction: thought`) >= 1) && (availableAmount($item`abstraction: certainty`) === 0) && (getProperty("_machineTunnelsAdv") < 5)) {
+    } else if ((availableAmount($item`abstraction: thought`) >= 1) && (availableAmount($item`abstraction: certainty`) === 0) && (get("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetcertainty");
       adv1($location`the deep machine tunnels`, -1, "");
       setAutoAttack(0);
@@ -843,26 +840,26 @@ if (!testDone(TEST_HP)) {
   if (get("_witchessFights") < 5) {
     equip($item`Fourth of May Cosplay Saber`);
     useDefaultFamiliar();
-    while (toInt(getProperty("_witchessFights")) === 0) {
+    while (get("_witchessFights") === 0) {
       Macro.step(justKillTheThing).setAutoAttack();
       Witchess.fightPiece($monster`Witchess Bishop`);
       setAutoAttack(0);
     }
-    while (toInt(getProperty("_witchessFights")) === 1) {
+    while (get("_witchessFights") === 1) {
       useDefaultFamiliar();
       Macro.attack().repeat().setAutoAttack();
       ensureEffect($effect`Carol of the Bulls`);
       Witchess.fightPiece($monster`Witchess King`);
       setAutoAttack(0);
     }
-    while (toInt(getProperty("_witchessFights")) === 2) {
+    while (get("_witchessFights") === 2) {
       useDefaultFamiliar();
       Macro.attack().repeat().setAutoAttack();
       ensureEffect($effect`Carol of the Bulls`);
       Witchess.fightPiece($monster`Witchess Witch`);
       setAutoAttack(0);
     }
-    while (toInt(getProperty("_witchessFights")) === 3) {
+    while (get("_witchessFights") === 3) {
       useDefaultFamiliar();
       Macro.step(justKillTheThing).setAutoAttack();
       Witchess.fightPiece($monster`Witchess Bishop`);
@@ -890,7 +887,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // Professor 9x free sausage fight @ NEP
-  if (getPropertyInt("_sausageFights") === 0) {
+  if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
     tryEquip($item`Pocket Professor memory chip`);
     equip($item`Kramco Sausage-o-Matic™`);
@@ -909,7 +906,7 @@ if (!testDone(TEST_HP)) {
       setChoice(1322, 2); // just here to party
     }
 
-    while (getPropertyInt("_sausageFights") === 0) {
+    while (get("_sausageFights") === 0) {
       if (myHp() < 0.8 * myMaxhp()) {
         visitUrl("clan_viplounge.php?where=hottub");
       }
@@ -930,7 +927,7 @@ if (!testDone(TEST_HP)) {
   // Visiting Looking Glass in clan VIP lounge
   visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2");
   cliExecute("swim item");
-  while (getPropertyInt("_genieWishesUsed") < 3) {
+  while (get("_genieWishesUsed") < 3) {
     cliExecute("genie wish for more wishes");
   }
 
@@ -976,7 +973,7 @@ if (!testDone(TEST_HP)) {
   }
 
   // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
-  if (toInt(getProperty("_witchessFights")) === 4) {
+  if (get("_witchessFights") === 4) {
     useDefaultFamiliar();
     Macro.attack().repeat().setAutoAttack();
     ensureEffect($effect`Carol of the Bulls`);
@@ -1000,9 +997,9 @@ if (!testDone(TEST_HP)) {
 
   // 14 free NEP fights, using mob hit and xray
   while (
-    getPropertyInt("_neverendingPartyFreeTurns") < 10 ||
-    (haveSkill($skill`Chest X-Ray`) && getPropertyInt("_chestXRayUsed") < 3) ||
-    (haveSkill($skill`Gingerbread Mob Hit`) && !getPropertyBoolean("_gingerbreadMobHitUsed"))
+    get("_neverendingPartyFreeTurns") < 10 ||
+    (haveSkill($skill`Chest X-Ray`) && get("_chestXRayUsed") < 3) ||
+    (haveSkill($skill`Gingerbread Mob Hit`) && !get("_gingerbreadMobHitUsed"))
   ) {
     // cliExecute("mood execute");
 
@@ -1011,13 +1008,13 @@ if (!testDone(TEST_HP)) {
     // }
 
     ensureMpSausage(100);
-    if (getPropertyInt("_neverendingPartyFreeTurns") < 10 && getPropertyInt("_feelPrideUsed") < 3) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
         Macro.trySkill($skill`Feel Pride`).step(justKillTheThing)
       );
-    } else if (getPropertyInt("_neverendingPartyFreeTurns") < 10) {
+    } else if (get("_neverendingPartyFreeTurns") < 10) {
       useDefaultFamiliar();
       adventureMacroAuto($location`The Neverending Party`, Macro.step(justKillTheThing));
     } else {
@@ -1034,7 +1031,7 @@ if (!testDone(TEST_HP)) {
   equip($item`makeshift garbage shirt`);
   useDefaultFamiliar();
 
-  if (getProperty("boomBoxSong") !== "These Fists Were Made for Punchin'") {
+  if (get("boomBoxSong") !== "These Fists Were Made for Punchin'") {
     cliExecute("boombox damage");
   }
 
@@ -1176,8 +1173,24 @@ if (!testDone(TEST_HOT_RES)) {
   equip($slot`acc2`, $item`Powerful Glove`);
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
 
-  //TODO: Make sure short order cook doesn't kill the thing
-  //TODO: add in a fire extinguisher charge here for +30
+  // Sabering an NEP mob to get cloud of mist and foam yourself
+
+  if (get("_saberForceUses") < 5 && !have($effect`Fireproof Foam Suit`)) {
+    equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
+    equip($item`industrial fire extinguisher`, $slot`offhand`);
+    equip($item`vampyric cloake`);
+    setProperty("choiceAdventure1387", "3");
+    adventureMacroAuto(
+      $location`The Neverending Party`,
+      Macro.skill($skill`Become a Cloud of Mist`)
+        .skill($skill`Fire Extinguisher: Foam Yourself`)
+        .skill($skill`Use the Force`)
+    );
+    while (lastChoice() === 1387 && handlingChoice()) {
+      runChoice(3);
+    }
+  }
+  /*
   if (availableAmount($item`heat-resistant gloves`) === 0) {
     adv1($location`LavaCo™ Lamp Factory`, -1, "");
     if (
@@ -1202,7 +1215,7 @@ if (!testDone(TEST_HOT_RES)) {
     }
     setProperty("mappingMonsters", "false");
   }
-
+*/
   // synth hot
   /*
   if (haveEffect($effect`Synthesis: Hot`) === 0) {
@@ -1305,7 +1318,7 @@ if (!testDone(TEST_HOT_RES)) {
   // if (get_property('_horsery') != 'pale horse') cli_execute('horsery pale');
 
   useFamiliar($familiar`Exotic Parrot`);
-  if (availableAmount($item`cracker`) === 0 && getPropertyInt("tomeSummons") < 3) {
+  if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
     retrieveItem(1, $item`box of Familiar Jacks`);
     use(1, $item`box of Familiar Jacks`);
     equip($item`cracker`);
@@ -1410,7 +1423,7 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Human-Machine Hybrid`);
   ensureEffect($effect`Shortly Stacked`);
   /*
-  if (availableAmount($item`cracker`) > 0 && getPropertyInt("tomeSummons") < 3) {
+  if (availableAmount($item`cracker`) > 0 && get("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
     equip($item`cracker`);
   }
@@ -1499,14 +1512,14 @@ if (!testDone(TEST_WEAPON)) {
   fightSausageIfGuaranteed();
 
   // Get inner elf for weapon damage
-  if (haveEffect($effect`Inner Elf`) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    cliExecute("/whitelist beldungeon");
+  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
+    Clan.join("Beldungeon");
     ensureEffect($effect`Blood Bubble`);
     useFamiliar($familiar`Machine Elf`);
     setProperty("choiceAdventure326", "1");
     adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
     useDefaultFamiliar();
-    cliExecute("/whitelist alliance from hell");
+    Clan.join("Alliance from Hell");
   } else {
     print("Something went wrong with getting inner elf");
   }
@@ -1515,7 +1528,7 @@ if (!testDone(TEST_WEAPON)) {
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
     // const match = chateauText.match(/alt="Painting of an? ([^(]*) .1."/);
-    // if (getPropertyInt("camelSpit") === 100) useFamiliar($familiar`Melodramedary`);
+    // if (get("camelSpit") === 100) useFamiliar($familiar`Melodramedary`);
     useFamiliar($familiar`Ghost of Crimbo Carols`);
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     if (get("_reflexHammerUsed") > 2) {
@@ -1536,9 +1549,33 @@ if (!testDone(TEST_WEAPON)) {
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
   if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`Cowrruption`) === 0) {
+    if (!get("_photocopyUsed")) {
+      useFamiliar($familiar`Melodramedary`);
+      equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
+      setChoice(1387, 3);
+      Macro.skill($skill`Meteor Shower`)
+        .skill($skill`%fn\, spit on me!`)
+        .skill($skill`Use the Force`)
+        .setAutoAttack();
+      try {
+        Clan.join("Beldungeon");
+        fax($monster`ungulith`);
+      } finally {
+        Clan.join("Alliance from Hell");
+      }
+      use($item`photocopied monster`);
+      if (handlingChoice()) runChoice(3);
+      setProperty("camelSpit", "0");
+      useDefaultFamiliar();
+    } else {
+      throw "You used your photocopy and don't have corrupted marrow, so that's bad.";
+    }
+  }
+  /*
+  if (availableAmount($item`corrupted marrow`) === 0 && haveEffect($effect`Cowrruption`) === 0) {
     print(`Your camel spit level is ${get("camelSpit")}`, "green");
     if (availableAmount($item`photocopied monster`) === 0) {
-      if (getPropertyBoolean("_photocopyUsed")) throw "Already used fax for the day.";
+      if (get("_photocopyUsed")) throw "Already used fax for the day.";
       cliExecute("/whitelist alliance from hell");
       chatPrivate("cheesefax", "ungulith");
       for (let i = 0; i < 2; i++) {
@@ -1552,7 +1589,7 @@ if (!testDone(TEST_WEAPON)) {
     }
     cliExecute("mood apathetic");
     equip($item`Fourth of May Cosplay Saber`);
-    if (getPropertyInt("camelSpit") === 100) {
+    if (get("camelSpit") === 100) {
       useFamiliar($familiar`Melodramedary`);
       Macro.skill($skill`Meteor Shower`)
         .skill($skill`%fn\, spit on me!`)
@@ -1568,15 +1605,6 @@ if (!testDone(TEST_WEAPON)) {
       print("your camel is not full enough", "red");
       abort();
     }
-  }
-  /*
-  if (haveEffect($effect`In a Lather`) === 0) {
-    if (myInebriety() > inebrietyLimit() - 2) {
-      error("Something went wrong. We are too drunk.");
-    }
-    assertMeat(500);
-    ensureOde(2);
-    cliExecute("drink Sockdollager");
   }
 */
   if (availableAmount($item`twinkly nuggets`) > 0) {
@@ -1603,7 +1631,7 @@ if (!testDone(TEST_WEAPON)) {
   cliExecute("briefcase e weapon");
 
   // Beach Comb
-  if (!containsText(getProperty("_beachHeadsUsed"), "6")) {
+  if (!containsText(get("_beachHeadsUsed"), "6")) {
     ensureEffect($effect`Lack of Body-Building`);
   }
 
@@ -1674,14 +1702,14 @@ if (!testDone(TEST_SPELL)) {
   cliExecute("briefcase e spell");
 
   // Get inner elf for spell damage
-  if (haveEffect($effect`Inner Elf`) === 0 && getPropertyInt("_snokebombUsed") < 3) {
-    cliExecute("/whitelist beldungeon");
+  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
+    Clan.join("Beldungeon");
     ensureEffect($effect`Blood Bubble`);
     useFamiliar($familiar`Machine Elf`);
     setProperty("choiceAdventure326", "1");
     adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
     useDefaultFamiliar();
-    cliExecute("/whitelist alliance from hell");
+    Clan.join("Alliance from Hell");
   } else {
     print("Something went wrong with getting inner elf");
   }
@@ -1701,7 +1729,7 @@ if (!testDone(TEST_SPELL)) {
   }
 
   // Sigils of Yeg = 200% SD
-  if (!getPropertyBoolean("_cargoPocketEmptied") && haveEffect($effect`Sigils of Yeg`) === 0) {
+  if (!get("_cargoPocketEmptied") && haveEffect($effect`Sigils of Yeg`) === 0) {
     if (availableAmount($item`Yeg's Motel hand soap`) === 0) cliExecute("cargo 177");
     ensureEffect($effect`Sigils of Yeg`);
   }
@@ -1736,10 +1764,7 @@ if (!testDone(TEST_ITEM)) {
   equip($slot`off-hand`, $item`none`);
 
   //getting a lil ninja costume for the tot
-  if (
-    availableAmount($item`li'l ninja costume`) === 0 &&
-    getPropertyInt("_shatteringPunchUsed") < 3
-  ) {
+  if (availableAmount($item`li'l ninja costume`) === 0 && get("_shatteringPunchUsed") < 3) {
     Macro.skill($skill`Shattering Punch`).setAutoAttack();
     mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`);
     setLocation($location`none`);
@@ -1750,7 +1775,7 @@ if (!testDone(TEST_ITEM)) {
   // ensureEffect($effect`certainty`);
 
   // pulls wheel of fortune from deck, gets rope and wrench for later
-  if (getPropertyInt("_deckCardsDrawn") === 5) {
+  if (get("_deckCardsDrawn") === 5) {
     cliExecute("cheat buff items");
   }
   // get pirate DNA and make a gene tonic
@@ -1783,7 +1808,7 @@ if (!testDone(TEST_ITEM)) {
   useDefaultFamiliar();
 
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
-    if (getPropertyInt("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
+    if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     equip($item`vampyric cloake`);
     adventureMacroAuto(
@@ -1793,7 +1818,7 @@ if (!testDone(TEST_ITEM)) {
     setAutoAttack(0);
   }
   /*
-  if (!getPropertyBoolean("_clanFortuneBuffUsed")) {
+  if (!get("_clanFortuneBuffUsed")) {
     ensureEffect($effect`There's No N In Love`);
   }
 */
@@ -1825,7 +1850,7 @@ if (!testDone(TEST_ITEM)) {
   ensureEffect($effect`Steely-Eyed Squint`);
 
   // get big smile of the blender if available, someday use this to replace something?
-  if (getPropertyInt("_campAwaySmileBuffs") === 1) {
+  if (get("_campAwaySmileBuffs") === 1) {
     visitUrl("place.php?whichplace=campaway&action=campaway_sky");
   }
 
@@ -1858,7 +1883,6 @@ setProperty("_meteorShowerUses", "4");
 cliExecute("mood default");
 cliExecute("ccs default");
 cliExecute("boombox food");
-cliExecute("/whitelist alliance from hell");
 
 visitUrl("peevpee.php?action=smashstone&confirm=on");
 print("Stone smashed. Get your PVP on!", "green");
@@ -1889,20 +1913,20 @@ print(
   "green"
 );
 
-print(`HP test: ${getProperty("_hccsHpTurns")}`, "green");
-print(`Muscle test: ${getProperty("_hccsHpTurns")}`, "green");
-print(`Moxie test: ${getProperty("_hccsMoxTurns")}`, "green");
-print(`Myst test: ${getProperty("_hccsMysTurns")}`, "green");
+print(`HP test: ${get("_hccsHpTurns")}`, "green");
+print(`Muscle test: ${get("_hccsHpTurns")}`, "green");
+print(`Moxie test: ${get("_hccsMoxTurns")}`, "green");
+print(`Myst test: ${get("_hccsMysTurns")}`, "green");
 print(hotPrediction);
-print(`Hot Res test: ${getProperty("_hccsHotResTurns")}`, "green");
+print(`Hot Res test: ${get("_hccsHotResTurns")}`, "green");
 print(ncPrediction);
-print(`Noncombat test: ${getProperty("_hccsNoncombatTurns")}`, "green");
-print(`Fam Weight test: ${getProperty("_hccsFamiliarTurns")}`, "green");
+print(`Noncombat test: ${get("_hccsNoncombatTurns")}`, "green");
+print(`Fam Weight test: ${get("_hccsFamiliarTurns")}`, "green");
 print(weaponPrediction);
-print(`Weapon Damage test: ${getProperty("_hccsWeaponTurns")}`, "green");
-print(`Spell Damage Test: ${getProperty("_hccsSpellTurns")}`, "green");
+print(`Weapon Damage test: ${get("_hccsWeaponTurns")}`, "green");
+print(`Spell Damage Test: ${get("_hccsSpellTurns")}`, "green");
 print(itemPrediction);
-print(`Item Drop test: ${getProperty("_hccsItemTurns")}`, "green");
+print(`Item Drop test: ${get("_hccsItemTurns")}`, "green");
 
 if (get("_questPartyFairQuest") === "food") {
   print("Hey, go talk to Geraldine!", "blue");

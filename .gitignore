@@ -77,3 +77,6 @@ typings/
 
 # vscode settings
 .vscode/
+
+# transpiled js scripts
+KoLmafia/scripts/

@@ -110,6 +110,7 @@ const TEST_HOT_RES = 10;
 const TEST_COIL_WIRE = 11;
 const DONATE = 30;
 
+let moxieStat = "";
 let hotPrediction = "";
 let ncPrediction = "";
 let weaponPrediction = "";
@@ -441,7 +442,7 @@ if (!testDone(TEST_COIL_WIRE)) {
 
 if (myTurncount() < 60) throw "Something went wrong coiling wire.";
 
-if (!testDone(TEST_HP)) {
+if (!testDone(TEST_MOX)) {
   // just in case?
   if (haveEffect($effect`That's Just Cloud-Talk, Man`) === 0) {
     visitUrl("place.php?whichplace=campaway&action=campaway_sky");
@@ -674,6 +675,19 @@ if (!testDone(TEST_HP)) {
     useFamiliar($familiar`Ghost of Crimbo Carols`);
     adventureMacroAuto($location`Noob Cave`, Macro.trySkill($skill`KGB tranquilizer dart`));
     setAutoAttack(0);
+  }
+
+  // Get inner elf for leveling and moxie test
+  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
+    Clan.join("Beldungeon");
+    ensureEffect($effect`Blood Bubble`);
+    useFamiliar($familiar`Machine Elf`);
+    setChoice(326, 1);
+    adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
+    useDefaultFamiliar();
+    Clan.join("Alliance from Hell");
+  } else {
+    print("Something went wrong with getting inner elf");
   }
 
   // Chateau rest
@@ -1026,24 +1040,54 @@ if (!testDone(TEST_HP)) {
     }
   }
 
-  equip($item`Fourth of May Cosplay Saber`);
-  cliExecute("fold makeshift garbage shirt");
-  equip($item`makeshift garbage shirt`);
-  useDefaultFamiliar();
-
-  if (get("boomBoxSong") !== "These Fists Were Made for Punchin'") {
-    cliExecute("boombox damage");
-  }
-
   if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Undead Elbow Macaroni`);
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
   // TODO: make moxie first and bridge an inner elf from levelling to moxie
+  if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Penne Dreadful`);
+  else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
-  // synthesis_plan($effect[Synthesis: Strong], tail(tail(subsequent)));
+  // Beach Comb
+  ensureEffect($effect`Pomp & Circumsands`);
 
-  // ensure_effect($effect[Gr8ness]);
+  use(1, $item`Bird-a-Day calendar`);
+  ensureEffect($effect`Blessing of the Bird`);
+
+  // Should be 11% NC and 50% moxie, will fall through to NC test
+  // ensureEffect($effect`Blessing of your favorite Bird`);
+
+  ensureEffect($effect`Big`);
+  ensureEffect($effect`Song of Bravado`);
+  ensureSong($effect`Stevedave's Shanty of Superiority`);
+  ensureSong($effect`The Moxious Madrigal`);
+  ensureEffect($effect`Quiet Desperation`);
+  ensureEffect($effect`Disco Fever`);
   // ensure_effect($effect[Tomato Power]);
+  ensureNpcEffect($effect`Butt-Rock Hair`, 5, $item`hair spray`);
+  use(availableAmount($item`rhinestone`), $item`rhinestone`);
+  if (haveEffect($effect`Unrunnable Face`) === 0) {
+    tryUse(1, $item`runproof mascara`);
+  }
+
+  maximize("moxie", false);
+  if (
+    myClass() === $class`Pastamancer` &&
+    myBuffedstat($stat`moxie`) - myBasestat($stat`mysticality`) < 1770
+  ) {
+    throw "Not enough moxie to cap.";
+  } else if (myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`) < 1770) {
+    throw "Not enough moxie to cap.";
+  }
+
+  moxieStat = String(Math.floor((myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`)) / 30));
+
+  TEMP_TURNS = myTurncount();
+  doTest(TEST_MOX);
+  MOX_TURNS = myTurncount() - TEMP_TURNS;
+  setProperty("_hccsMoxTurns", MOX_TURNS.toString());
+}
+
+if (!testDone(TEST_HP)) {
   ensureEffect($effect`Song of Starch`);
   ensureEffect($effect`Big`);
   ensureSong($effect`Power Ballad of the Arrowsmith`);
@@ -1120,47 +1164,6 @@ if (!testDone(TEST_MYS)) {
   doTest(TEST_MYS);
   MYS_TURNS = myTurncount() - TEMP_TURNS;
   setProperty("_hccsMysTurns", MYS_TURNS.toString());
-}
-
-if (!testDone(TEST_MOX)) {
-  if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Penne Dreadful`);
-  else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
-
-  // Beach Comb
-  ensureEffect($effect`Pomp & Circumsands`);
-
-  use(1, $item`Bird-a-Day calendar`);
-  ensureEffect($effect`Blessing of the Bird`);
-
-  // Should be 11% NC and 50% moxie, will fall through to NC test
-  // ensureEffect($effect`Blessing of your favorite Bird`);
-
-  ensureEffect($effect`Big`);
-  ensureEffect($effect`Song of Bravado`);
-  ensureSong($effect`Stevedave's Shanty of Superiority`);
-  ensureSong($effect`The Moxious Madrigal`);
-  ensureEffect($effect`Quiet Desperation`);
-  ensureEffect($effect`Disco Fever`);
-  // ensure_effect($effect[Tomato Power]);
-  ensureNpcEffect($effect`Butt-Rock Hair`, 5, $item`hair spray`);
-  use(availableAmount($item`rhinestone`), $item`rhinestone`);
-  if (haveEffect($effect`Unrunnable Face`) === 0) {
-    tryUse(1, $item`runproof mascara`);
-  }
-  maximize("moxie", false);
-  if (
-    myClass() === $class`Pastamancer` &&
-    myBuffedstat($stat`moxie`) - myBasestat($stat`mysticality`) < 1770
-  ) {
-    throw "Not enough moxie to cap.";
-  } else if (myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`) < 1770) {
-    throw "Not enough moxie to cap.";
-  }
-
-  TEMP_TURNS = myTurncount();
-  doTest(TEST_MOX);
-  MOX_TURNS = myTurncount() - TEMP_TURNS;
-  setProperty("_hccsMoxTurns", MOX_TURNS.toString());
 }
 
 if (!testDone(TEST_HOT_RES)) {
@@ -1525,6 +1528,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   // Paint crayon elf for DNA and ghost buff (Saber YR)
+  // TODO: switch this to a deck pull and leave embezzler in here
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
     // const match = chateauText.match(/alt="Painting of an? ([^(]*) .1."/);
@@ -1915,6 +1919,7 @@ print(
 
 print(`HP test: ${get("_hccsHpTurns")}`, "green");
 print(`Muscle test: ${get("_hccsHpTurns")}`, "green");
+print(`moxie prediction: ${moxieStat}`);
 print(`Moxie test: ${get("_hccsMoxTurns")}`, "green");
 print(`Myst test: ${get("_hccsMysTurns")}`, "green");
 print(hotPrediction);

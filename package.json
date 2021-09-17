@@ -12,9 +12,9 @@
     "watch": "webpack --watch --progress"
   },
   "devDependencies": {
-    "@babel/cli": "^7.12.8",
-    "@babel/compat-data": "^7.12.13",
-    "@babel/core": "^7.12.9",
+    "@babel/cli": "^7.15.4",
+    "@babel/compat-data": "^7.15.0",
+    "@babel/core": "^7.15.5",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
     "@babel/preset-env": "^7.12.7",

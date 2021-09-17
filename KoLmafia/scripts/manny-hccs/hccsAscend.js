@@ -50,7 +50,7 @@ __webpack_require__(517);
 
 __webpack_require__(5899);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -967,7 +967,7 @@ exports.Copier = Copier;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.Dreadsylvania = exports.SlimeTube = exports.Hobopolis = exports.default = void 0;
+exports.Dreadsylvania = exports.SlimeTube = exports.Hobopolis = exports["default"] = void 0;
 
 __webpack_require__(7504);
 
@@ -983,7 +983,7 @@ __webpack_require__(5899);
 
 __webpack_require__(2352);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _Clan = __webpack_require__(1662);
 
@@ -1161,7 +1161,7 @@ var Dungeon = /*#__PURE__*/function () {
   return Dungeon;
 }();
 
-exports.default = Dungeon;
+exports["default"] = Dungeon;
 var Hobopolis = new Dungeon("Hobopolis", (0, _templateString.$items)(_templateObject || (_templateObject = _taggedTemplateLiteral(["Ol' Scratch's ash can, Ol' Scratch's ol' britches, Ol' Scratch's stovepipe hat, Ol' Scratch's infernal pitchfork, Ol' Scratch's manacles, Ol' Scratch's stove door, Frosty's carrot, Frosty's nailbat, Frosty's old silk hat, Frosty's arm, Frosty's iceball, Frosty's snowball sack, Oscus's dumpster waders, Oscus's pelt, Wand of Oscus, Oscus's flypaper pants, Oscus's garbage can lid, Oscus's neverending soda, Zombo's grievous greaves, Zombo's shield, Zombo's skullcap, Zombo's empty eye, Zombo's shoulder blade, Zombo's skull ring, Chester's bag of candy, Chester's cutoffs, Chester's moustache, Chester's Aquarius medallion, Chester's muscle shirt, Chester's sunglasses, Hodgman's bow tie, Hodgman's porkpie hat, Hodgman's lobsterskin pants, Hodgman's almanac, Hodgman's lucky sock, Hodgman's metal detector, Hodgman's varcolac paw, Hodgman's harmonica, Hodgman's garbage sticker, Hodgman's cane, Hodgman's whackin' stick, Hodgman's disgusting technicolor overcoat, Hodgman's imaginary hamster"]))), "cleansewer", "floodsewer", 1000000, "opengrate.gif", "sewergrate.gif");
 exports.Hobopolis = Hobopolis;
 var SlimeTube = new Dungeon("The Slime Tube", (0, _templateString.$items)(_templateObject2 || (_templateObject2 = _taggedTemplateLiteral(["slime-soaked brain, slime-soaked hypophysis, slime-soaked sweat gland, squirming Slime larva, caustic slime nodule, caustic slime nodule, hardened slime belt, hardened slime hat, hardened slime pants"]))), "cleanspot", "sealtube", 250000, "slimehole.gif", "greasespot.gif");
@@ -1186,7 +1186,7 @@ __webpack_require__(2352);
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.default = void 0;
+exports["default"] = void 0;
 
 __webpack_require__(2238);
 
@@ -1208,7 +1208,7 @@ __webpack_require__(778);
 
 __webpack_require__(3239);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _utils = __webpack_require__(8588);
 
@@ -1609,7 +1609,7 @@ var Kmail = /*#__PURE__*/function () {
   return Kmail;
 }();
 
-exports.default = Kmail;
+exports["default"] = Kmail;
 
 /***/ }),
 
@@ -1793,7 +1793,7 @@ __webpack_require__(6467);
 
 __webpack_require__(4594);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _templateString = __webpack_require__(678);
 
@@ -2021,7 +2021,7 @@ __webpack_require__(8151);
 
 __webpack_require__(1714);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _templateString = __webpack_require__(678);
 
@@ -2647,7 +2647,7 @@ __webpack_require__(6467);
 
 __webpack_require__(4594);
 
-var _kolmafia = __webpack_require__(1664); // eslint-disable-next-line @typescript-eslint/no-explicit-any
+var _kolmafia = __webpack_require__(7530); // eslint-disable-next-line @typescript-eslint/no-explicit-any
 
 
 var logColor = color => function () {
@@ -2686,7 +2686,7 @@ __webpack_require__(2352);
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.default = findFreeRun;
+exports["default"] = findFreeRun;
 exports.FreeRun = void 0;
 
 __webpack_require__(517);
@@ -2705,7 +2705,7 @@ var _templateString = __webpack_require__(678);
 
 var _combat = __webpack_require__(1762);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _property = __webpack_require__(1347);
 
@@ -3231,7 +3231,7 @@ __webpack_require__(893);
 
 __webpack_require__(6467);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _templateString = __webpack_require__(678);
 
@@ -4115,13 +4115,13 @@ exports.Environment = Environment;
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.default = void 0;
+exports["default"] = void 0;
 
 __webpack_require__(6467);
 
 __webpack_require__(4594);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -4207,7 +4207,7 @@ var Logger = /*#__PURE__*/function () {
 
 var _default = new Logger();
 
-exports.default = _default;
+exports["default"] = _default;
 
 /***/ }),
 
@@ -4252,7 +4252,7 @@ __webpack_require__(778);
 
 __webpack_require__(3239);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _templateString = __webpack_require__(678);
 
@@ -5112,7 +5112,7 @@ __webpack_require__(778);
 
 __webpack_require__(3239);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -5920,7 +5920,7 @@ __webpack_require__(8819);
 
 __webpack_require__(7434);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _propertyTyping = __webpack_require__(9412);
 
@@ -6318,7 +6318,7 @@ __webpack_require__(778);
 
 __webpack_require__(3239);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _property = __webpack_require__(1347);
 
@@ -6549,7 +6549,7 @@ exports.getSpookyPuttySheetMonster = getSpookyPuttySheetMonster;
 exports.useSpookyPuttySheet = useSpookyPuttySheet;
 exports.sheet = void 0;
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -6618,7 +6618,7 @@ exports.canUseBadlyRomanticArrow = canUseBadlyRomanticArrow;
 exports.getBadlyRomanticArrowMonster = getBadlyRomanticArrowMonster;
 exports.BadlyRomanticArrow = exports.familiar = void 0;
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _Copier = __webpack_require__(2219);
 
@@ -6723,7 +6723,7 @@ exports.getRainDohBlackBoxMonster = getRainDohBlackBoxMonster;
 exports.useRainDohBlackBox = useRainDohBlackBox;
 exports.box = void 0;
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -6794,7 +6794,7 @@ __webpack_require__(3239);
 
 __webpack_require__(7504);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _property = __webpack_require__(1347);
 
@@ -7114,7 +7114,7 @@ __webpack_require__(778);
 
 __webpack_require__(3239);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _templateString = __webpack_require__(678);
 
@@ -7210,7 +7210,7 @@ __webpack_require__(3239);
 
 __webpack_require__(2231);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -7336,7 +7336,7 @@ __webpack_require__(2238);
 
 __webpack_require__(1714);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _isEqual = _interopRequireDefault(__webpack_require__(7120));
 
@@ -7732,7 +7732,7 @@ __webpack_require__(3239);
 
 __webpack_require__(5899);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -7808,7 +7808,7 @@ exports.getLovEnamorangMonster = getLovEnamorangMonster;
 exports.fightAll = fightAll;
 exports.LovEnamorang = void 0;
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _Copier = __webpack_require__(2219);
 
@@ -7956,7 +7956,7 @@ __webpack_require__(893);
 
 __webpack_require__(6467);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -8063,7 +8063,7 @@ __webpack_require__(6467);
 
 __webpack_require__(4594);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -8133,7 +8133,7 @@ exports.havePlatinumBooze = havePlatinumBooze;
 exports.haveBooze = haveBooze;
 exports.Cocktails = exports.item = void 0;
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 var _lib = __webpack_require__(3311);
 
@@ -8583,7 +8583,7 @@ __webpack_require__(5899);
 
 __webpack_require__(2238);
 
-var _kolmafia = __webpack_require__(1664);
+var _kolmafia = __webpack_require__(7530);
 
 function _classCallCheck(instance, Constructor) {
   if (!(instance instanceof Constructor)) {
@@ -17348,7 +17348,7 @@ module.exports = stubFalse;
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
-/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1664);
+/* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7530);
 /* harmony import */ var kolmafia__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(kolmafia__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9803);
 /* harmony import */ var libram__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(libram__WEBPACK_IMPORTED_MODULE_1__);
@@ -17386,7 +17386,7 @@ if ((0,kolmafia__WEBPACK_IMPORTED_MODULE_0__.equippedItem)((0,libram__WEBPACK_IM
 
 /***/ }),
 
-/***/ 1664:
+/***/ 7530:
 /***/ ((module) => {
 
 "use strict";

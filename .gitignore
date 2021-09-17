@@ -79,4 +79,4 @@ typings/
 .vscode/
 
 # transpiled js scripts
-KoLmafia/scripts/
+/KoLmafia/scripts/

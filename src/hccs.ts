@@ -677,19 +677,6 @@ if (!testDone(TEST_MOX)) {
     setAutoAttack(0);
   }
 
-  // Get inner elf for leveling and moxie test
-  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
-    Clan.join("Beldungeon");
-    ensureEffect($effect`Blood Bubble`);
-    useFamiliar($familiar`Machine Elf`);
-    setChoice(326, 1);
-    adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
-    useDefaultFamiliar();
-    Clan.join("Alliance from Hell");
-  } else {
-    print("Something went wrong with getting inner elf");
-  }
-
   // Chateau rest
   while (get("timesRested") < totalFreeRests()) {
     visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
@@ -996,6 +983,20 @@ if (!testDone(TEST_MOX)) {
     setAutoAttack(0);
   }
 
+  // Get inner elf for leveling and moxie test
+  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
+    print(`${myLevel()}is my level at the moment, trying to get inner elf`, "red");
+    Clan.join("Beldungeon");
+    ensureEffect($effect`Blood Bubble`);
+    useFamiliar($familiar`Machine Elf`);
+    setChoice(326, 1);
+    adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
+    useDefaultFamiliar();
+    Clan.join("Alliance from Hell");
+  } else {
+    print("Something went wrong with getting inner elf");
+  }
+
   useDefaultFamiliar();
 
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
@@ -1079,7 +1080,7 @@ if (!testDone(TEST_MOX)) {
     throw "Not enough moxie to cap.";
   }
 
-  moxieStat = String(Math.floor((myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`)) / 30));
+  moxieStat = String(Math.floor((myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`)) / 30) - 60);
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_MOX);

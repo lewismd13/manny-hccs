@@ -110,7 +110,7 @@ const TEST_HOT_RES = 10;
 const TEST_COIL_WIRE = 11;
 const DONATE = 30;
 
-let moxieStat = "";
+let moxieStat = 0;
 let hotPrediction = "";
 let ncPrediction = "";
 let weaponPrediction = "";
@@ -1080,7 +1080,7 @@ if (!testDone(TEST_MOX)) {
     throw "Not enough moxie to cap.";
   }
 
-  moxieStat = String(Math.floor((myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`)) / 30) - 60);
+  moxieStat = 60 - Math.floor((myBuffedstat($stat`moxie`) - myBasestat($stat`moxie`)) / 30);
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_MOX);
@@ -1528,8 +1528,24 @@ if (!testDone(TEST_WEAPON)) {
     print("Something went wrong with getting inner elf");
   }
 
-  // Paint crayon elf for DNA and ghost buff (Saber YR)
-  // TODO: switch this to a deck pull and leave embezzler in here
+  // Deck pull elf for DNA and ghost buff (reflex hammer)
+  if (get("_deckCardsDrawn") === 5) {
+    useFamiliar($familiar`Ghost of Crimbo Carols`);
+    equip($slot`acc3`, $item`Lil' Doctor™ bag`);
+    if (get("_reflexHammerUsed") > 2) {
+      throw "You do not have any banishes left";
+    }
+    Macro.item($item`DNA extraction syringe`)
+      .skill($skill`Reflex Hammer`)
+      .setAutoAttack();
+    cliExecute("cheat phylum elf");
+    runCombat();
+    useDefaultFamiliar();
+  } else {
+    throw "You are out of deck pulls.";
+  }
+
+  /*
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
     // const match = chateauText.match(/alt="Painting of an? ([^(]*) .1."/);
@@ -1548,6 +1564,7 @@ if (!testDone(TEST_WEAPON)) {
   } else {
     throw "You already fought your painting";
   }
+*/
 
   geneTonic("elf");
   ensureEffect($effect`Human-Elf Hybrid`);
@@ -1780,7 +1797,7 @@ if (!testDone(TEST_ITEM)) {
   // ensureEffect($effect`certainty`);
 
   // pulls wheel of fortune from deck, gets rope and wrench for later
-  if (get("_deckCardsDrawn") === 5) {
+  if (get("_deckCardsDrawn") === 10) {
     cliExecute("cheat buff items");
   }
   // get pirate DNA and make a gene tonic

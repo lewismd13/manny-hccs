@@ -1657,11 +1657,6 @@ if (!testDone(TEST_WEAPON)) {
     ensureEffect($effect`Lack of Body-Building`);
   }
 
-  // Boombox potion - did we get one?
-  if (availableAmount($item`Punching Potion`) > 0) {
-    ensureEffect($effect`Feeling Punchy`);
-  }
-
   // Pool buff. Should have fallen through.
   ensureEffect($effect`Billiards Belligerence`);
 

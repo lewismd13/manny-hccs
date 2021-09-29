@@ -1,7 +1,9 @@
 import {
+  abort,
   availableAmount,
   buy,
   buyUsingStorage,
+  chatPrivate,
   cliExecute,
   create,
   eat,
@@ -31,9 +33,10 @@ import {
   use,
   useSkill,
   visitUrl,
+  wait,
   weightAdjustment,
 } from "kolmafia";
-import { $effect, $effects, $item, $location, $skill, Macro } from "libram";
+import { $effect, $effects, $item, $location, $skill, get, Macro, property } from "libram";
 
 export function getPropertyInt(name: string) {
   const str = getProperty(name);
@@ -355,4 +358,24 @@ export function kill() {
     .trySkill($skill`Saucestorm`)
     .trySkillRepeat($skill`Saucegeyser`)
     .attack();
+}
+
+function checkFax(monster: Monster): boolean {
+  cliExecute("fax receive");
+  if (property.getString("photocopyMonster").toLowerCase() === monster.name.toLowerCase())
+    return true;
+  cliExecute("fax send");
+  return false;
+}
+
+export function fax(monster: Monster): void {
+  if (!get("_photocopyUsed")) {
+    if (checkFax(monster)) return;
+    chatPrivate("cheesefax", monster.name);
+    for (let i = 0; i < 3; i++) {
+      wait(5 + i);
+      if (checkFax(monster)) return;
+    }
+    abort(`Failed to acquire photocopied ${monster.name}.`);
+  }
 }

@@ -33,6 +33,7 @@ import {
   getProperty,
   handlingChoice,
   haveEffect,
+  haveEquipped,
   haveSkill,
   hippyStoneBroken,
   itemAmount,
@@ -111,8 +112,6 @@ const TEST_COIL_WIRE = 11;
 const DONATE = 30;
 
 let moxieStat = 0;
-let hotPrediction = "";
-let ncPrediction = "";
 let weaponPrediction = "";
 let itemPrediction = "";
 
@@ -152,16 +151,16 @@ function useDefaultFamiliar() {
     useFamiliar($familiar`Melodramedary`);
     equip($item`dromedary drinking helmet`);
   } else if (
-    availableAmount($item`rope`) < 1 &&
-    availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1
-  ) {
-    useFamiliar($familiar`Garbage Fire`);
-  } else if (
     availableAmount($item`short stack of pancakes`) === 0 &&
     haveEffect($effect`Shortly Stacked`) === 0 &&
     !get("csServicesPerformed").split(",").includes("Breed More Collies")
   ) {
     useFamiliar($familiar`Shorter-Order Cook`);
+  } else if (
+    availableAmount($item`rope`) < 1 &&
+    availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1
+  ) {
+    useFamiliar($familiar`Garbage Fire`);
   } else {
     useFamiliar($familiar`Machine Elf`);
   }
@@ -319,6 +318,7 @@ setProperty("recoveryScript", "");
 // Do buy stuff from coinmasters (hermit).
 setProperty("_saved_autoSatisfyWithCoinmasters", getProperty("autoSatisfyWithCoinmasters"));
 setProperty("autoSatisfyWithCoinmasters", "true");
+// setProperty("logPreferenceChange", "true");
 
 // Initialize council.
 visitUrl("council.php");
@@ -867,11 +867,12 @@ if (!testDone(TEST_MOX)) {
       setAutoAttack(0);
     }
   }
+  /*
   // backing up bishops - leaving a few backups for garbo
   useDefaultFamiliar();
   equip($slot`acc2`, $item`backup camera`);
   equip($slot`shirt`, $item`none`);
-  while (get("lastCopyableMonster") === $monster`Witchess Bishop` && get("_backUpUses") < 9) {
+  while (get("lastCopyableMonster") === $monster`Witchess Bishop` && get("_backUpUses") < 5) {
     useDefaultFamiliar();
     adventureMacroAuto(
       $location`Noob Cave`,
@@ -879,7 +880,7 @@ if (!testDone(TEST_MOX)) {
     );
   }
   setAutoAttack(0);
-
+*/
   equip($item`makeshift garbage shirt`);
 
   // get witchess buff, this should fall all the way through to fam wt
@@ -1010,18 +1011,20 @@ if (!testDone(TEST_MOX)) {
   ensureSong($effect`Ur-Kel's Aria of Annoyance`);
   ensureEffect($effect`Feeling Excited`);
 
+  if (!have($item`makeshift garbage shirt`)) {
+    cliExecute("fold makeshift garbage shirt");
+  }
+
+  if (!haveEquipped($item`makeshift garbage shirt`)) equip($item`makeshift garbage shirt`);
+
   // 14 free NEP fights, using mob hit and xray
   while (
     get("_neverendingPartyFreeTurns") < 10 ||
     (haveSkill($skill`Chest X-Ray`) && get("_chestXRayUsed") < 3) ||
     (haveSkill($skill`Gingerbread Mob Hit`) && !get("_gingerbreadMobHitUsed"))
   ) {
-    // cliExecute("mood execute");
-
     // Otherwise fight.
     setChoice(1324, 5);
-    // }
-
     ensureMpSausage(100);
     if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
       useDefaultFamiliar();
@@ -1335,8 +1338,6 @@ if (!testDone(TEST_HOT_RES)) {
     throw "Something went wrong building hot res.";
   }
 
-  hotPrediction = String(round(numericModifier("hot resistance")));
-
   // logprint(cliExecuteOutput("modtrace hot resistance"));
 
   TEMP_TURNS = myTurncount();
@@ -1399,8 +1400,6 @@ if (!testDone(TEST_NONCOMBAT)) {
     throw "Not enough -combat to cap.";
   }
 
-  ncPrediction = String(round(numericModifier("combat rate")));
-
   // cli_execute('modtrace combat rate');
   // abort();
   TEMP_TURNS = myTurncount();
@@ -1425,7 +1424,7 @@ if (!testDone(TEST_FAMILIAR)) {
   ensureEffect($effect`Empathy`);
   ensureEffect($effect`Robot Friends`);
   ensureEffect($effect`Human-Machine Hybrid`);
-  ensureEffect($effect`Shortly Stacked`);
+  if (have($item`short stack of pancakes`)) ensureEffect($effect`Shortly Stacked`);
   /*
   if (availableAmount($item`cracker`) > 0 && get("tomeSummons") < 3) {
     useFamiliar($familiar`Exotic Parrot`);
@@ -1529,22 +1528,23 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   // Deck pull elf for DNA and ghost buff (reflex hammer)
-  if (get("_deckCardsDrawn") === 5) {
-    useFamiliar($familiar`Ghost of Crimbo Carols`);
-    equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-    if (get("_reflexHammerUsed") > 2) {
-      throw "You do not have any banishes left";
+  if (!have($effect`Do You Crush What I Crush?`) || get("dnaSyringe") !== "elf") {
+    if (get("_deckCardsDrawn") === 5) {
+      useFamiliar($familiar`Ghost of Crimbo Carols`);
+      equip($slot`acc3`, $item`Lil' Doctor™ bag`);
+      if (get("_reflexHammerUsed") > 2) {
+        throw "You do not have any banishes left";
+      }
+      Macro.item($item`DNA extraction syringe`)
+        .skill($skill`Reflex Hammer`)
+        .setAutoAttack();
+      cliExecute("cheat phylum elf");
+      runCombat();
+      useDefaultFamiliar();
+    } else {
+      throw "You are out of deck pulls.";
     }
-    Macro.item($item`DNA extraction syringe`)
-      .skill($skill`Reflex Hammer`)
-      .setAutoAttack();
-    cliExecute("cheat phylum elf");
-    runCombat();
-    useDefaultFamiliar();
-  } else {
-    throw "You are out of deck pulls.";
   }
-
   /*
   if (!get("_chateauMonsterFought")) {
     // const chateauText = visitUrl("place.php?whichplace=chateau", false);
@@ -1655,11 +1655,6 @@ if (!testDone(TEST_WEAPON)) {
   // Beach Comb
   if (!containsText(get("_beachHeadsUsed"), "6")) {
     ensureEffect($effect`Lack of Body-Building`);
-  }
-
-  // Boombox potion - did we get one?
-  if (availableAmount($item`Punching Potion`) > 0) {
-    ensureEffect($effect`Feeling Punchy`);
   }
 
   // Pool buff. Should have fallen through.
@@ -1895,6 +1890,8 @@ if (!testDone(TEST_ITEM)) {
   setProperty("_hccsItemTurns", ITEM_TURNS.toString());
 }
 
+const END_TIME = gametimeToInt();
+
 useSkill(1, $skill`Spirit of Nothing`);
 setProperty("autoSatisfyWithNPCs", "true");
 setProperty("autoSatisfyWithCoinmasters", getProperty("_saved_autoSatisfyWithCoinmasters"));
@@ -1918,11 +1915,11 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(4);
 }
 
-cliExecute("swagger");
+cliExecute("pvp fame lifelong");
 
 doTest(DONATE);
 
-const totalSeconds = (gametimeToInt() - START_TIME) / 1000;
+const totalSeconds = (END_TIME - START_TIME) / 1000;
 const min = Math.floor(totalSeconds / 60);
 const sec = Math.floor(totalSeconds % 60);
 
@@ -1940,9 +1937,7 @@ print(`Muscle test: ${get("_hccsHpTurns")}`, "green");
 print(`moxie prediction: ${moxieStat}`);
 print(`Moxie test: ${get("_hccsMoxTurns")}`, "green");
 print(`Myst test: ${get("_hccsMysTurns")}`, "green");
-print(hotPrediction);
 print(`Hot Res test: ${get("_hccsHotResTurns")}`, "green");
-print(ncPrediction);
 print(`Noncombat test: ${get("_hccsNoncombatTurns")}`, "green");
 print(`Fam Weight test: ${get("_hccsFamiliarTurns")}`, "green");
 print(weaponPrediction);
@@ -1956,3 +1951,5 @@ if (get("_questPartyFairQuest") === "food") {
 } else if (get("_questPartyFairQuest") === "booze") {
   print("Hey, go talk to Gerald!", "blue");
 }
+
+// setProperty("logPreferenceChange", "false");

@@ -4,7 +4,6 @@ import {
   create,
   drinksilent,
   fullnessLimit,
-  getClanId,
   getWorkshed,
   inebrietyLimit,
   myAdventures,
@@ -21,19 +20,17 @@ import {
   useFamiliar,
   useSkill,
 } from "kolmafia";
-import { $familiar, $item, $skill, get } from "libram";
+import { $familiar, $item, $skill, Clan } from "libram";
+import { mannyCleanup } from "./lib";
 
-if (getClanId() !== 40382) {
-  cliExecute("/whitelist alliance from hell");
-}
+Clan.join("Alliance from Hell");
+
 if (pvpAttacksLeft() > 0) {
   cliExecute("uberpvpoptimizer");
   cliExecute("swagger");
 }
 
-if (get("_freeBeachWalksUsed") < 11) {
-  cliExecute("combbeach free");
-}
+mannyCleanup();
 
 if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {
   if (myFamiliar() !== $familiar`Stooper`) {
@@ -62,7 +59,10 @@ if (getWorkshed() !== $item`Little Geneticist DNA-Splicing Lab`) {
   takeStash($item`Little Geneticist DNA-Splicing Lab`, 1);
   use($item`Little Geneticist DNA-Splicing Lab`);
 }
+
 // TODO: pick garden if has growth
+
 if (myGardenType() !== "peppermint") {
+  cliExecute("garden pick");
   use($item`Peppermint Pip Packet`);
 }

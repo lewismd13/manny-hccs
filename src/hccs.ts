@@ -518,8 +518,6 @@ if (!testDone(TEST_MOX)) {
   // Depends on Ez's Bastille script.
   cliExecute("bastille myst brutalist");
 
-  // if (get_property('_horsery') != 'crazy horse') cli_execute('horsery crazy');
-
   // Tune moon sign to Blender. Have to do this now to get chewing gum.
   if (!get("moonTuned")) {
     if (get("_campAwaySmileBuffs") === 0) {
@@ -1322,8 +1320,6 @@ if (!testDone(TEST_HOT_RES)) {
   // Use pocket maze
   // if (availableAmount($item`pocket maze`) > 0) ensureEffect($effect`Amazing`);
 
-  // if (get_property('_horsery') != 'pale horse') cli_execute('horsery pale');
-
   useFamiliar($familiar`Exotic Parrot`);
   if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
     retrieveItem(1, $item`box of Familiar Jacks`);
@@ -1400,8 +1396,6 @@ if (!testDone(TEST_NONCOMBAT)) {
     throw "Not enough -combat to cap.";
   }
 
-  // cli_execute('modtrace combat rate');
-  // abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_NONCOMBAT);
   NONCOMBAT_TURNS = myTurncount() - TEMP_TURNS;
@@ -1503,8 +1497,6 @@ if (!testDone(TEST_FAMILIAR)) {
 
   maximize("familiar weight", false);
 
-  // cli_execute('modtrace familiar weight');
-  // abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_FAMILIAR);
   FAMILIAR_TURNS = myTurncount() - TEMP_TURNS;
@@ -1764,8 +1756,6 @@ if (!testDone(TEST_SPELL)) {
     eat(1, $item`magical sausage`);
   }
 
-  // cli_execute('modtrace spell damage');
-  // abort();
   TEMP_TURNS = myTurncount();
   doTest(TEST_SPELL);
   SPELL_TURNS = myTurncount() - TEMP_TURNS;
@@ -1879,9 +1869,6 @@ if (!testDone(TEST_ITEM)) {
     false
   );
 
-  // cli_execute('modtrace item');
-  // abort();
-
   itemPrediction = String(itemDropModifier());
 
   TEMP_TURNS = myTurncount();
@@ -1915,6 +1902,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
   runChoice(4);
 }
 
+cliExecute("uberpvpoptimizer");
 cliExecute("pvp fame lifelong");
 
 doTest(DONATE);

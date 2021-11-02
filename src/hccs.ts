@@ -886,6 +886,17 @@ if (!testDone(TEST_MOX)) {
     cliExecute("witchess");
   }
 
+  // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
+  if (get("_questPartyFairQuest") === "") {
+    setChoice(1322, 6); // Leave
+    adv1($location`The Neverending Party`, -1, "");
+  }
+  if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
+    setChoice(1322, 1); // accept quest
+  } else {
+    setChoice(1322, 2); // just here to party
+  }
+
   // Professor 9x free sausage fight @ NEP
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -895,16 +906,6 @@ if (!testDone(TEST_MOX)) {
     equip($slot`acc3`, $item`Beach Comb`);
 
     // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
-
-    if (get("_questPartyFairQuest") === "") {
-      setChoice(1322, 6); // Leave
-      adv1($location`The Neverending Party`, -1, "");
-    }
-    if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
-      setChoice(1322, 1); // accept quest
-    } else {
-      setChoice(1322, 2); // just here to party
-    }
 
     while (get("_sausageFights") === 0) {
       if (myHp() < 0.8 * myMaxhp()) {
@@ -982,20 +983,6 @@ if (!testDone(TEST_MOX)) {
     setAutoAttack(0);
   }
 
-  // Get inner elf for leveling and moxie test
-  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
-    print(`${myLevel()}is my level at the moment, trying to get inner elf`, "red");
-    Clan.join("Beldungeon");
-    ensureEffect($effect`Blood Bubble`);
-    useFamiliar($familiar`Machine Elf`);
-    setChoice(326, 1);
-    adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
-    useDefaultFamiliar();
-    Clan.join("Alliance from Hell");
-  } else {
-    print("Something went wrong with getting inner elf");
-  }
-
   useDefaultFamiliar();
 
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
@@ -1021,10 +1008,26 @@ if (!testDone(TEST_MOX)) {
     (haveSkill($skill`Chest X-Ray`) && get("_chestXRayUsed") < 3) ||
     (haveSkill($skill`Gingerbread Mob Hit`) && !get("_gingerbreadMobHitUsed"))
   ) {
+    // Get inner elf for leveling and moxie test
+    // TODO: make this try again if she's busy
+    // TODO: make this a function and move into lib
+    if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3 && myLevel() > 12) {
+      print(`${myLevel()}is my level at the moment, trying to get inner elf`, "red");
+      Clan.join("Beldungeon");
+      ensureEffect($effect`Blood Bubble`);
+      useFamiliar($familiar`Machine Elf`);
+      setChoice(326, 1);
+      adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
+      useDefaultFamiliar();
+      Clan.join("Alliance from Hell");
+    } else {
+      print("Something went wrong with getting inner elf");
+    }
+
     // Otherwise fight.
     setChoice(1324, 5);
     ensureMpSausage(100);
-    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 2) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
@@ -1070,6 +1073,10 @@ if (!testDone(TEST_MOX)) {
   if (haveEffect($effect`Unrunnable Face`) === 0) {
     tryUse(1, $item`runproof mascara`);
   }
+  ensureEffect($effect`Blubbered Up`);
+  ensureEffect($effect`Penne Fedora`);
+  ensureEffect($effect`Mariachi Mood`);
+  ensureEffect($effect`Disco State of Mind`);
 
   maximize("moxie", false);
   if (
@@ -1903,7 +1910,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("uberpvpoptimizer");
-cliExecute("pvp fame lifelong");
+cliExecute("pvp fame freshest");
 
 doTest(DONATE);
 

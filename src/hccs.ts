@@ -754,11 +754,8 @@ if (!testDone(TEST_MOX)) {
       cliExecute("hottub"); // removing lava effect
       setAutoAttack(0);
     } else throw "Something went wrong getting fish DNA.";
+    if (!hybridize()) throw "Failed to hybridize fish";
   }
-
-  if (get("dnaSyringe") === $phylum`fish`) {
-    hybridize();
-  } else throw "You failed to get fish DNA somehow";
 
   if (!get("hasRange")) {
     ensureItem(1, $item`Dramatic™ range`);

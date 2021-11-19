@@ -80,6 +80,7 @@ import {
   $item,
   $location,
   $monster,
+  $phylum,
   $skill,
   $slot,
   $stat,
@@ -91,6 +92,13 @@ import {
   Macro,
   Witchess,
 } from "libram";
+import {
+  getEffect,
+  getTonic,
+  hybridize,
+  isHybridized,
+  makeTonic,
+} from "libram/dist/resources/2014/DNALab";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -208,43 +216,20 @@ function spellTurns() {
 }
 
 // Checks that you don't already have the tonic or effect and if your syringe has the right phylum and if so, makes the appropriate tonic.
-/* eslint-disable libram/verify-constants */
-function geneTonic(ph: string) {
-  if (ph === "dude" || ph === "weird") {
-    print("This function doesn't work for dudes or weirds.", "red");
-  } else if (ph === "construct") {
-    if (
-      haveEffect($effect`Human-Machine Hybrid`) === 0 &&
-      availableAmount($item`Gene Tonic: Construct`) === 0 &&
-      get("dnaSyringe") === "construct"
-    ) {
-      cliExecute("camp dnapotion 1");
-      if (availableAmount($item`Gene Tonic:${ph}`) === 0) {
-        throw "something went wrong getting your gene tonic";
-      } else {
-        print("successfully created gene tonic: construct");
-      }
+
+function geneTonic(ph: Phylum) {
+  if (!have(getEffect(ph)) && !have(getTonic(ph))) {
+    if (get("dnaSyringe") !== ph) throw "You have the wrong DNA in your syringe";
+    makeTonic();
+    if (!have(getTonic(ph))) {
+      throw "something went wrong getting your gene tonic";
     } else {
-      print("You already have construct DNA");
+      print(`successfully created ${getTonic(ph).name}`);
     }
   } else {
-    if (
-      haveEffect($effect`Human-${ph}Hybrid`) === 0 &&
-      availableAmount($item`Gene Tonic:${ph}`) === 0 &&
-      get("dnaSyringe") === ph
-    ) {
-      cliExecute("camp dnapotion 1");
-      if (availableAmount($item`Gene Tonic:${ph}`) === 0) {
-        throw "something went wrong getting your gene tonic";
-      } else {
-        print(`successfully created gene tonic: ${ph}`);
-      }
-    } else {
-      print(`You already have ${ph} DNA`);
-    }
+    print(`You already have ${ph} DNA`);
   }
 }
-/* eslint-enable libram/verify-constants */
 
 function summonBrickoOyster(maxSummons: number) {
   if (get("_brickoFights") >= 3) return false;
@@ -652,12 +637,15 @@ if (!testDone(TEST_MOX)) {
     useDefaultFamiliar();
     setProperty("choiceAdventure1310", "3"); // myst for ice rice, because it sells for more
     visitUrl("place.php?whichplace=snojo&action=snojo_controller");
-    if (availableAmount($item`Gene Tonic: Construct`) === 0 && get("dnaSyringe") !== "construct") {
+    if (
+      availableAmount($item`Gene Tonic: Construct`) === 0 &&
+      get("dnaSyringe") !== $phylum`construct`
+    ) {
       adventureMacroAuto(
         $location`The X-32-F Combat Training Snowman`,
         Macro.item($item`DNA extraction syringe`).trySkillRepeat($skill`Saucestorm`)
       );
-      geneTonic("construct");
+      geneTonic($phylum`construct`);
     }
     while (get("_snojoFreeFights") < 10) {
       useDefaultFamiliar();
@@ -737,7 +725,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   // become a human fish hybrid
-  if (get("_dnaHybrid") === false && get("dnaSyringe") !== "fish") {
+  if (!isHybridized($phylum`fish`) && get("dnaSyringe") !== $phylum`fish`) {
     // tryEquip($item`powerful glove`);
     // useFamiliar($familiar`frumious bandersnatch`);
     print($location`The Bubblin' Caldera`.noncombatQueue);
@@ -768,9 +756,9 @@ if (!testDone(TEST_MOX)) {
     } else throw "Something went wrong getting fish DNA.";
   }
 
-  if (get("_dnaHybrid") === false && get("dnaSyringe") === "fish") {
-    cliExecute("camp dnainject");
-  }
+  if (get("dnaSyringe") === $phylum`fish`) {
+    hybridize();
+  } else throw "You failed to get fish DNA somehow";
 
   if (!get("hasRange")) {
     ensureItem(1, $item`Dramatic™ range`);
@@ -1527,7 +1515,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   // Deck pull elf for DNA and ghost buff (reflex hammer)
-  if (!have($effect`Do You Crush What I Crush?`) || get("dnaSyringe") !== "elf") {
+  if (!have($effect`Do You Crush What I Crush?`) || get("dnaSyringe") !== $phylum`elf`) {
     if (get("_deckCardsDrawn") === 5) {
       useFamiliar($familiar`Ghost of Crimbo Carols`);
       equip($slot`acc3`, $item`Lil' Doctor™ bag`);
@@ -1565,7 +1553,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 */
 
-  geneTonic("elf");
+  geneTonic($phylum`elf`);
   ensureEffect($effect`Human-Elf Hybrid`);
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
@@ -1793,7 +1781,7 @@ if (!testDone(TEST_ITEM)) {
     cliExecute("cheat buff items");
   }
   // get pirate DNA and make a gene tonic
-  if (get("dnaSyringe") !== "pirate" && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
+  if (get("dnaSyringe") !== $phylum`pirate` && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
     equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
     if (get("_kgbTranquilizerDartUses") >= 3) {
       throw "Out of KGB banishes";
@@ -1813,7 +1801,7 @@ if (!testDone(TEST_ITEM)) {
         $location`Pirates of the Garbage Barges`,
         Macro.item($item`DNA extraction syringe`).skill($skill`KGB tranquilizer dart`)
       );
-      geneTonic("pirate");
+      geneTonic($phylum`pirate`);
       ensureEffect($effect`Human-Pirate Hybrid`);
       setAutoAttack(0);
     } else throw "Something went wrong getting pirate DNA.";

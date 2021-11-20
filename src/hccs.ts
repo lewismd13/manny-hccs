@@ -98,6 +98,7 @@ import {
   hybridize,
   isHybridized,
   makeTonic,
+  tonicsLeft,
 } from "libram/dist/resources/2014/DNALab";
 
 // rewrite all combats
@@ -218,6 +219,7 @@ function spellTurns() {
 // Checks that you don't already have the tonic or effect and if your syringe has the right phylum and if so, makes the appropriate tonic.
 
 function geneTonic(ph: Phylum) {
+  if (tonicsLeft() < 1) throw "You can't make any more tonics";
   if (!have(getEffect(ph)) && !have(getTonic(ph))) {
     if (get("dnaSyringe") !== ph) throw "You have the wrong DNA in your syringe";
     makeTonic();

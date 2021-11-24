@@ -1449,7 +1449,7 @@ if (!testDone(TEST_FAMILIAR)) {
         availableAmount($item`gingerbread spice latte`) === 0 &&
         haveEffect($effect`Whole Latte Love`) === 0
       ) {
-        adventureMacro($location`Gingerbread Upscale Retail District`, Macro.step("runaway"));
+        adventureMacro($location`Gingerbread Upscale Retail District`, Macro.runaway());
       }
     } else {
       throw "Something went wrong getting sprinkles";

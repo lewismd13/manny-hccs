@@ -6,6 +6,7 @@ import {
   buy,
   buyUsingStorage,
   chatPrivate,
+  choiceFollowsFight,
   cliExecute,
   create,
   eat,
@@ -16,6 +17,7 @@ import {
   getProperty,
   haveEffect,
   haveSkill,
+  inMultiFight,
   itemAmount,
   myAdventures,
   myFamiliar,
@@ -69,6 +71,12 @@ export function getPropertyBoolean(name: string) {
 
 export function setChoice(adv: number, choice: number) {
   setProperty(`choiceAdventure${adv}`, `${choice}`);
+}
+
+export function multiFightAutoAttack(): void {
+  while (choiceFollowsFight() || inMultiFight()) {
+    visitUrl("choice.php");
+  }
 }
 
 export function myFamiliarWeight() {

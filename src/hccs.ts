@@ -80,6 +80,7 @@ import {
   $item,
   $location,
   $monster,
+  $phylum,
   $skill,
   $slot,
   $stat,
@@ -91,6 +92,14 @@ import {
   Macro,
   Witchess,
 } from "libram";
+import {
+  getEffect,
+  getTonic,
+  hybridize,
+  isHybridized,
+  makeTonic,
+  tonicsLeft,
+} from "libram/dist/resources/2014/DNALab";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -208,43 +217,21 @@ function spellTurns() {
 }
 
 // Checks that you don't already have the tonic or effect and if your syringe has the right phylum and if so, makes the appropriate tonic.
-/* eslint-disable libram/verify-constants */
-function geneTonic(ph: string) {
-  if (ph === "dude" || ph === "weird") {
-    print("This function doesn't work for dudes or weirds.", "red");
-  } else if (ph === "construct") {
-    if (
-      haveEffect($effect`Human-Machine Hybrid`) === 0 &&
-      availableAmount($item`Gene Tonic: Construct`) === 0 &&
-      get("dnaSyringe") === "construct"
-    ) {
-      cliExecute("camp dnapotion 1");
-      if (availableAmount($item`Gene Tonic:${ph}`) === 0) {
-        throw "something went wrong getting your gene tonic";
-      } else {
-        print("successfully created gene tonic: construct");
-      }
+
+function geneTonic(ph: Phylum) {
+  if (tonicsLeft() < 1) throw "You can't make any more tonics";
+  if (!have(getEffect(ph)) && !have(getTonic(ph))) {
+    if (get("dnaSyringe") !== ph) throw "You have the wrong DNA in your syringe";
+    makeTonic();
+    if (!have(getTonic(ph))) {
+      throw "something went wrong getting your gene tonic";
     } else {
-      print("You already have construct DNA");
+      print(`successfully created ${getTonic(ph).name}`);
     }
   } else {
-    if (
-      haveEffect($effect`Human-${ph}Hybrid`) === 0 &&
-      availableAmount($item`Gene Tonic:${ph}`) === 0 &&
-      get("dnaSyringe") === ph
-    ) {
-      cliExecute("camp dnapotion 1");
-      if (availableAmount($item`Gene Tonic:${ph}`) === 0) {
-        throw "something went wrong getting your gene tonic";
-      } else {
-        print(`successfully created gene tonic: ${ph}`);
-      }
-    } else {
-      print(`You already have ${ph} DNA`);
-    }
+    print(`You already have ${ph} DNA`);
   }
 }
-/* eslint-enable libram/verify-constants */
 
 function summonBrickoOyster(maxSummons: number) {
   if (get("_brickoFights") >= 3) return false;
@@ -652,12 +639,15 @@ if (!testDone(TEST_MOX)) {
     useDefaultFamiliar();
     setProperty("choiceAdventure1310", "3"); // myst for ice rice, because it sells for more
     visitUrl("place.php?whichplace=snojo&action=snojo_controller");
-    if (availableAmount($item`Gene Tonic: Construct`) === 0 && get("dnaSyringe") !== "construct") {
+    if (
+      availableAmount($item`Gene Tonic: Construct`) === 0 &&
+      get("dnaSyringe") !== $phylum`construct`
+    ) {
       adventureMacroAuto(
         $location`The X-32-F Combat Training Snowman`,
         Macro.item($item`DNA extraction syringe`).trySkillRepeat($skill`Saucestorm`)
       );
-      geneTonic("construct");
+      geneTonic($phylum`construct`);
     }
     while (get("_snojoFreeFights") < 10) {
       useDefaultFamiliar();
@@ -737,7 +727,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   // become a human fish hybrid
-  if (get("_dnaHybrid") === false && get("dnaSyringe") !== "fish") {
+  if (!isHybridized($phylum`fish`) && get("dnaSyringe") !== $phylum`fish`) {
     // tryEquip($item`powerful glove`);
     // useFamiliar($familiar`frumious bandersnatch`);
     print($location`The Bubblin' Caldera`.noncombatQueue);
@@ -766,10 +756,7 @@ if (!testDone(TEST_MOX)) {
       cliExecute("hottub"); // removing lava effect
       setAutoAttack(0);
     } else throw "Something went wrong getting fish DNA.";
-  }
-
-  if (get("_dnaHybrid") === false && get("dnaSyringe") === "fish") {
-    cliExecute("camp dnainject");
+    if (!hybridize()) throw "Failed to hybridize fish";
   }
 
   if (!get("hasRange")) {
@@ -886,6 +873,17 @@ if (!testDone(TEST_MOX)) {
     cliExecute("witchess");
   }
 
+  // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
+  if (get("_questPartyFairQuest") === "") {
+    setChoice(1322, 6); // Leave
+    adv1($location`The Neverending Party`, -1, "");
+  }
+  if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
+    setChoice(1322, 1); // accept quest
+  } else {
+    setChoice(1322, 2); // just here to party
+  }
+
   // Professor 9x free sausage fight @ NEP
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -895,16 +893,6 @@ if (!testDone(TEST_MOX)) {
     equip($slot`acc3`, $item`Beach Comb`);
 
     // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
-
-    if (get("_questPartyFairQuest") === "") {
-      setChoice(1322, 6); // Leave
-      adv1($location`The Neverending Party`, -1, "");
-    }
-    if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
-      setChoice(1322, 1); // accept quest
-    } else {
-      setChoice(1322, 2); // just here to party
-    }
 
     while (get("_sausageFights") === 0) {
       if (myHp() < 0.8 * myMaxhp()) {
@@ -982,20 +970,6 @@ if (!testDone(TEST_MOX)) {
     setAutoAttack(0);
   }
 
-  // Get inner elf for leveling and moxie test
-  if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3) {
-    print(`${myLevel()}is my level at the moment, trying to get inner elf`, "red");
-    Clan.join("Beldungeon");
-    ensureEffect($effect`Blood Bubble`);
-    useFamiliar($familiar`Machine Elf`);
-    setChoice(326, 1);
-    adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
-    useDefaultFamiliar();
-    Clan.join("Alliance from Hell");
-  } else {
-    print("Something went wrong with getting inner elf");
-  }
-
   useDefaultFamiliar();
 
   equip($slot`acc3`, $item`Lil' Doctor™ bag`);
@@ -1021,10 +995,26 @@ if (!testDone(TEST_MOX)) {
     (haveSkill($skill`Chest X-Ray`) && get("_chestXRayUsed") < 3) ||
     (haveSkill($skill`Gingerbread Mob Hit`) && !get("_gingerbreadMobHitUsed"))
   ) {
+    // Get inner elf for leveling and moxie test
+    // TODO: make this try again if she's busy
+    // TODO: make this a function and move into lib
+    if (haveEffect($effect`Inner Elf`) === 0 && get("_snokebombUsed") < 3 && myLevel() > 12) {
+      print(`${myLevel()}is my level at the moment, trying to get inner elf`, "red");
+      Clan.join("Beldungeon");
+      ensureEffect($effect`Blood Bubble`);
+      useFamiliar($familiar`Machine Elf`);
+      setChoice(326, 1);
+      adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
+      useDefaultFamiliar();
+      Clan.join("Alliance from Hell");
+    } else {
+      print("Something went wrong with getting inner elf");
+    }
+
     // Otherwise fight.
     setChoice(1324, 5);
     ensureMpSausage(100);
-    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 2) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
@@ -1070,6 +1060,10 @@ if (!testDone(TEST_MOX)) {
   if (haveEffect($effect`Unrunnable Face`) === 0) {
     tryUse(1, $item`runproof mascara`);
   }
+  ensureEffect($effect`Blubbered Up`);
+  ensureEffect($effect`Penne Fedora`);
+  ensureEffect($effect`Mariachi Mood`);
+  ensureEffect($effect`Disco State of Mind`);
 
   maximize("moxie", false);
   if (
@@ -1520,7 +1514,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 
   // Deck pull elf for DNA and ghost buff (reflex hammer)
-  if (!have($effect`Do You Crush What I Crush?`) || get("dnaSyringe") !== "elf") {
+  if (!have($effect`Do You Crush What I Crush?`) || get("dnaSyringe") !== $phylum`elf`) {
     if (get("_deckCardsDrawn") === 5) {
       useFamiliar($familiar`Ghost of Crimbo Carols`);
       equip($slot`acc3`, $item`Lil' Doctor™ bag`);
@@ -1558,7 +1552,7 @@ if (!testDone(TEST_WEAPON)) {
   }
 */
 
-  geneTonic("elf");
+  geneTonic($phylum`elf`);
   ensureEffect($effect`Human-Elf Hybrid`);
 
   // fax an ungulith to get corrupted marrow, meteor showered, and spit upon (if applicable)
@@ -1786,7 +1780,7 @@ if (!testDone(TEST_ITEM)) {
     cliExecute("cheat buff items");
   }
   // get pirate DNA and make a gene tonic
-  if (get("dnaSyringe") !== "pirate" && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
+  if (get("dnaSyringe") !== $phylum`pirate` && haveEffect($effect`Human-Pirate Hybrid`) === 0) {
     equip($slot`acc1`, $item`Kremlin's Greatest Briefcase`);
     if (get("_kgbTranquilizerDartUses") >= 3) {
       throw "Out of KGB banishes";
@@ -1806,7 +1800,7 @@ if (!testDone(TEST_ITEM)) {
         $location`Pirates of the Garbage Barges`,
         Macro.item($item`DNA extraction syringe`).skill($skill`KGB tranquilizer dart`)
       );
-      geneTonic("pirate");
+      geneTonic($phylum`pirate`);
       ensureEffect($effect`Human-Pirate Hybrid`);
       setAutoAttack(0);
     } else throw "Something went wrong getting pirate DNA.";
@@ -1903,7 +1897,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("uberpvpoptimizer");
-cliExecute("pvp fame lifelong");
+cliExecute("pvp fame freshest");
 
 doTest(DONATE);
 

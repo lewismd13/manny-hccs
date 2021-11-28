@@ -958,12 +958,13 @@ if (!testDone(TEST_MOX)) {
   equip($item`makeshift garbage shirt`);
   useFamiliar($familiar`God Lobster`);
   while (get("_godLobsterFights") < 2) {
-    setProperty("choiceAdventure1310", "1");
+    print("Find me debug message hi");
+    setChoice(1310, 1);
     tryEquip($item`God Lobster's Scepter`);
     visitUrl("main.php?fightgodlobster=1");
-    withMacro(Macro.skill($skill`Saucegeyser`), runCombat);
-    visitUrl("choice.php");
-    if (handlingChoice()) runChoice(1);
+    runCombat(Macro.trySkillRepeat($skill`Saucegeyser`).toString());
+    multiFightAutoAttack();
+    runChoice(-1);
     setAutoAttack(0);
   }
 

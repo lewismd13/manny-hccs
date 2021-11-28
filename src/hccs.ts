@@ -874,14 +874,21 @@ if (!testDone(TEST_MOX)) {
   }
 
   // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
-  if (get("_questPartyFairQuest") === "") {
-    setChoice(1322, 6); // Leave
-    adv1($location`The Neverending Party`, -1, "");
-  }
-  if (get("_questPartyFairQuest") === "food" || get("_questPartyFairQuest") === "booze") {
-    setChoice(1322, 1); // accept quest
-  } else {
-    setChoice(1322, 2); // just here to party
+  if (get("_questPartyFair") === "unstarted") {
+    setProperty("choiceAventure1322", "");
+    visitUrl("adventure.php?snarfblat=528");
+    if (get("_questPartyFairQuest") === "food") {
+      runChoice(1);
+      setChoice(1324, 2);
+      setChoice(1326, 3);
+    } else if (get("_questPartyFairQuest") === "booze") {
+      runChoice(1);
+      setChoice(1324, 3);
+      setChoice(1327, 3);
+    } else {
+      runChoice(2);
+      setChoice(1324, 5);
+    }
   }
 
   // Professor 9x free sausage fight @ NEP

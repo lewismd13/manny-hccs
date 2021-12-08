@@ -458,24 +458,10 @@ if (!testDone(TEST_MOX)) {
   // learn extract and digitize
   cliExecute("terminal educate extract");
   cliExecute("terminal educate digitize");
-  /*
-  const lovePotion = $item`Love Potion #0`;
-  const loveEffect = $effect`Tainted Love Potion`;
-  if (haveEffect(loveEffect) === 0) {
-    if (availableAmount(lovePotion) === 0) {
-      useSkill(1, $skill`Love Mixology`);
-    }
-    visitUrl(`desc_effect.php?whicheffect=${loveEffect.descid}`);
-    if (
-      numericModifier(loveEffect, "mysticality") > 10 &&
-      numericModifier(loveEffect, "muscle") > -30 &&
-      numericModifier(loveEffect, "moxie") > -30 &&
-      numericModifier(loveEffect, "maximum hp percent") > -0.001
-    ) {
-      use(1, lovePotion);
-    }
-  }
-*/
+
+  // bring along dark horse for the meats
+  horse("dark");
+
   // Boxing Daycare
   ensureEffect($effect`Uncucumbered`);
 
@@ -1349,6 +1335,7 @@ if (!testDone(TEST_NONCOMBAT)) {
   ensureEffect($effect`Blood Bond`);
   ensureEffect($effect`Leash of Linguini`);
   ensureEffect($effect`Empathy`);
+  horse("dark");
 
   if (get("_godLobsterFights") < 3) {
     if (myHp() < 0.8 * myMaxhp()) useSkill(1, $skill`Cannelloni Cocoon`);

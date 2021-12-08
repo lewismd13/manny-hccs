@@ -435,3 +435,9 @@ export function mannyCleanup(): void {
     visitUrl("place.php?whichplace=arcade&action=arcade_plumber");
   }
 }
+
+// shamelessly stolen from phccs
+export function horse(horse: string): void {
+  if (!horse.includes("horse")) horse = `${horse} horse`;
+  if (get("_horsery") !== horse) cliExecute(`horsery ${horse}`);
+}

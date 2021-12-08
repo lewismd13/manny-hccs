@@ -1003,8 +1003,6 @@ if (!testDone(TEST_MOX)) {
       adventureMacro($location`The Slime Tube`, Macro.skill($skill`Snokebomb`));
       useDefaultFamiliar();
       Clan.join("Alliance from Hell");
-    } else {
-      print("Something went wrong with getting inner elf");
     }
 
     // Otherwise fight.

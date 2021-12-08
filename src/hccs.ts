@@ -39,7 +39,6 @@ import {
   haveSkill,
   hippyStoneBroken,
   itemAmount,
-  itemDropModifier,
   lastChoice,
   maximize,
   mpCost,
@@ -90,6 +89,7 @@ import {
   adventureMacroAuto,
   Clan,
   get,
+  getModifier,
   have,
   Macro,
   Witchess,
@@ -123,8 +123,8 @@ const TEST_COIL_WIRE = 11;
 const DONATE = 30;
 
 let moxieStat = 0;
-let weaponPrediction = "";
-let itemPrediction = "";
+let itemdrop = 0;
+let boozedrop = 0;
 
 let HP_TURNS = 0;
 let MUS_TURNS = 0;
@@ -879,16 +879,16 @@ if (!testDone(TEST_MOX)) {
     }
   }
 
-  // Professor 9x free sausage fight @ NEP
+  // Professor 5x free sausage fight @ NEP
+  // TODO: Maybe switch this to bishops
+  // TODO: make this work
+
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
     tryEquip($item`Pocket Professor memory chip`);
     equip($item`Kramco Sausage-o-Matic™`);
     equip($slot`acc2`, $item`Brutal brogues`);
     equip($slot`acc3`, $item`Beach Comb`);
-
-    // Checking if it's gerald(ine) and accepting the quest if it is, otherwise just here to party.
-
     while (get("_sausageFights") === 0) {
       if (myHp() < 0.8 * myMaxhp()) {
         visitUrl("clan_viplounge.php?where=hottub");
@@ -1660,7 +1660,6 @@ if (!testDone(TEST_WEAPON)) {
   if (weaponTurns() > 2) {
     throw "Something went wrong with weapon damage.";
   }
-  weaponPrediction = String(weaponTurns());
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_WEAPON);
@@ -1770,7 +1769,7 @@ if (!testDone(TEST_ITEM)) {
   // use abstraction: certainty if you have it
   // ensureEffect($effect`certainty`);
 
-  // pulls wheel of fortune from deck, gets rope and wrench for later
+  // pulls wheel of fortune from deck
   if (get("_deckCardsDrawn") === 10) {
     cliExecute("cheat buff items");
   }
@@ -1821,7 +1820,7 @@ if (!testDone(TEST_ITEM)) {
   ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
   ensureEffect($effect`Singer's Faithful Ocelot`);
   ensureEffect($effect`The Spirit of Taking`);
-  ensureEffect($effect`items.enh`);
+  // ensureEffect($effect`items.enh`);
   ensureEffect($effect`El Aroma de Salsa`);
 
   // synthesis: collection
@@ -1858,7 +1857,8 @@ if (!testDone(TEST_ITEM)) {
     false
   );
 
-  itemPrediction = String(itemDropModifier());
+  itemdrop = getModifier("Item Drop");
+  boozedrop = getModifier("Booze Drop");
 
   TEMP_TURNS = myTurncount();
   doTest(TEST_ITEM);
@@ -1917,16 +1917,13 @@ print(`Myst test: ${get("_hccsMysTurns")}`, "green");
 print(`Hot Res test: ${get("_hccsHotResTurns")}`, "green");
 print(`Noncombat test: ${get("_hccsNoncombatTurns")}`, "green");
 print(`Fam Weight test: ${get("_hccsFamiliarTurns")}`, "green");
-print(weaponPrediction);
 print(`Weapon Damage test: ${get("_hccsWeaponTurns")}`, "green");
 print(`Spell Damage Test: ${get("_hccsSpellTurns")}`, "green");
-print(itemPrediction);
+print(
+  `item drop was ${itemdrop} and booze drop was ${boozedrop}, so that test should have taken ${
+    60 - (Math.floor(boozedrop / 15) + Math.floor(itemdrop / 30))
+  }`
+);
 print(`Item Drop test: ${get("_hccsItemTurns")}`, "green");
 
-if (get("_questPartyFairQuest") === "food") {
-  print("Hey, go talk to Geraldine!", "blue");
-} else if (get("_questPartyFairQuest") === "booze") {
-  print("Hey, go talk to Gerald!", "blue");
-}
-
-// setProperty("logPreferenceChange", "false");
+print(`You spent ${get("_pocketProfessorLectures")} lectures this run.`);

@@ -779,7 +779,7 @@ if (!testDone(TEST_MOX)) {
     setChoice(1225, 1); // Fight LOV Engineer
     setChoice(1226, 2); // Open Heart Surgery
     setChoice(1227, 1); // Fight LOV Equivocator
-    setChoice(1228, 3); // Take chocolate
+    setChoice(1228, 1); // Take enamorang
     Macro.if_('monstername "LOV enforcer"', Macro.attack().repeat())
       .if_('monstername "lov engineer"', Macro.skill($skill`Saucegeyser`).repeat())
       .step(justKillTheThing)

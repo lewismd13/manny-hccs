@@ -611,6 +611,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   // ensure_effect($effect[hulkien]);
+  ensureEffect($effect`Big`);
   ensureEffect($effect`Favored by Lyle`);
   ensureEffect($effect`Starry-Eyed`);
   ensureEffect($effect`Triple-Sized`);

@@ -1711,7 +1711,7 @@ if (!testDone(TEST_SPELL)) {
   } else {
     print("Something went wrong with getting inner elf");
   }
-
+  // TODO: use non-attacking fam here
   // Meteor showered
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);

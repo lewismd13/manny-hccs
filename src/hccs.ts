@@ -880,9 +880,9 @@ if (!testDone(TEST_MOX)) {
     }
   }
 
-  // Professor 5x free sausage fight @ NEP
+  // Professor 10x free sausage fight @ NEP
   // TODO: Maybe switch this to bishops
-  // TODO: make this work
+  // TODO: make this work - either stop after 5 or skip altogether
 
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -1030,7 +1030,6 @@ if (!testDone(TEST_MOX)) {
   if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Undead Elbow Macaroni`);
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
-  // TODO: make moxie first and bridge an inner elf from levelling to moxie
   if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Penne Dreadful`);
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
@@ -1147,7 +1146,9 @@ if (!testDone(TEST_MYS)) {
   // ensure_effect($effect[Tomato Power]);
   ensureEffect($effect`Mystically Oiled`);
   ensureNpcEffect($effect`Glittering Eyelashes`, 5, $item`glittery mascara`);
+
   maximize("mysticality", false);
+
   if (myBuffedstat($stat`mysticality`) - myBasestat($stat`mysticality`) < 1770) {
     throw "Not enough mysticality to cap.";
   }
@@ -1711,7 +1712,8 @@ if (!testDone(TEST_SPELL)) {
   } else {
     print("Something went wrong with getting inner elf");
   }
-  // TODO: use non-attacking fam here
+
+  useDefaultFamiliar();
   // Meteor showered
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);

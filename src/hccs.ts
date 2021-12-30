@@ -611,6 +611,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   // ensure_effect($effect[hulkien]);
+  ensureEffect($effect`Big`);
   ensureEffect($effect`Favored by Lyle`);
   ensureEffect($effect`Starry-Eyed`);
   ensureEffect($effect`Triple-Sized`);
@@ -1008,7 +1009,7 @@ if (!testDone(TEST_MOX)) {
     // Otherwise fight.
     setChoice(1324, 5);
     ensureMpSausage(100);
-    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 2) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
@@ -1710,7 +1711,7 @@ if (!testDone(TEST_SPELL)) {
   } else {
     print("Something went wrong with getting inner elf");
   }
-
+  // TODO: use non-attacking fam here
   // Meteor showered
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);

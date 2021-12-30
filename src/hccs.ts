@@ -1009,7 +1009,7 @@ if (!testDone(TEST_MOX)) {
     // Otherwise fight.
     setChoice(1324, 5);
     ensureMpSausage(100);
-    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 2) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,

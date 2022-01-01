@@ -1895,7 +1895,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("uberpvpoptimizer");
-cliExecute("pvp fame freshest");
+cliExecute("pvp fame nice list");
 
 doTest(DONATE);
 

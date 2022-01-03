@@ -1,26 +1,20 @@
 import {
   availableAmount,
   cliExecute,
-  create,
-  drinksilent,
   fullnessLimit,
   getWorkshed,
   inebrietyLimit,
   myAdventures,
-  myFamiliar,
   myFullness,
   myGardenType,
   myInebriety,
   print,
   putShop,
-  putStash,
   pvpAttacksLeft,
   takeStash,
   use,
-  useFamiliar,
-  useSkill,
 } from "kolmafia";
-import { $familiar, $item, $skill, Clan } from "libram";
+import { $item, Clan } from "libram";
 import { mannyCleanup } from "./lib";
 
 Clan.join("Alliance from Hell");
@@ -32,19 +26,8 @@ if (pvpAttacksLeft() > 0) {
 
 mannyCleanup();
 
-if (myInebriety() === inebrietyLimit() && myFullness() === fullnessLimit()) {
-  if (myFamiliar() !== $familiar`Stooper`) {
-    useFamiliar($familiar`Stooper`);
-    useSkill($skill`The Ode to Booze`, 1);
-    drinksilent($item`elemental caipiroska`);
-  }
-  useSkill($skill`The Ode to Booze`, 1);
-  takeStash($item`tiny plastic sword`, 1);
-  create($item`grogtini`);
-  drinksilent($item`grogtini`);
-  putStash($item`tiny plastic sword`, 1);
-} else if (myInebriety() >= inebrietyLimit() && myFullness() === fullnessLimit()) {
-  print("You're all set on drinking");
+if (myInebriety() >= inebrietyLimit() && myFullness() === fullnessLimit()) {
+  print("You're all set.");
 } else {
   throw "are you sure you want to ascend? you have some open organ space";
 }

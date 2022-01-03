@@ -145,6 +145,7 @@ const START_TIME = gametimeToInt();
 
 const justKillTheThing = Macro.trySkill($skill`Curse of Weaksauce`)
   .trySkill($skill`Micrometeorite`)
+  .tryItem($item`Time-Spinner`)
   .trySkill($skill`Sing Along`)
   .trySkill($skill`Stuffed Mortar Shell`)
   .skill($skill`Candyblast`)

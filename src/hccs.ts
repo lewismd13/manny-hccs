@@ -1801,14 +1801,19 @@ if (!testDone(TEST_ITEM)) {
   }
 
   useDefaultFamiliar();
-  // TODO: Add bowling ball skill for 25% item
+  // Get bat-adjecent form and bowling straight up effect with a freerun
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     equip($item`vampyric cloake`);
+    // eslint-disable-next-line libram/verify-constants
+    tryEquip($item`cosmic bowling ball`);
     adventureMacroAuto(
       $location`The Neverending Party`,
-      Macro.skill($skill`Become a Bat`).skill($skill`Reflex Hammer`)
+      Macro.skill($skill`Become a Bat`)
+        // eslint-disable-next-line libram/verify-constants
+        .trySkill($skill`Bowl Straight Up`)
+        .skill($skill`Reflex Hammer`)
     );
     setAutoAttack(0);
   }

@@ -1687,10 +1687,6 @@ if (!testDone(TEST_SPELL)) {
   // Beach Comb
   ensureEffect($effect`We're All Made of Starfish`);
 
-  // Tea party
-  ensureSewerItem(1, $item`mariachi hat`);
-  // ensure_effect($effect[Full Bottle in front of Me]);
-
   useSkill(1, $skill`Spirit of Cayenne`);
 
   // Get flimsy hardwood scraps.
@@ -1805,7 +1801,7 @@ if (!testDone(TEST_ITEM)) {
   }
 
   useDefaultFamiliar();
-
+  // TODO: Add bowling ball skill for 25% item
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);

@@ -67,7 +67,6 @@ import {
   setLocation,
   setProperty,
   sweetSynthesis,
-  toInt,
   totalFreeRests,
   use,
   useFamiliar,
@@ -603,7 +602,7 @@ if (!testDone(TEST_MOX)) {
   tryUse(1, $item`a ten-percent bonus`);
 
   // Scavenge for gym equipment
-  if (toInt(get("_daycareGymScavenges")) < 1) {
+  if (get("_daycareGymScavenges") < 1) {
     visitUrl("/place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
     const pg = runChoice(3);
     if (containsText(pg, "[free]")) runChoice(2);

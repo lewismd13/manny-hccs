@@ -1805,8 +1805,6 @@ if (!testDone(TEST_ITEM)) {
     if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     equip($item`vampyric cloake`);
-    // eslint-disable-next-line libram/verify-constants
-    tryEquip($item`cosmic bowling ball`);
     adventureMacroAuto(
       $location`The Neverending Party`,
       Macro.skill($skill`Become a Bat`)

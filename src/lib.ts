@@ -395,9 +395,6 @@ export function fax(monster: Monster): void {
 }
 
 export function mannyCleanup(): void {
-  while (get("_sourceTerminalEnhanceUses") < 3) {
-    cliExecute("terminal enhance meat.enh");
-  }
 
   if (get("_claraBellUsed") === false && myAdventures() > 0) {
     use($item`Clara's bell`);

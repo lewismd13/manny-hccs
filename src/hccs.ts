@@ -795,7 +795,10 @@ if (!testDone(TEST_MOX)) {
   // spend 5 turns in DMT, skipping joy and cert, just get stats
   while (get("_machineTunnelsAdv") < 5) {
     useFamiliar($familiar`Machine Elf`);
-    adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
+    adventureMacroAuto(
+      $location`The Deep Machine Tunnels`,
+      Macro.trySkill($skill`Bowl Sideways`).step(justKillTheThing)
+    );
     /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (get("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetthought");
       adv1($location`the deep machine tunnels`, -1, "");
@@ -881,8 +884,8 @@ if (!testDone(TEST_MOX)) {
   }
 
   // Professor 10x free sausage fight @ NEP
-  // TODO: Maybe switch this to bishops
-  // TODO: make this work - either stop after 5 or skip altogether
+
+  // TODO: probably ditch this now that we bowl sideways
 
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -985,7 +988,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   if (!haveEquipped($item`makeshift garbage shirt`)) equip($item`makeshift garbage shirt`);
-
+  // TODO: bowl sideways for +exp% in NEP
   // 14 free NEP fights, using mob hit and xray
   while (
     get("_neverendingPartyFreeTurns") < 10 ||
@@ -1013,7 +1016,9 @@ if (!testDone(TEST_MOX)) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
-        Macro.trySkill($skill`Feel Pride`).step(justKillTheThing)
+        Macro.trySkill($skill`Feel Pride`)
+          .trySkill($skill`Bowl Sideways`)
+          .step(justKillTheThing)
       );
     } else if (get("_neverendingPartyFreeTurns") < 10) {
       useDefaultFamiliar();

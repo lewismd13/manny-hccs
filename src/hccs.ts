@@ -1,24 +1,4 @@
 import {
-  ensureCreateItem,
-  ensureEffect,
-  ensureItem,
-  ensureMpSausage,
-  ensureMpTonic,
-  ensureNpcEffect,
-  ensureOde,
-  ensurePotionEffect,
-  ensureSewerItem,
-  ensureSong,
-  fax,
-  horse,
-  kill,
-  mapMonster,
-  multiFightAutoAttack,
-  sausageFightGuaranteed,
-  setChoice,
-  setClan,
-} from "./lib";
-import {
   abort,
   adv1,
   autosell,
@@ -75,6 +55,7 @@ import {
 } from "kolmafia";
 import {
   $class,
+  $coinmaster,
   $effect,
   $familiar,
   $item,
@@ -101,6 +82,26 @@ import {
   makeTonic,
   tonicsLeft,
 } from "libram/dist/resources/2014/DNALab";
+import {
+  ensureCreateItem,
+  ensureEffect,
+  ensureItem,
+  ensureMpSausage,
+  ensureMpTonic,
+  ensureNpcEffect,
+  ensureOde,
+  ensurePotionEffect,
+  ensureSewerItem,
+  ensureSong,
+  fax,
+  horse,
+  kill,
+  mapMonster,
+  multiFightAutoAttack,
+  sausageFightGuaranteed,
+  setChoice,
+  setClan,
+} from "./lib";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -1692,6 +1693,13 @@ if (!testDone(TEST_SPELL)) {
   ensureEffect($effect`We're All Made of Starfish`);
 
   useSkill(1, $skill`Spirit of Cayenne`);
+
+  if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
+    useSkill(1, $skill`Summon Alice's Army Cards`);
+    buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
+  }
+
+  ensureEffect($effect`Pisces in the Skyces`);
 
   // Get flimsy hardwood scraps.
   visitUrl("shop.php?whichshop=lathe");

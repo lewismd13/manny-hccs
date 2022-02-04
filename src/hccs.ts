@@ -1,24 +1,4 @@
 import {
-  ensureCreateItem,
-  ensureEffect,
-  ensureItem,
-  ensureMpSausage,
-  ensureMpTonic,
-  ensureNpcEffect,
-  ensureOde,
-  ensurePotionEffect,
-  ensureSewerItem,
-  ensureSong,
-  fax,
-  horse,
-  kill,
-  mapMonster,
-  multiFightAutoAttack,
-  sausageFightGuaranteed,
-  setChoice,
-  setClan,
-} from "./lib";
-import {
   abort,
   adv1,
   autosell,
@@ -67,7 +47,6 @@ import {
   setLocation,
   setProperty,
   sweetSynthesis,
-  toInt,
   totalFreeRests,
   use,
   useFamiliar,
@@ -76,6 +55,7 @@ import {
 } from "kolmafia";
 import {
   $class,
+  $coinmaster,
   $effect,
   $familiar,
   $item,
@@ -102,6 +82,26 @@ import {
   makeTonic,
   tonicsLeft,
 } from "libram/dist/resources/2014/DNALab";
+import {
+  ensureCreateItem,
+  ensureEffect,
+  ensureItem,
+  ensureMpSausage,
+  ensureMpTonic,
+  ensureNpcEffect,
+  ensureOde,
+  ensurePotionEffect,
+  ensureSewerItem,
+  ensureSong,
+  fax,
+  horse,
+  kill,
+  mapMonster,
+  multiFightAutoAttack,
+  sausageFightGuaranteed,
+  setChoice,
+  setClan,
+} from "./lib";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -603,7 +603,7 @@ if (!testDone(TEST_MOX)) {
   tryUse(1, $item`a ten-percent bonus`);
 
   // Scavenge for gym equipment
-  if (toInt(get("_daycareGymScavenges")) < 1) {
+  if (get("_daycareGymScavenges") < 1) {
     visitUrl("/place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
     const pg = runChoice(3);
     if (containsText(pg, "[free]")) runChoice(2);
@@ -796,7 +796,10 @@ if (!testDone(TEST_MOX)) {
   // spend 5 turns in DMT, skipping joy and cert, just get stats
   while (get("_machineTunnelsAdv") < 5) {
     useFamiliar($familiar`Machine Elf`);
-    adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
+    adventureMacroAuto(
+      $location`The Deep Machine Tunnels`,
+      Macro.trySkill($skill`Bowl Sideways`).step(justKillTheThing)
+    );
     /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (get("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetthought");
       adv1($location`the deep machine tunnels`, -1, "");
@@ -882,8 +885,8 @@ if (!testDone(TEST_MOX)) {
   }
 
   // Professor 10x free sausage fight @ NEP
-  // TODO: Maybe switch this to bishops
-  // TODO: make this work - either stop after 5 or skip altogether
+
+  // TODO: probably ditch this now that we bowl sideways
 
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -986,7 +989,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   if (!haveEquipped($item`makeshift garbage shirt`)) equip($item`makeshift garbage shirt`);
-
+  // TODO: bowl sideways for +exp% in NEP
   // 14 free NEP fights, using mob hit and xray
   while (
     get("_neverendingPartyFreeTurns") < 10 ||
@@ -1014,7 +1017,9 @@ if (!testDone(TEST_MOX)) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
-        Macro.trySkill($skill`Feel Pride`).step(justKillTheThing)
+        Macro.trySkill($skill`Feel Pride`)
+          .trySkill($skill`Bowl Sideways`)
+          .step(justKillTheThing)
       );
     } else if (get("_neverendingPartyFreeTurns") < 10) {
       useDefaultFamiliar();
@@ -1687,11 +1692,14 @@ if (!testDone(TEST_SPELL)) {
   // Beach Comb
   ensureEffect($effect`We're All Made of Starfish`);
 
-  // Tea party
-  ensureSewerItem(1, $item`mariachi hat`);
-  // ensure_effect($effect[Full Bottle in front of Me]);
-
   useSkill(1, $skill`Spirit of Cayenne`);
+
+  if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
+    useSkill(1, $skill`Summon Alice's Army Cards`);
+    buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
+  }
+
+  ensureEffect($effect`Pisces in the Skyces`);
 
   // Get flimsy hardwood scraps.
   visitUrl("shop.php?whichshop=lathe");
@@ -1805,14 +1813,17 @@ if (!testDone(TEST_ITEM)) {
   }
 
   useDefaultFamiliar();
-
+  // Get bat-adjecent form and bowling straight up effect with a freerun
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     equip($item`vampyric cloake`);
     adventureMacroAuto(
       $location`The Neverending Party`,
-      Macro.skill($skill`Become a Bat`).skill($skill`Reflex Hammer`)
+      Macro.skill($skill`Become a Bat`)
+        // eslint-disable-next-line libram/verify-constants
+        .trySkill($skill`Bowl Straight Up`)
+        .skill($skill`Reflex Hammer`)
     );
     setAutoAttack(0);
   }

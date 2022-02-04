@@ -38,6 +38,8 @@ while (myAdventures() > 4) {
 
 putShop(0, 0, availableAmount($item`Game Grid ticket`), $item`Game Grid ticket`);
 
+cliExecute("closet empty");
+
 if (getWorkshed() !== $item`Little Geneticist DNA-Splicing Lab`) {
   takeStash($item`Little Geneticist DNA-Splicing Lab`, 1);
   use($item`Little Geneticist DNA-Splicing Lab`);

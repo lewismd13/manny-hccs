@@ -10,6 +10,7 @@ import {
   cliExecute,
   create,
   eat,
+  Effect,
   equip,
   familiarWeight,
   getClanName,
@@ -18,56 +19,59 @@ import {
   haveEffect,
   haveSkill,
   inMultiFight,
+  Item,
   itemAmount,
+  Location,
+  Monster,
   myAdventures,
+  myClass,
   myFamiliar,
+  myLevel,
   myLocation,
   myMaxmp,
   myMp,
+  myPrimestat,
   print,
   pullsRemaining,
   putShop,
   retrieveItem,
   setProperty,
   shopAmount,
+  Skill,
+  Stat,
   storageAmount,
   takeShop,
   toEffect,
-  toInt,
   toString as toStringAsh,
   totalTurnsPlayed,
   toUrl,
   use,
+  useFamiliar,
   useSkill,
   visitUrl,
   wait,
   weightAdjustment,
 } from "kolmafia";
-import { $effect, $effects, $item, $location, $skill, get, Macro, property } from "libram";
-
-export function getPropertyInt(name: string) {
-  const str = getProperty(name);
-  if (str === "") {
-    throw `Unknown property ${name}.`;
-  }
-  return toInt(str);
-}
-
-export function setPropertyInt(name: string, value: number) {
-  setProperty(name, `${value}`);
-}
-
-export function incrementProperty(name: string) {
-  setPropertyInt(name, getPropertyInt(name) + 1);
-}
-
-export function getPropertyBoolean(name: string) {
-  const str = getProperty(name);
-  if (str === "") {
-    throw `Unknown property ${name}.`;
-  }
-  return str === "true";
-}
+import {
+  $class,
+  $effect,
+  $effects,
+  $familiar,
+  $item,
+  $location,
+  $skill,
+  $slot,
+  $stat,
+  adventureMacro,
+  Clan,
+  get,
+  getModifier,
+  have,
+  Macro,
+  property,
+} from "libram";
+import { FamiliarWeight, WeaponDamage } from "libram/dist/challengePaths/2015/CommunityService";
+import { propertyManager } from ".";
 
 export function setChoice(adv: number, choice: number) {
   setProperty(`choiceAdventure${adv}`, `${choice}`);
@@ -175,12 +179,9 @@ export function ensureMpSausage(mp: number) {
 }
 
 export function sausageFightGuaranteed() {
-  const goblinsFought = getPropertyInt("_sausageFights");
+  const goblinsFought = get("_sausageFights");
   const nextGuaranteed =
-    getPropertyInt("_lastSausageMonsterTurn") +
-    4 +
-    goblinsFought * 3 +
-    Math.max(0, goblinsFought - 5) ** 3;
+    get("_lastSausageMonsterTurn") + 4 + goblinsFought * 3 + Math.max(0, goblinsFought - 5) ** 3;
   return goblinsFought === 0 || totalTurnsPlayed() >= nextGuaranteed;
 }
 
@@ -248,13 +249,13 @@ export function ensureAsdonEffect(ef: Effect) {
 export function mapMonster(location: Location, monster: Monster) {
   if (
     haveSkill($skill`Map the Monsters`) &&
-    !getPropertyBoolean("mappingMonsters") &&
-    getPropertyInt("_monstersMapped") < 3
+    !get("mappingMonsters") &&
+    get("_monstersMapped") < 3
   ) {
     useSkill($skill`Map the Monsters`);
   }
 
-  if (!getPropertyBoolean("mappingMonsters")) throw "Failed to setup Map the Monsters.";
+  if (!get("mappingMonsters")) throw "Failed to setup Map the Monsters.";
 
   const mapPage = visitUrl(toUrl(location), false, true);
   if (!mapPage.includes("Leading Yourself Right to Them")) throw "Something went wrong mapping.";
@@ -440,4 +441,74 @@ export function mannyCleanup(): void {
 export function horse(horse: string): void {
   if (!horse.includes("horse")) horse = `${horse} horse`;
   if (get("_horsery") !== horse) cliExecute(`horsery ${horse}`);
+}
+
+export function useDefaultFamiliar(): void {
+  if (get("camelSpit") < 100 && !WeaponDamage.isDone()) {
+    useFamiliar($familiar`Melodramedary`);
+    equip($item`dromedary drinking helmet`);
+  } else if (
+    availableAmount($item`rope`) < 1 &&
+    availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1 &&
+    !FamiliarWeight.isDone()
+  ) {
+    useFamiliar($familiar`Garbage Fire`);
+  } else if (
+    availableAmount($item`short stack of pancakes`) === 0 &&
+    haveEffect($effect`Shortly Stacked`) === 0 &&
+    !FamiliarWeight.isDone()
+  ) {
+    useFamiliar($familiar`Shorter-Order Cook`);
+  } else {
+    useFamiliar($familiar`Machine Elf`);
+  }
+}
+
+export function equalizeStat(targetStat: Stat): void {
+  if (targetStat === myPrimestat()) return;
+  if (myClass() === $class`Pastamancer`) {
+    if (targetStat === $stat`Muscle`) {
+      useSkill($skill`Bind Undead Elbow Macaroni`);
+    } else if (targetStat === $stat`Moxie`) {
+      useSkill($skill`Bind Penne Dreadful`);
+    }
+  } else {
+    const potion =
+      myPrimestat() === $stat`Muscle`
+        ? $item`oil of stability`
+        : myPrimestat() === $stat`Mysticality`
+        ? $item`oil of expertise`
+        : $item`oil of slipperiness`;
+    const effect = getModifier("Effect", potion);
+    if (have(effect)) return;
+
+    if (potion === $item`oil of stability`) useSkill($skill`Prevent Scurvy and Sobriety`);
+    else if (potion === $item`oil of expertise`) {
+      throw "No support for getting a cherry... yet.";
+    }
+    if (!retrieveItem(potion)) {
+      throw `Couldn't make potion ${potion.name}.`;
+    }
+    use(potion);
+  }
+}
+
+export function ensureInnerElf(): void {
+  if (haveEffect($effect`Inner Elf`) === 0 && myLevel() >= 13) {
+    const savedFam = myFamiliar();
+    Clan.join("Beldungeon");
+    try {
+      useFamiliar($familiar`Machine Elf`);
+      equip($slot`acc3`, $item`Kremlin's Greatest Briefcase`);
+      propertyManager.setChoices({ [326]: 1 });
+      ensureEffect($effect`Blood Bubble`);
+      adventureMacro(
+        $location`The Slime Tube`,
+        Macro.trySkill($skill`KGB tranquilizer dart`).trySkill($skill`Snokebomb`)
+      );
+    } finally {
+      Clan.join("Alliance From Hell");
+      useFamiliar(savedFam);
+    }
+  }
 }

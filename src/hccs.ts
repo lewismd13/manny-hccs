@@ -1,24 +1,4 @@
 import {
-  ensureCreateItem,
-  ensureEffect,
-  ensureItem,
-  ensureMpSausage,
-  ensureMpTonic,
-  ensureNpcEffect,
-  ensureOde,
-  ensurePotionEffect,
-  ensureSewerItem,
-  ensureSong,
-  fax,
-  horse,
-  kill,
-  mapMonster,
-  multiFightAutoAttack,
-  sausageFightGuaranteed,
-  setChoice,
-  setClan,
-} from "./lib";
-import {
   abort,
   adv1,
   autosell,
@@ -29,6 +9,7 @@ import {
   create,
   drink,
   eat,
+  Effect,
   equip,
   floor,
   gametimeToInt,
@@ -38,6 +19,7 @@ import {
   haveEquipped,
   haveSkill,
   hippyStoneBroken,
+  Item,
   itemAmount,
   lastChoice,
   maximize,
@@ -58,6 +40,7 @@ import {
   mySpleenUse,
   myTurncount,
   numericModifier,
+  Phylum,
   print,
   retrieveItem,
   round,
@@ -66,6 +49,7 @@ import {
   setAutoAttack,
   setLocation,
   setProperty,
+  Skill,
   sweetSynthesis,
   toInt,
   totalFreeRests,
@@ -102,6 +86,26 @@ import {
   makeTonic,
   tonicsLeft,
 } from "libram/dist/resources/2014/DNALab";
+import {
+  ensureCreateItem,
+  ensureEffect,
+  ensureItem,
+  ensureMpSausage,
+  ensureMpTonic,
+  ensureNpcEffect,
+  ensureOde,
+  ensurePotionEffect,
+  ensureSewerItem,
+  ensureSong,
+  fax,
+  horse,
+  kill,
+  mapMonster,
+  multiFightAutoAttack,
+  sausageFightGuaranteed,
+  setChoice,
+  setClan,
+} from "./lib";
 
 // rewrite all combats
 // create a defaultFamiliar function that chooses somewhat dynamically
@@ -1416,6 +1420,7 @@ if (!testDone(TEST_FAMILIAR)) {
 */
 
   // this is going to be all the gingerbread stuff, it is a work in progress
+  // TODO: this should be a map not a macro
   if (
     haveEffect($effect`Whole Latte Love`) === 0 &&
     availableAmount($item`gingerbread spice latte`) === 0

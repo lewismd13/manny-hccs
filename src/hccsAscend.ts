@@ -13,18 +13,17 @@ print("you're about to ascend! wait, is that good?", "green");
 
 wait(15);
 
-prepareAscension(
-  {
-    workshed: $item`Little Geneticist DNA-Splicing Lab`,
-    garden: $item`Peppermint Pip Packet`,
-    eudora: $item`Our Daily Candles™ order form`,
+prepareAscension({
+  workshed: "Little Geneticist DNA-Splicing Lab",
+  garden: "Peppermint Pip Packet",
+  eudora: "Our Daily Candles™ order form",
+
+  chateau: {
+    desk: "Swiss piggy bank",
+    nightstand: "foreign language tapes",
+    ceiling: "ceiling fan",
   },
-  {
-    desk: $item`Swiss piggy bank`,
-    nightstand: $item`foreign language tapes`,
-    ceiling: $item`ceiling fan`,
-  }
-);
+});
 
 ascend(
   Paths.CommunityService,

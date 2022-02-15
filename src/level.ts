@@ -36,12 +36,12 @@ import {
   ensureEffect,
   get,
   have,
-  Macro,
   Mood,
   TunnelOfLove,
   Witchess,
 } from "libram";
 import { resources } from ".";
+import Macro from "./combat";
 import { withMacro } from "./hccs";
 import {
   ensureMpTonic,
@@ -50,11 +50,17 @@ import {
   mapMonster,
   sausageFightGuaranteed,
   setChoice,
+  tryEnsureEffect,
   tryEquip,
   tryUse,
   useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
+import uniform from "./outfits";
+
+// TODO: Use libram freekill and freerun handling
+
+// TODO: just use my own synth handling. hardcode that shit.
 
 export function level(): void {
   if (!have($effect`That's Just Cloud-Talk, Man`)) {
@@ -100,7 +106,7 @@ export function level(): void {
     use($item`box of Familiar Jacks`);
   }
 
-  ensureOutfit("CS Leveling");
+  uniform();
 
   if (availableAmount($item`li'l ninja costume`) === 0) {
     if (
@@ -118,7 +124,7 @@ export function level(): void {
       });
     }
 
-    withMacro(Macro.skill($skill`Feel Nostalgic`).skill("Chest X-Ray"), () => {
+    withMacro(Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`), () => {
       ensureMpTonic(50);
       useDefaultFamiliar();
       mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`);
@@ -365,12 +371,12 @@ export function level(): void {
       $location`Noob Cave`,
       Macro.if_("!monstername sausage goblin", Macro.abort())
         .trySkill($skill`lecture on relativity`)
-        .trySkill("Feel Pride")
+        .trySkill($skill`Feel Pride`)
         .kill()
     );
   }
 
-  ensureOutfit("CS Leveling");
+  uniform();
 
   while (
     globalOptions.levelAggressively &&
@@ -425,7 +431,7 @@ export function level(): void {
         .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
         .externalIf(
           get("_neverendingPartyFreeTurns") === 10,
-          Macro.trySkill("Shattering Punch", "Gingerbread Mob Hit").abort()
+          Macro.trySkill($skill`Shattering Punch`, $skill`Gingerbread Mob Hit`).abort()
         )
 
         .kill()

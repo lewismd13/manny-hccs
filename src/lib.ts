@@ -67,11 +67,11 @@ import {
   get,
   getModifier,
   have,
-  Macro,
   property,
 } from "libram";
 import { FamiliarWeight, WeaponDamage } from "libram/dist/challengePaths/2015/CommunityService";
 import { propertyManager } from ".";
+import Macro from "./combat";
 
 export function setChoice(adv: number, choice: number) {
   setProperty(`choiceAdventure${adv}`, `${choice}`);
@@ -158,6 +158,16 @@ export function ensureEffect(ef: Effect, turns = 1) {
   if (haveEffect(ef) < turns) {
     if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
       throw 'Failed to get effect " + ef.name + ".';
+    }
+  } else {
+    print(`Already have effect ${ef.name}.`);
+  }
+}
+
+export function tryEnsureEffect(ef: Effect, turns = 1): void {
+  if (haveEffect(ef) < turns) {
+    if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
+      print(`Failed to get effect ${ef.name}.`);
     }
   } else {
     print(`Already have effect ${ef.name}.`);

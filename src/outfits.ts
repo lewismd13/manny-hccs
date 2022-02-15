@@ -319,7 +319,7 @@ export function noncombatOutfit(): void {
       weapon: $item`Fourth of May Cosplay Saber`,
       offhand: $items`burning paper crane, familiar scrapbook`,
       acc1: $item`Kremlin's Greatest Briefcase`,
-      acc2: $item`codpiece`,
+      acc2: $items`codpiece, hewn moon-rune spoon`,
       acc3: $item`Brutal brogues`,
     },
     $familiar`Disgeist`

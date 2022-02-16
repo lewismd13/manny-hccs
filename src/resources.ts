@@ -26,6 +26,7 @@ export class ResourceTracker {
   pulls: Item[] = [];
   consumedFood = new Map<Item, number>();
   consumedBooze = new Map<Item, number>();
+  saberForces: (Item | Effect)[] = [];
 
   deck(card: string, attempt = false): void {
     if (get("_deckCardsSeen").toLowerCase().includes(card)) return;

@@ -2,15 +2,19 @@ import {
   availableAmount,
   cliExecute,
   cliExecuteOutput,
+  eat,
   equip,
   getProperty,
   handlingChoice,
+  haveEffect,
   logprint,
   myBasestat,
   myBuffedstat,
   myClass,
   myHp,
   myMaxhp,
+  myMp,
+  numericModifier,
   print,
   runChoice,
   runCombat,
@@ -24,20 +28,24 @@ import {
   $effect,
   $familiar,
   $item,
+  $location,
   $skill,
   $slot,
   $stat,
+  adventureMacro,
   AsdonMartin,
   CommunityService,
   ensureEffect,
   get,
   have,
 } from "libram";
-import { propertyManager } from ".";
+import { propertyManager, resources } from ".";
 import Macro from "./combat";
 import { withMacro } from "./hccs";
 import {
+  ensureCreateItem,
   ensureInnerElf,
+  ensureMpTonic,
   ensureNpcEffect,
   ensurePotionEffect,
   ensureSong,
@@ -45,7 +53,14 @@ import {
   tryUse,
 } from "./lib";
 import { globalOptions } from "./options";
-import { hpOutfit, moxieOutfit, muscleOutfit, mysticalityOutfit, noncombatOutfit } from "./outfits";
+import {
+  hotresOutfit,
+  hpOutfit,
+  moxieOutfit,
+  muscleOutfit,
+  mysticalityOutfit,
+  noncombatOutfit,
+} from "./outfits";
 
 export function moxPrep() {
   equalizeStat($stat`Moxie`);
@@ -172,5 +187,82 @@ export function nonCombatPrep() {
   ensureEffect($effect`Throwing Some Shade`);
   if (globalOptions.debug) {
     logprint(cliExecuteOutput("modtrace combat rate"));
+  }
+}
+
+export function hotResPrep() {
+  ensureMpTonic(500);
+
+  useFamiliar($familiar`Exotic Parrot`);
+
+  // These should have fallen through all the way from leveling.
+  ensureEffect($effect`Fidoxene`);
+  ensureEffect($effect`Do I Know You From Somewhere?`);
+  ensureEffect($effect`Puzzle Champ`);
+  ensureEffect($effect`Billiards Belligerence`);
+  ensureEffect($effect`Astral Shell`);
+  ensureEffect($effect`Elemental Saucesphere`);
+  cliExecute(`smash ${availableAmount($item`ratty knitted cap`)} ratty knitted cap`);
+
+  while (
+    have($skill`Deep Dark Visions`) &&
+    haveEffect($effect`Visions of the Deep Dark Deeps`) < 50
+  ) {
+    if (myMp() < 20) {
+      ensureCreateItem(1, $item`magical sausage`);
+      eat(1, $item`magical sausage`);
+    }
+    while (myHp() < myMaxhp()) {
+      useSkill(1, $skill`Cannelloni Cocoon`);
+    }
+    if (myMp() < 100) {
+      ensureCreateItem(1, $item`magical sausage`);
+      eat(1, $item`magical sausage`);
+    }
+    if (Math.round(numericModifier("spooky resistance")) < 10) {
+      ensureEffect($effect`Does It Have a Skull In There??`);
+      if (Math.round(numericModifier("spooky resistance")) < 10) {
+        throw "Not enough spooky res for Deep Dark Visions.";
+      }
+    }
+    useSkill(1, $skill`Deep Dark Visions`);
+  }
+
+  if (!have($effect`Fireproof Foam Suit`)) {
+    equip($slot`weapon`, $item`industrial fire extinguisher`);
+    equip($slot`off-hand`, $item`Fourth of May Cosplay Saber`);
+    equip($item`vampyric cloake`);
+    propertyManager.setChoices({ [1387]: 3 });
+    adventureMacro(
+      $location`The Dire Warren`,
+      Macro.skill($skill`Become a Cloud of Mist`)
+        .skill($skill`Fire Extinguisher: Foam Yourself`)
+        .skill($skill`Use the Force`)
+    );
+    resources.saberForces.push($effect`Fireproof Foam Suit`);
+  }
+
+  if (
+    availableAmount($item`sleaze powder`) > 0 ||
+    availableAmount($item`lotion of sleaziness`) > 0
+  ) {
+    ensurePotionEffect($effect`Sleazy Hands`, $item`lotion of sleaziness`);
+  }
+
+  ensureEffect($effect`Feeling Peaceful`);
+
+  if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
+    useFamiliar($familiar`Exotic Parrot`);
+    resources.clipArt($item`box of Familiar Jacks`);
+    use($item`box of Familiar Jacks`);
+  }
+
+  useFamiliar($familiar`Exotic Parrot`);
+
+  // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
+  // FIXME: Outfit
+  hotresOutfit();
+  if (globalOptions.debug) {
+    logprint(cliExecuteOutput("modtrace hot res"));
   }
 }

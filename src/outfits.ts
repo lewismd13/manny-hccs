@@ -300,11 +300,11 @@ export function hotresOutfit(): void {
     {
       back: $item`unwrapped knock-off retro superhero cape`,
       weapon: $item`Fourth of May Cosplay Saber`,
-      offhand: $item`meteorite guard`,
+      offhand: $item`industrial fire extinguisher`,
       pants: $item`pantogram pants`,
       acc1: $item`your cowboy boots`,
       acc2: $item`Brutal brogues`,
-      acc3: $item`Beach Comb`,
+      acc3: $item`Kremlin's Greatest Briefcase`,
       familiar: $items`cracker`,
     },
     $familiar`Exotic Parrot`

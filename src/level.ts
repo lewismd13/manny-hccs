@@ -1,4 +1,5 @@
 import {
+  adv1,
   autosell,
   availableAmount,
   cliExecute,
@@ -6,16 +7,21 @@ import {
   create,
   equip,
   handlingChoice,
+  haveEffect,
   itemAmount,
   mpCost,
   myBasestat,
+  myClass,
   myPrimestat,
+  numericModifier,
   print,
   retrieveItem,
+  round,
   runChoice,
   runCombat,
   setAutoAttack,
   setLocation,
+  sweetSynthesis,
   totalFreeRests,
   toUrl,
   use,
@@ -24,6 +30,7 @@ import {
   visitUrl,
 } from "kolmafia";
 import {
+  $class,
   $effect,
   $familiar,
   $item,
@@ -40,14 +47,17 @@ import {
   TunnelOfLove,
   Witchess,
 } from "libram";
-import { resources } from ".";
+import { propertyManager, resources } from ".";
 import Macro from "./combat";
 import { withMacro } from "./hccs";
 import {
+  ensureInnerElf,
   ensureMpTonic,
   ensureNpcEffect,
   ensurePotionEffect,
-  mapMonster,
+  libramBurn,
+  mapMacro,
+  oysterAvailable,
   sausageFightGuaranteed,
   setChoice,
   tryEnsureEffect,
@@ -113,37 +123,29 @@ export function level(): void {
       !have($item`tomato`) &&
       !have($item`tomato juice of powerful power`) &&
       !have($effect`Tomato Power`) &&
-      get("lastCopyableMonster") !== $monster`possessed can of tomatoes`
+      get("lastCopyableMonster") !== $monster`possessed can of tomatoes` &&
+      myClass() === $class`Pastamancer`
     ) {
       equip($slot`off-hand`, $item`none`);
       equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-      withMacro(Macro.skill($skill`Reflex Hammer`), () => {
-        useDefaultFamiliar();
-        mapMonster($location`The Haunted Pantry`, $monster`possessed can of tomatoes`);
-        runCombat();
-      });
-    }
-
-    withMacro(Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`), () => {
-      ensureMpTonic(50);
       useDefaultFamiliar();
-      mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`);
-      runCombat();
-    });
+      mapMacro(
+        $location`The Haunted Pantry`,
+        $monster`possessed can of tomatoes`,
+        Macro.skill($skill`Reflex Hammer`)
+      );
+    }
+    ensureMpTonic(50);
+    useDefaultFamiliar();
+    mapMacro(
+      $location`The Haiku Dungeon`,
+      $monster`amateur ninja`,
+      Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`)
+    );
+    runCombat();
+
     ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
   }
-
-  if (get("_candySummons") === 0) {
-    useSkill(1, $skill`Summon Crimbo Candy`);
-    if (itemAmount($item`Crimbo candied pecan`) === 3) {
-      resources.tome($item`sugar sheet`);
-      useFamiliar($familiar`Baby Bugged Bugbear`);
-      visitUrl("arena.php");
-      useDefaultFamiliar();
-    }
-  }
-
-  useSkill(1, $skill`Chubby and Plump`);
 
   while (itemAmount($item`BRICKO eye brick`) < 1 || itemAmount($item`BRICKO brick`) < 8) {
     ensureMpTonic(mpCost($skill`Summon BRICKOs`));
@@ -170,12 +172,48 @@ export function level(): void {
     setAutoAttack(0);
   }
 
-  this.context.synthesisPlanner.synthesize(
-    myPrimestat() === $stat`Muscle` ? $effect`Synthesis: Movement` : $effect`Synthesis: Learning`
-  );
-  this.context.synthesisPlanner.synthesize(
-    myPrimestat() === $stat`Muscle` ? $effect`Synthesis: Strong` : $effect`Synthesis: Smart`
-  );
+  if (get("_candySummons") === 0) {
+    useSkill(1, $skill`Summon Crimbo Candy`);
+  }
+
+  useSkill(1, $skill`Chubby and Plump`);
+
+  // Depending on crimbo candy summons, gets synth learning, possibly getting bugged beanie if it needs a tome summon
+  // TODO: muscle support
+  if (
+    availableAmount($item`Crimbo candied pecan`) > 1 &&
+    availableAmount($item`Crimbo peppermint bark`) === 0 &&
+    haveEffect($effect`Synthesis: Learning`) === 0
+  ) {
+    resources.tome($skill`Summon Sugar Sheets`);
+    cliExecute("create 1 sugar shotgun");
+    sweetSynthesis($item`sugar shotgun`, $item`Crimbo candied pecan`);
+    useFamiliar($familiar`Baby Bugged Bugbear`);
+    visitUrl("arena.php");
+    useDefaultFamiliar();
+  } else if (
+    availableAmount($item`Crimbo fudge`) >= 2 &&
+    haveEffect($effect`Synthesis: Learning`) === 0
+  ) {
+    sweetSynthesis($item`Crimbo fudge`, $item`Crimbo fudge`);
+  } else if (
+    availableAmount($item`Crimbo peppermint bark`) !== 0 &&
+    haveEffect($effect`Synthesis: Learning`) === 0
+  ) {
+    sweetSynthesis($item`Crimbo peppermint bark`, $item`peppermint sprout`);
+  }
+
+  // synthesis: smart
+  if (haveEffect($effect`Synthesis: Smart`) === 0) {
+    sweetSynthesis($item`bag of many confections`, $item`Chubby and Plump bar`);
+  }
+  // This is the sequence of synthesis effects; synthesis_plan will, if possible, come up with a plan for allocating candy to each of these.
+  // SynthesisPlanner.synthesize($effect`Synthesis: Learning`);
+  // SynthesisPlanner.synthesize($effect`Synthesis: Smart`);
+
+  if (round(numericModifier("mysticality experience percent")) < 100) {
+    throw "Insufficient +stat%.";
+  }
 
   cliExecute("briefcase enchantment spell hot -combat");
 
@@ -220,6 +258,37 @@ export function level(): void {
   while (get("_snojoFreeFights") < 10) {
     useDefaultFamiliar();
     adventureMacroAuto($location`The X-32-F Combat Training Snowman`, Macro.attack().repeat());
+  }
+
+  const missingOintment =
+    availableAmount($item`ointment of the occult`) === 0 &&
+    availableAmount($item`grapefruit`) === 0 &&
+    haveEffect($effect`Mystically Oiled`) === 0;
+  const missingOil =
+    availableAmount($item`oil of expertise`) === 0 &&
+    availableAmount($item`cherry`) === 0 &&
+    haveEffect($effect`Expert Oiliness`) === 0;
+  if (myClass() !== $class`Pastamancer` && (missingOil || missingOintment)) {
+    cliExecute("mood apathetic");
+
+    if (get("questM23Meatsmith") === "unstarted") {
+      visitUrl("shop.php?whichshop=meatsmith&action=talk");
+      runChoice(1);
+    }
+    // if (!canAdv($location`The Skeleton Store`, false)) error("Cannot open skeleton store!");
+    adv1($location`The Skeleton Store`, -1, "");
+    if (!containsText($location`The Skeleton Store`.noncombatQueue, "Skeletons In Store")) {
+      throw "Something went wrong at skeleton store.";
+    }
+    setChoice(1387, 3);
+    mapMacro(
+      $location`The Skeleton Store`,
+      $monster`novelty tropical skeleton`,
+      Macro.skill($skill`Use the Force`)
+    );
+    if (handlingChoice()) runChoice(-1);
+    resources.saberForces.push($item`cherry`);
+    // setProperty("mappingMonsters", "false");
   }
 
   // Chateau rest
@@ -286,7 +355,7 @@ export function level(): void {
         .repeat()
     )
       .if_("monstername LOV Engineer", Macro.skill($skill`Weapon of the Pastalord`).repeat())
-      .if_("monstername LOV Equivocator", Macro.pickpocket().kill())
+      .if_("monstername LOV Equivocator", Macro.kill())
       .setAutoAttack();
 
     TunnelOfLove.fightAll("LOV Epaulettes", "Open Heart Surgery", "LOV Extraterrestrial Chocolate");
@@ -310,29 +379,41 @@ export function level(): void {
       if (handlingChoice()) runChoice(1);
     }
   }
-  // Witchess fights, saving queen until just before NEP
-  useDefaultFamiliar();
-  if (availableAmount($item`dented scepter`) === 0 && get("_witchessFights") < 5) {
-    setAutoAttack(0);
+
+  //witchess fights
+  if (get("_witchessFights") < 5) {
     equip($item`Fourth of May Cosplay Saber`);
-    withMacro(Macro.skill($skill`Saucegeyser`).repeat(), () =>
-      Witchess.fightPiece($monster`Witchess King`)
-    );
-  }
-  if (availableAmount($item`battle broom`) === 0 && get("_witchessFights") < 5) {
-    setAutoAttack(0);
-    equip($item`Fourth of May Cosplay Saber`);
-    withMacro(Macro.attack().repeat(), () => Witchess.fightPiece($monster`Witchess Witch`));
-  }
-  if (get("_witchessFights") < 4) {
-    Macro.kill().setAutoAttack();
-    Witchess.fightPiece($monster`Witchess Bishop`);
-    setAutoAttack(0);
+    useDefaultFamiliar();
+    while (get("_witchessFights") === 0) {
+      Macro.kill().setAutoAttack();
+      Witchess.fightPiece($monster`Witchess Bishop`);
+      setAutoAttack(0);
+    }
+    while (get("_witchessFights") === 1) {
+      useDefaultFamiliar();
+      Macro.attack().repeat().setAutoAttack();
+      ensureEffect($effect`Carol of the Bulls`);
+      Witchess.fightPiece($monster`Witchess King`);
+      setAutoAttack(0);
+    }
+    while (get("_witchessFights") === 2) {
+      useDefaultFamiliar();
+      Macro.attack().repeat().setAutoAttack();
+      ensureEffect($effect`Carol of the Bulls`);
+      Witchess.fightPiece($monster`Witchess Witch`);
+      setAutoAttack(0);
+    }
+    while (get("_witchessFights") === 3) {
+      useDefaultFamiliar();
+      Macro.kill().setAutoAttack();
+      Witchess.fightPiece($monster`Witchess Bishop`);
+      setAutoAttack(0);
+    }
   }
 
   while (get("_machineTunnelsAdv") < 5) {
     // DMT noncombat. Run.
-    this.context.propertyManager.setChoices({ [1119]: 5 });
+    propertyManager.setChoices({ [1119]: 5 });
 
     useFamiliar($familiar`Machine Elf`);
     if (globalOptions.debug)
@@ -409,7 +490,7 @@ export function level(): void {
         )} and this is NEP fight ${get("_neverendingPartyFreeTurns")}`
       );
 
-    this.ensureInnerElf();
+    ensureInnerElf();
 
     if (get("_questPartyFair") === "unstarted") {
       visitUrl(toUrl($location`The Neverending Party`));
@@ -423,7 +504,7 @@ export function level(): void {
 
     useDefaultFamiliar();
     // NEP noncombat. Fight.
-    this.context.propertyManager.setChoices({ [1324]: 5 });
+    propertyManager.setChoices({ [1324]: 5 });
 
     adventureMacroAuto(
       $location`The Neverending Party`,
@@ -438,15 +519,14 @@ export function level(): void {
     );
   }
 
-  if (availableAmount($item`very pointy crown`) === 0 && get("_witchessFights") < 5) {
+  // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
+  if (get("_witchessFights") === 4) {
+    useDefaultFamiliar();
+    Macro.attack().repeat().setAutoAttack();
+    ensureEffect($effect`Carol of the Bulls`);
+    ensureEffect($effect`Song of the North`);
+    Witchess.fightPiece($monster`Witchess Queen`);
     setAutoAttack(0);
-    equip($item`Fourth of May Cosplay Saber`);
-    withMacro(
-      Macro.tryItem([$item`jam band bootleg`, $item`gas can`])
-        .attack()
-        .repeat(),
-      () => Witchess.fightPiece($monster`Witchess Queen`)
-    );
   }
 
   // Reset location so maximizer doesn't get confused.

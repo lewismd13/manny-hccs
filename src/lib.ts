@@ -17,17 +17,16 @@ import {
   getFuel,
   getProperty,
   haveEffect,
-  haveSkill,
   inMultiFight,
   Item,
   itemAmount,
   Location,
   Monster,
+  mpCost,
   myAdventures,
   myClass,
   myFamiliar,
   myLevel,
-  myLocation,
   myMaxmp,
   myMp,
   myPrimestat,
@@ -35,6 +34,8 @@ import {
   pullsRemaining,
   putShop,
   retrieveItem,
+  runChoice,
+  runCombat,
   setProperty,
   shopAmount,
   Skill,
@@ -256,25 +257,17 @@ export function ensureAsdonEffect(ef: Effect) {
   ensureEffect(ef);
 }
 
-export function mapMonster(location: Location, monster: Monster) {
-  if (
-    haveSkill($skill`Map the Monsters`) &&
-    !get("mappingMonsters") &&
-    get("_monstersMapped") < 3
-  ) {
-    useSkill($skill`Map the Monsters`);
+export function mapMacro(location: Location, monster: Monster, macro: Macro): void {
+  macro.setAutoAttack();
+  useSkill($skill`Map the Monsters`);
+  if (!get("mappingMonsters")) throw `I am not actually mapping anything. Weird!`;
+  else {
+    while (get("mappingMonsters")) {
+      visitUrl(toUrl(location));
+      runChoice(1, `heyscriptswhatsupwinkwink=${monster.id}`);
+      runCombat(macro.toString());
+    }
   }
-
-  if (!get("mappingMonsters")) throw "Failed to setup Map the Monsters.";
-
-  const mapPage = visitUrl(toUrl(location), false, true);
-  if (!mapPage.includes("Leading Yourself Right to Them")) throw "Something went wrong mapping.";
-
-  const fightPage = visitUrl(
-    `choice.php?pwd&whichchoice=1435&option=1&heyscriptswhatsupwinkwink=${monster.id}`
-  );
-  if (!fightPage.includes("You're fighting") && myLocation() !== $location`The Haiku Dungeon`)
-    throw "Something went wrong starting the fight.";
 }
 
 export function tryUse(quantity: number, it: Item) {
@@ -521,4 +514,39 @@ export function ensureInnerElf(): void {
       useFamiliar(savedFam);
     }
   }
+}
+
+function castBestLibram() {
+  if (availableAmount($item`BRICKO eye brick`) + get("_brickoFights") < 2 && myLevel() < 14) {
+    useSkill($skill`Summon BRICKOs`);
+  } else if (
+    availableAmount($item`green candy heart`) < 1 &&
+    !get("csServicesPerformed").includes("Breed More Collies")
+  ) {
+    useSkill($skill`Summon Candy Heart`);
+  } else if (
+    availableAmount($item`lavender candy heart`) < 1 &&
+    !get("csServicesPerformed").includes("Make Margaritas")
+  ) {
+    useSkill($skill`Summon Candy Heart`);
+  } else if (
+    availableAmount($item`love song of icy revenge`) < 2 &&
+    !get("csServicesPerformed").includes("Breed More Collies")
+  ) {
+    useSkill($skill`Summon Love Song`);
+  } else {
+    useSkill($skill`Summon Taffy`);
+  }
+}
+
+export function libramBurn(): void {
+  while (myMp() / myMaxmp() > 0.4 && mpCost($skill`Summon BRICKOs`) <= myMp()) {
+    castBestLibram();
+  }
+}
+
+export function oysterAvailable(): boolean {
+  if (availableAmount($item`BRICKO eye brick`) >= 1 && availableAmount($item`BRICKO brick`) >= 8)
+    return true;
+  else return false;
 }

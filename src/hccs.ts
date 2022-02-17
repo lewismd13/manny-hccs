@@ -75,7 +75,6 @@ import {
   get,
   getModifier,
   have,
-  Macro,
   Witchess,
 } from "libram";
 import {
@@ -86,6 +85,7 @@ import {
   makeTonic,
   tonicsLeft,
 } from "libram/dist/resources/2014/DNALab";
+import Macro from "./combat";
 import {
   ensureCreateItem,
   ensureEffect,
@@ -100,7 +100,7 @@ import {
   fax,
   horse,
   kill,
-  mapMonster,
+  mapMacro,
   multiFightAutoAttack,
   sausageFightGuaranteed,
   setChoice,
@@ -712,8 +712,11 @@ if (!testDone(TEST_MOX)) {
       throw "Something went wrong at skeleton store.";
     }
     setProperty("choiceAdventure1387", "3");
-    mapMonster($location`The Skeleton Store`, $monster`novelty tropical skeleton`);
-    withMacro(Macro.skill($skill`Use the Force`), runCombat);
+    mapMacro(
+      $location`The Skeleton Store`,
+      $monster`novelty tropical skeleton`,
+      Macro.trySkill($skill`Use the Force`)
+    );
     if (handlingChoice()) runChoice(3);
     // setProperty("mappingMonsters", "false");
   }
@@ -1765,10 +1768,12 @@ if (!testDone(TEST_ITEM)) {
 
   //getting a lil ninja costume for the tot
   if (availableAmount($item`li'l ninja costume`) === 0 && get("_shatteringPunchUsed") < 3) {
-    Macro.skill($skill`Shattering Punch`).setAutoAttack();
-    mapMonster($location`The Haiku Dungeon`, $monster`amateur ninja`);
+    mapMacro(
+      $location`The Haiku Dungeon`,
+      $monster`amateur ninja`,
+      Macro.skill($skill`Shattering Punch`)
+    );
     setLocation($location`none`);
-    setAutoAttack(0);
   }
 
   // use abstraction: certainty if you have it

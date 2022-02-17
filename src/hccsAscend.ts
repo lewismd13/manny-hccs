@@ -17,7 +17,7 @@ function main(args = ""): void {
     throw "Your cowboy boots have the wrong skin";
   }
 
-  if (equippedItem($slot`bootspur`) !== $item`thicksilver spurs`) {
+  if (equippedItem($slot`bootspur`) !== $item`nicksilver spurs`) {
     throw "Your cowboy boots have the wrong spurs";
   }
 

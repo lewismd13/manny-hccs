@@ -1,23 +1,36 @@
 import {
+  autosell,
   availableAmount,
+  buy,
   cliExecute,
   cliExecuteOutput,
+  containsText,
   eat,
   equip,
   getProperty,
   handlingChoice,
   haveEffect,
   logprint,
+  maximize,
+  mpCost,
   myBasestat,
   myBuffedstat,
   myClass,
+  myGardenType,
   myHp,
+  myLevel,
   myMaxhp,
+  myMaxmp,
   myMp,
+  mySpleenUse,
   numericModifier,
   print,
+  retrieveItem,
   runChoice,
   runCombat,
+  setAutoAttack,
+  setProperty,
+  sweetSynthesis,
   use,
   useFamiliar,
   useSkill,
@@ -25,19 +38,26 @@ import {
 } from "kolmafia";
 import {
   $class,
+  $classes,
+  $coinmaster,
   $effect,
   $familiar,
   $item,
   $location,
+  $monster,
   $skill,
   $slot,
   $stat,
   adventureMacro,
+  adventureMacroAuto,
   AsdonMartin,
+  CombatLoversLocket,
   CommunityService,
   ensureEffect,
   get,
   have,
+  set,
+  SongBoom,
 } from "libram";
 import { propertyManager, resources } from ".";
 import Macro from "./combat";
@@ -45,22 +65,112 @@ import { withMacro } from "./hccs";
 import {
   ensureCreateItem,
   ensureInnerElf,
+  ensureItem,
+  ensureMpSausage,
   ensureMpTonic,
   ensureNpcEffect,
   ensurePotionEffect,
+  ensureSewerItem,
   ensureSong,
   equalizeStat,
+  incrementProperty,
+  setChoice,
+  tryEnsureEffect,
   tryUse,
+  useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
 import {
+  famweightOutfit,
   hotresOutfit,
   hpOutfit,
+  itemOutfit,
   moxieOutfit,
   muscleOutfit,
   mysticalityOutfit,
   noncombatOutfit,
+  spellOutfit,
+  weaponOutfit,
+  wireOutfit,
 } from "./outfits";
+
+export function coilPrep() {
+  if (myLevel() === 1 && mySpleenUse() === 0) {
+    while (get("_universeCalculated") < get("skillLevel144")) {
+      cliExecute("numberology 69");
+    }
+  }
+
+  if (get("_deckCardsDrawn") < 5) resources.deck("1952");
+  autosell(1, $item`1952 Mickey Mantle card`);
+
+  // Buy toy accordion
+  ensureItem(1, $item`toy accordion`);
+
+  if (!get("_chateauDeskHarvested")) {
+    // Chateau piggy bank
+    visitUrl("place.php?whichplace=chateau&action=chateau_desk1");
+  }
+
+  // Upgrade saber for fam wt
+  if (get("_saberMod") === 0) {
+    visitUrl("main.php?action=may4");
+    runChoice(4);
+  }
+
+  // Vote.
+  if (get("_voteModifier") === "") {
+    visitUrl("place.php?whichplace=town_right&action=townright_vote");
+    visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=1&local%5B%5D=2");
+    // Make sure initiative-tracking works.
+    visitUrl("place.php?whichplace=town_right&action=townright_vote");
+  }
+
+  // pick garden for synth.
+  if (myGardenType() === "peppermint") {
+    cliExecute("garden pick");
+  } else {
+    print(
+      "WARNING: This script is built for peppermint garden. Switch gardens or find other candy.",
+      "red"
+    );
+  }
+
+  // Initialize bird calendar
+  use(1, $item`Bird-a-Day calendar`);
+
+  // get cowboy boots
+  visitUrl("place.php?whichplace=town_right&action=townright_ltt");
+
+  // Sell pork gems + tent
+  visitUrl("tutorial.php?action=toot");
+  tryUse(1, $item`letter from King Ralph XI`);
+  tryUse(1, $item`pork elf goodies sack`);
+  autosell(5, $item`baconstone`);
+  autosell(5, $item`hamethyst`);
+
+  // get things to cast buffs
+  ensureSewerItem(1, $item`turtle totem`);
+  ensureSewerItem(1, $item`saucepan`);
+
+  // Detective Agency for NC test
+  // requires Ezandora's script
+  // shouldn't need this if we have the PM bird, but we still want detective badge
+  if (get("_detectiveCasesCompleted") < 3 && myClass() !== $class`Pastamancer`)
+    cliExecute("detective solver");
+  else visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct");
+
+  // Set doc bag choice
+  setChoice(1340, 3);
+
+  if (!get("_borrowedTimeUsed")) {
+    if (!have($item`borrowed time`)) resources.clipArt($item`borrowed time`);
+    use($item`borrowed time`);
+  }
+
+  visitUrl("council.php");
+  wireOutfit();
+}
 
 export function moxPrep() {
   equalizeStat($stat`Moxie`);
@@ -173,7 +283,7 @@ export function nonCombatPrep() {
 
   useFamiliar($familiar`Disgeist`);
 
-  AsdonMartin.drive($effect`Driving Stealthily`, 1);
+  if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Stealthily`, 1);
 
   // Without the PM bird, we need shoe gum
   if (myClass() !== $class`Pastamancer`) ensurePotionEffect($effect`Gummed Shoes`, $item`shoe gum`);
@@ -264,5 +374,316 @@ export function hotResPrep() {
   hotresOutfit();
   if (globalOptions.debug) {
     logprint(cliExecuteOutput("modtrace hot res"));
+  }
+}
+
+export function famWtPrep() {
+  if (myHp() < 30) useSkill(1, $skill`Cannelloni Cocoon`);
+  ensureEffect($effect`Blood Bond`);
+  ensureEffect($effect`Leash of Linguini`);
+  ensureEffect($effect`Empathy`);
+
+  // These should have fallen through all the way from leveling.
+  ensureEffect($effect`Fidoxene`);
+  ensureEffect($effect`Do I Know You From Somewhere?`);
+  ensureEffect($effect`Puzzle Champ`);
+  ensureEffect($effect`Billiards Belligerence`);
+
+  // NC reward
+  ensureEffect($effect`Robot Friends`);
+
+  // use freeruns at gingerbread city to get gingerbread spice latte
+  if (
+    haveEffect($effect`Whole Latte Love`) === 0 &&
+    availableAmount($item`gingerbread spice latte`) === 0
+  ) {
+    useFamiliar($familiar`Chocolate Lab`);
+    // TODO: get rid of this maximize call
+    maximize("sprinkle drop", false);
+    if (!get("_gingerbreadClockAdvanced")) {
+      visitUrl("adventure.php?snarfblat=477");
+      runChoice(1);
+    }
+    if (availableAmount($item`sprinkles`) < 50) {
+      equip($slot`acc1`, $item`Lil' Doctor™ bag`);
+      adventureMacroAuto(
+        $location`Gingerbread Upscale Retail District`,
+        Macro.if_("monstername gingerbread gentrifier", Macro.skill($skill`Macrometeorite`)).skill(
+          $skill`Chest X-Ray`
+        )
+      );
+      setAutoAttack(0);
+    }
+    if (availableAmount($item`sprinkles`) >= 50) {
+      useFamiliar($familiar`Frumious Bandersnatch`);
+      ensureEffect($effect`Ode to Booze`);
+      setChoice(1208, 3);
+      while (
+        availableAmount($item`gingerbread spice latte`) === 0 &&
+        haveEffect($effect`Whole Latte Love`) === 0
+      ) {
+        adventureMacro($location`Gingerbread Upscale Retail District`, Macro.runaway());
+      }
+    } else {
+      throw "Something went wrong getting sprinkles";
+    }
+    use($item`gingerbread spice latte`);
+    useDefaultFamiliar();
+  }
+
+  if (haveEffect($effect`Meteor Showered`) === 0) {
+    equip($item`Fourth of May Cosplay Saber`);
+    useFamiliar($familiar`none`);
+    adventureMacro(
+      $location`The Dire Warren`,
+      Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`)
+    );
+    if (haveEffect($effect`Meteor Showered`) > 0) incrementProperty("_meteorShowerUses");
+    resources.saberForces.push($effect`Meteor Showered`);
+  }
+
+  // make a crane if we have one
+  if (
+    availableAmount($item`burning newspaper`) > 0 &&
+    availableAmount($item`burning paper crane`) < 1
+  ) {
+    cliExecute("create 1 burning paper crane");
+  }
+
+  // try to get a green heart
+  while (myMp() / myMaxmp() > 0.3 && mpCost($skill`Summon BRICKOs`) <= myMp()) {
+    useSkill($skill`Summon Candy Heart`);
+  }
+
+  tryEnsureEffect($effect`Heart of Green`);
+
+  if (have($item`cracker`)) useFamiliar($familiar`Exotic Parrot`);
+  else useFamiliar($familiar`Baby Bugged Bugbear`);
+  famweightOutfit();
+  if (globalOptions.debug) {
+    print(
+      `debug: your short order cook charges were at ${get(
+        "_shortOrderCookCharge"
+      )} charges and your trash fire is at ${get("garbageFireProgress")}`
+    );
+    logprint(cliExecuteOutput("modtrace familiar weight"));
+  }
+}
+
+export function WeaponPrep() {
+  if (haveEffect($effect`Do You Crush What I Crush?`) === 0) {
+    useFamiliar($familiar`Ghost of Crimbo Carols`);
+    adventureMacro($location`The Dire Warren`, Macro.skill($skill`Feel Hatred`));
+  }
+
+  if (
+    $classes`Seal Clubber, Pastamancer`.includes(myClass()) &&
+    haveEffect($effect`Saucefingers`) + haveEffect($effect`Elbow Sauce`) === 0
+  ) {
+    useFamiliar($familiar`Mini-Adventurer`);
+    equip($item`latte lovers member's mug`);
+    setChoice(768, 4); // Make mini-adv a Sauceror.
+    if (get("miniAdvClass") !== 4) {
+      if (get("_latteBanishUsed")) throw "Latte banish used!";
+      adventureMacro($location`The Dire Warren`, Macro.skill($skill`Throw Latte on Opponent`));
+    }
+    if (get("_latteBanishUsed")) throw "Latte banish used!";
+    adventureMacro($location`The Dire Warren`, Macro.skill($skill`Throw Latte on Opponent`));
+  }
+
+  ensureEffect($effect`Carol of the Bulls`);
+  ensureEffect($effect`Song of the North`);
+  ensureEffect($effect`Rage of the Reindeer`);
+  ensureEffect($effect`Frenzied, Bloody`);
+  ensureEffect($effect`Scowl of the Auk`);
+  if (myClass() !== $class`Turtle Tamer`) ensureEffect($effect`Disdain of the War Snapper`);
+  ensureEffect($effect`Tenacity of the Snapper`);
+  ensureSong($effect`Jackasses' Symphony of Destruction`);
+
+  ensureEffect($effect`Billiards Belligerence`);
+
+  // Beach Comb
+  if (!containsText(getProperty("_beachHeadsUsed"), "6")) {
+    ensureEffect($effect`Lack of Body-Building`);
+  }
+
+  if (availableAmount($item`LOV Elixir #3`) > 0) ensureEffect($effect`The Power of LOV`);
+
+  // Pastamancer d1 is weapon damage.
+  ensureEffect($effect`Blessing of the Bird`);
+  tryEnsureEffect($effect`Blessing of your favorite Bird`);
+
+  if (myClass() === $class`Seal Clubber`) {
+    cliExecute("barrelprayer buff");
+  }
+
+  ensureInnerElf();
+
+  // free run from fluffy bunny for crimbo ghost buff
+  if (!have($effect`Do You Crush What I Crush?`)) {
+    useFamiliar($familiar`Ghost of Crimbo Carols`);
+    equip($slot`acc3`, $item`Lil' Doctor™ bag`);
+    adventureMacroAuto($location`The Dire Warren`, Macro.skill($skill`Reflex Hammer`));
+  }
+
+  // fax ungulith (Saber YR)
+  if (!have($item`corrupted marrow`) && !have($effect`Cowrruption`)) {
+    useFamiliar($familiar`Melodramedary`);
+    equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
+    setChoice(1387, 3);
+    Macro.skill($skill`Meteor Shower`)
+      .skill($skill`%fn\, spit on me!`)
+      .skill($skill`Use the Force`)
+      .setAutoAttack();
+    if (CombatLoversLocket.availableLocketMonsters().includes($monster`ungulith`)) {
+      CombatLoversLocket.reminisce($monster`ungulith`);
+    } else {
+      throw "You don't have ungulith in your locket, and you don't have corrupted marrow, so that's bad.";
+    }
+    if (handlingChoice()) runChoice(-1);
+    if (have($item`corrupted marrow`)) {
+      set("_locketMonstersFought", `1932,${get("_locketMonstersFought")}`);
+      resources.lockets.push($monster`ungulith`);
+    }
+    if (have($effect`Spit Upon`) && get("camelSpit") === 100) setProperty("camelSpit", "0");
+    if (have($effect`Meteor Showered`)) set("_meteorShowerUses", 1 + get("_meteorShowerUses"));
+    setAutoAttack(0);
+    useDefaultFamiliar();
+  }
+
+  // Corrupted marrow
+  ensureEffect($effect`Cowrruption`);
+
+  SongBoom.setSong("These Fists Were Made for Punchin'");
+
+  ensureEffect($effect`Bow-Legged Swagger`);
+
+  weaponOutfit();
+  if (globalOptions.debug) {
+    logprint(cliExecuteOutput("modtrace weapon damage"));
+  }
+}
+
+export function spellPrep() {
+  ensureEffect($effect`Simmering`);
+  ensureEffect($effect`Song of Sauce`);
+  ensureEffect($effect`Carol of the Hells`);
+  tryEnsureEffect($effect`Arched Eyebrow of the Archmage`);
+  ensureSong($effect`Jackasses' Symphony of Destruction`);
+
+  if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
+    useSkill(1, $skill`Summon Alice's Army Cards`);
+    buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
+  }
+
+  ensureEffect($effect`Pisces in the Skyces`);
+
+  // Pool buff
+  if (get("_poolGames") < 3) ensureEffect($effect`Mental A-cue-ity`);
+
+  // Beach Comb
+  ensureEffect($effect`We're All Made of Starfish`);
+
+  // Tea party
+  // TODO: Is this the hatter buff we want?
+  if (!get("_madTeaParty")) {
+    visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2");
+    retrieveItem($item`mariachi hat`);
+    ensureEffect($effect`Full Bottle in front of Me`);
+  }
+
+  useSkill(1, $skill`Spirit of Cayenne`);
+
+  if (availableAmount($item`flask of baconstone juice`) > 0) {
+    ensureEffect($effect`Baconstoned`);
+  }
+
+  if (myClass() === $class`Sauceror`) {
+    cliExecute("barrelprayer buff");
+  }
+
+  ensureInnerElf();
+
+  if (haveEffect($effect`Meteor Showered`) === 0 && get("_meteorShowerUses") < 5) {
+    useFamiliar($familiar`Machine Elf`);
+    equip($item`Fourth of May Cosplay Saber`);
+    adventureMacroAuto(
+      $location`The Dire Warren`,
+      Macro.skill($skill`Meteor Shower`).skill($skill`Use the Force`)
+    );
+    if (haveEffect($effect`Meteor Showered`) > 0) incrementProperty("_meteorShowerUses");
+    resources.saberForces.push($effect`Meteor Showered`);
+  }
+
+  // Sigils of Yeg = 200% SD
+  if (!get("_cargoPocketEmptied") && !have($effect`Sigils of Yeg`)) {
+    if (!have($item`Yeg's Motel hand soap`)) cliExecute("cargo 177");
+    ensureEffect($effect`Sigils of Yeg`);
+  }
+
+  if (availableAmount($item`LOV Elixir #6`) > 0) ensureEffect($effect`The Magic of LOV`);
+
+  // Get flimsy hardwood scraps.
+  visitUrl("shop.php?whichshop=lathe");
+  if (availableAmount($item`flimsy hardwood scraps`) > 0) {
+    retrieveItem(1, $item`weeping willow wand`);
+  }
+
+  useFamiliar($familiar`Left-Hand Man`);
+
+  spellOutfit();
+  if (globalOptions.debug) {
+    logprint(cliExecuteOutput("modtrace spell damage"));
+  }
+}
+
+export function itemPrep() {
+  ensureMpSausage(500);
+
+  useFamiliar($familiar`Trick-or-Treating Tot`);
+  if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
+    propertyManager.setChoices({ [1324]: 5 });
+    if (have($effect`Feeling Lost`)) throw "You have teleportitis, this will go badly for you";
+    if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
+    equip($item`vampyric cloake`);
+    equip($slot`acc3`, $item`Lil' Doctor™ bag`);
+    adventureMacro(
+      $location`The Neverending Party`,
+      Macro.skill($skill`Become a Bat`)
+        .trySkill($skill`Bowl Straight Up`)
+        .skill($skill`Reflex Hammer`)
+    );
+  }
+
+  ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
+  ensureEffect($effect`Singer's Faithful Ocelot`);
+  ensureEffect($effect`The Spirit of Taking`);
+  tryEnsureEffect($effect`Heart of Lavender`);
+
+  if (haveEffect($effect`Synthesis: Collection`) === 0) {
+    use(1, $item`peppermint sprout`);
+    sweetSynthesis($item`peppermint sprout`, $item`peppermint twist`);
+  }
+
+  if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Observantly`, 1);
+
+  if (myClass() === $class`Pastamancer`) {
+    cliExecute("barrelprayer buff");
+  }
+
+  if (!have($item`oversized sparkler`) && !get("_fireworksShopEquipmentBought")) {
+    visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
+    buy($item`oversized sparkler`);
+  }
+
+  ensureEffect($effect`Steely-Eyed Squint`);
+
+  // only get Feeling Lost if this is the last test of the run
+  if (get("csServicesPerformed").split(",").length === 10) ensureEffect($effect`Feeling Lost`);
+
+  itemOutfit();
+  if (globalOptions.debug) {
+    logprint(cliExecuteOutput("modtrace item"));
+    logprint(cliExecuteOutput("modtrace booze"));
   }
 }

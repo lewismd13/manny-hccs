@@ -165,7 +165,7 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
     weapon: $item`Fourth of May Cosplay Saber`,
     offhand: $item`familiar scrapbook`,
     acc1: $items`meteorite necklace, your cowboy boots`,
-    acc2: $item`codpiece`,
+    acc2: $items`codpiece, Powerful Glove`,
     acc3: $items`battle broom, Powerful Glove`,
     back: $items`LOV Epaulettes, vampyric cloake`,
     familiar: null,
@@ -388,7 +388,7 @@ export function spellOutfit(): void {
       familiar: famEquip,
       pants: $item`pantogram pants`,
       acc1: $items`meteorite necklace, Kremlin's Greatest Briefcase`,
-      acc2: $item`codpiece`,
+      acc2: $item`Powerful Glove`,
       acc3: $item`battle broom`,
     },
     familiar

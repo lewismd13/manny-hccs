@@ -7,6 +7,7 @@ import {
   Item,
   itemAmount,
   itemType,
+  Monster,
   myFullness,
   myInebriety,
   print,
@@ -27,6 +28,7 @@ export class ResourceTracker {
   consumedFood = new Map<Item, number>();
   consumedBooze = new Map<Item, number>();
   saberForces: (Item | Effect)[] = [];
+  lockets: Monster[] = [];
 
   deck(card: string, attempt = false): void {
     if (get("_deckCardsSeen").toLowerCase().includes(card)) return;
@@ -93,7 +95,9 @@ export class ResourceTracker {
     print(`Deck: ${this.deckCards.join(", ")}`);
     print(`Wishes: ${this.genieWishes.map((effect) => effect.name).join(", ")}`);
     print(`Tomes: ${this.tomeSummons.map((skillOrItem) => skillOrItem.name).join(", ")}`);
-    print(`Pulls: ${this.pulls.map((item) => item.name).join(", ")}`);
+    // print(`Pulls: ${this.pulls.map((item) => item.name).join(", ")}`);
+    print(`Sabers: ${this.saberForces.map((effectOrItem) => effectOrItem.name).join(", ")}`);
+    print(`Locket Fights: ${this.saberForces.map((monster) => monster.name).join(", ")}`);
     if (this.consumedFood.size > 0) {
       print("FOOD");
       for (const [food, count] of this.consumedFood) {

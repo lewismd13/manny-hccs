@@ -361,10 +361,6 @@ export function level(): void {
     TunnelOfLove.fightAll("LOV Epaulettes", "Open Heart Surgery", "LOV Extraterrestrial Chocolate");
 
     if (handlingChoice()) throw "Did not get all the way through LOV.";
-
-    if (itemAmount($item`LOV Extraterrestrial Chocolate`) > 0) {
-      use($item`LOV Extraterrestrial Chocolate`);
-    }
   }
 
   if (get("_godLobsterFights") < 2) {
@@ -423,8 +419,7 @@ export function level(): void {
         )} and this is DMT fight ${get("_machineTunnelsAdv")}`
       );
 
-    equip($item`LOV Epaulettes`);
-    equip($slot`acc3`, $item`battle broom`);
+    uniform();
 
     adventureMacroAuto(
       $location`The Deep Machine Tunnels`,
@@ -479,9 +474,7 @@ export function level(): void {
     get("_shatteringPunchUsed") < 2 ||
     !get("_gingerbreadMobHitUsed")
   ) {
-    equip($item`LOV Epaulettes`);
-    equip($slot`acc3`, $item`battle broom`);
-
+    uniform();
     useDefaultFamiliar();
     if (globalOptions.debug)
       print(
@@ -502,7 +495,6 @@ export function level(): void {
       }
     }
 
-    useDefaultFamiliar();
     // NEP noncombat. Fight.
     propertyManager.setChoices({ [1324]: 5 });
 

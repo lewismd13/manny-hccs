@@ -1,7 +1,5 @@
 import {
   abort,
-  adv1,
-  autosell,
   availableAmount,
   buy,
   buyUsingStorage,
@@ -19,11 +17,9 @@ import {
   haveEffect,
   inMultiFight,
   Item,
-  itemAmount,
   Location,
   Monster,
   mpCost,
-  myAdventures,
   myClass,
   myFamiliar,
   myLevel,
@@ -32,7 +28,6 @@ import {
   myPrimestat,
   print,
   pullsRemaining,
-  putShop,
   retrieveItem,
   runChoice,
   runCombat,
@@ -65,12 +60,14 @@ import {
   $stat,
   adventureMacro,
   Clan,
+  CommunityService,
   get,
   getModifier,
   have,
   property,
+  set,
 } from "libram";
-import { FamiliarWeight, WeaponDamage } from "libram/dist/challengePaths/2015/CommunityService";
+import { NumericProperty } from "libram/dist/propertyTypes";
 import { propertyManager } from ".";
 import Macro from "./combat";
 
@@ -397,49 +394,6 @@ export function fax(monster: Monster): void {
   }
 }
 
-export function mannyCleanup(): void {
-  while (get("_sourceTerminalEnhanceUses") < 3) {
-    cliExecute("terminal enhance meat.enh");
-  }
-
-  if (get("_claraBellUsed") === false && myAdventures() > 0) {
-    use($item`Clara's bell`);
-    setChoice(919, 1);
-    do {
-      adv1($location`Sloppy Seconds Diner`, -1, "");
-    } while (get("lastEncounter") === "Nothing Could Be Finer");
-  }
-
-  if (get("boomBoxSong") !== "Food Vibrations") {
-    cliExecute("boombox food");
-  }
-
-  if (get("_freeBeachWalksUsed") < 11) {
-    cliExecute("combbeach free");
-  }
-
-  autosell($item`cheap sunglasses`, itemAmount($item`cheap sunglasses`) - 1);
-  autosell($item`filthy child leash`, itemAmount($item`filthy child leash`));
-  use(itemAmount($item`bag of park garbage`) - 30, $item`bag of park garbage`);
-  use(itemAmount($item`Gathered Meat-Clip`), $item`Gathered Meat-Clip`);
-  use(itemAmount($item`old coin purse`), $item`old coin purse`);
-  use(itemAmount($item`old leather wallet`), $item`old leather wallet`);
-  autosell($item`expensive camera`, itemAmount($item`expensive camera`));
-  autosell($item`bag of gross foreign snacks`, itemAmount($item`bag of gross foreign snacks`));
-  putShop(300, 0, itemAmount($item`gold nuggets`), $item`gold nuggets`);
-  putShop(0, 0, itemAmount($item`cornucopia`), $item`cornucopia`);
-  putShop(0, 0, itemAmount($item`elemental sugarcube`), $item`elemental sugarcube`);
-  putShop(0, 0, itemAmount($item`gingerbread cigarette`), $item`gingerbread cigarette`);
-  putShop(0, 0, itemAmount($item`abandoned candy`), $item`abandoned candy`);
-  autosell($item`meat stack`, itemAmount($item`meat stack`));
-
-  // check for a dggt if we haven't
-  if (get("_defectiveTokenChecked") === false) {
-    retrieveItem($item`Game Grid token`);
-    visitUrl("place.php?whichplace=arcade&action=arcade_plumber");
-  }
-}
-
 // shamelessly stolen from phccs
 export function horse(horse: string): void {
   if (!horse.includes("horse")) horse = `${horse} horse`;
@@ -447,19 +401,19 @@ export function horse(horse: string): void {
 }
 
 export function useDefaultFamiliar(): void {
-  if (get("camelSpit") < 100 && !WeaponDamage.isDone()) {
+  if (get("camelSpit") < 100 && !CommunityService.WeaponDamage.isDone()) {
     useFamiliar($familiar`Melodramedary`);
     equip($item`dromedary drinking helmet`);
   } else if (
     availableAmount($item`rope`) < 1 &&
     availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) < 1 &&
-    !FamiliarWeight.isDone()
+    !CommunityService.FamiliarWeight.isDone()
   ) {
     useFamiliar($familiar`Garbage Fire`);
   } else if (
     availableAmount($item`short stack of pancakes`) === 0 &&
     haveEffect($effect`Shortly Stacked`) === 0 &&
-    !FamiliarWeight.isDone()
+    !CommunityService.FamiliarWeight.isDone()
   ) {
     useFamiliar($familiar`Shorter-Order Cook`);
   } else {
@@ -549,4 +503,8 @@ export function oysterAvailable(): boolean {
   if (availableAmount($item`BRICKO eye brick`) >= 1 && availableAmount($item`BRICKO brick`) >= 8)
     return true;
   else return false;
+}
+
+export function incrementProperty(name: NumericProperty): void {
+  set(name, get(name) + 1);
 }

@@ -5,7 +5,7 @@ const path = require("path");
 module.exports = {
   entry: {
     // Point "entry" to scripts you want to be CLI-eligible.
-    mannyLoop: "./src/hccs.ts",
+    mannyLoop: "./src/index.ts",
     hccsAscend: "./src/hccsAscend.ts",
     // hccsLibrams: "./src/hccsLibrams.ts",
     hccsPre: "./src/hccsPre.ts",

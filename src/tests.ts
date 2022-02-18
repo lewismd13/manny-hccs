@@ -60,8 +60,7 @@ import {
   SongBoom,
 } from "libram";
 import { propertyManager, resources } from ".";
-import Macro from "./combat";
-import { withMacro } from "./hccs";
+import Macro, { withMacro } from "./combat";
 import {
   ensureCreateItem,
   ensureInnerElf,

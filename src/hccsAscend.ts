@@ -2,7 +2,7 @@ import { equippedItem, print, wait } from "kolmafia";
 import { $class, $item, $slot, ascend, Lifestyle, Paths, prepareAscension } from "libram";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-function main(args = ""): void {
+export function main(args = ""): void {
   const myworkshed = args.split(" ").includes("dna")
     ? `Little Geneticist DNA-Splicing Lab`
     : `Asdon Martin keyfob`;
@@ -21,9 +21,12 @@ function main(args = ""): void {
     throw "Your cowboy boots have the wrong spurs";
   }
 
-  print("you're about to ascend! wait, is that good?", "green");
+  print(
+    `you're about to ascend as a ${myClass} with a ${myworkshed}! you provided ${args} as options`,
+    "green"
+  );
 
-  wait(15);
+  wait(30);
 
   prepareAscension({
     workshed: myworkshed,

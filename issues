@@ -9,18 +9,18 @@
 -pre-coil kramco and protoghost
 -time and turncount tracking
 -pre coil fights
-
+-holiday wanderer handling, steal from phccs
 
 function firstFights() {
-    // eslint-disable-next-line libram/verify-constants
-    uniform(...$items`protonic accelerator pack, Daylight Shavings Helmet`);
+// eslint-disable-next-line libram/verify-constants
+uniform(...$items`protonic accelerator pack, Daylight Shavings Helmet`);
     useDefaultFamiliar();
     fightSausageIfAble(
         $location`Noob Cave`,
         Macro.skill($skill`Micrometeorite`)
-            .attack()
-            .repeat()
-    );
+.attack()
+.repeat()
+);
 
     if (have($item`magical sausage casing`)) {
         create(1, $item`magical sausage`);
@@ -43,4 +43,5 @@ function firstFights() {
                 .trySkill($skill`Trap Ghost`)
         );
     }
+
 }

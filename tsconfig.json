@@ -17,6 +17,6 @@
     "types": []
   },
   "include": ["src/**/*.ts"],
-  "exclude": [""],
+  "exclude": ["src/hccs.ts"],
   "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 }

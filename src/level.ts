@@ -12,6 +12,7 @@ import {
   mpCost,
   myBasestat,
   myClass,
+  myLevel,
   myPrimestat,
   numericModifier,
   print,
@@ -48,8 +49,7 @@ import {
   Witchess,
 } from "libram";
 import { propertyManager, resources } from ".";
-import Macro from "./combat";
-import { withMacro } from "./hccs";
+import Macro, { withMacro } from "./combat";
 import {
   ensureInnerElf,
   ensureMpTonic,
@@ -342,6 +342,9 @@ export function level(): void {
   if (myPrimestat() === $stat`Mysticality`) mood.skill($skill`Inscrutable Gaze`);
   mood.execute();
 
+  cliExecute("fold makeshift garbage shirt");
+  uniform($item`makeshift garbage shirt`);
+
   // LOV Tunnel
   if (!TunnelOfLove.isUsed()) {
     useDefaultFamiliar();
@@ -375,7 +378,6 @@ export function level(): void {
       if (handlingChoice()) runChoice(1);
     }
   }
-
   //witchess fights
   if (get("_witchessFights") < 5) {
     equip($item`Fourth of May Cosplay Saber`);
@@ -419,8 +421,6 @@ export function level(): void {
         )} and this is DMT fight ${get("_machineTunnelsAdv")}`
       );
 
-    uniform();
-
     adventureMacroAuto(
       $location`The Deep Machine Tunnels`,
       Macro.externalIf(
@@ -452,7 +452,8 @@ export function level(): void {
     );
   }
 
-  uniform();
+  cliExecute("fold makeshift garbage shirt");
+  uniform($item`makeshift garbage shirt`);
 
   while (
     globalOptions.levelAggressively &&
@@ -474,7 +475,6 @@ export function level(): void {
     get("_shatteringPunchUsed") < 2 ||
     !get("_gingerbreadMobHitUsed")
   ) {
-    uniform();
     useDefaultFamiliar();
     if (globalOptions.debug)
       print(
@@ -523,4 +523,9 @@ export function level(): void {
 
   // Reset location so maximizer doesn't get confused.
   setLocation($location`none`);
+
+  if (myLevel() >= 13) {
+    tryUse(1, $item`astral six-pack`);
+    resources.consumeTo(5, $item`astral pilsner`);
+  } else throw "You're not level 13 at the end of leveling and that is bad";
 }

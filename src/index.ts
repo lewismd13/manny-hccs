@@ -1,4 +1,4 @@
-import { canInteract, cliExecute, hippyStoneBroken, myLevel, runChoice, visitUrl } from "kolmafia";
+import { cliExecute, hippyStoneBroken, myLevel, print, setAutoAttack, visitUrl } from "kolmafia";
 import { Clan, CommunityService } from "libram";
 import { get, PropertiesManager } from "libram/dist/property";
 import { level } from "./level";
@@ -21,23 +21,13 @@ import {
 export const resources = new ResourceTracker();
 export const propertyManager = new PropertiesManager();
 
-const assertTest = (action: boolean, test: string) => {
-  if (!action) throw `${test} test failed to complete.`;
+const assertTest = (action: string, test: string) => {
+  if (action === "failed") throw `${test} test failed to complete.`;
 };
 
-function endOfRunPvp(): void {
+export function endOfRunPvp(): void {
   // break stone
   if (!hippyStoneBroken()) visitUrl("peevpee.php?action=smashstone&confirm=on");
-
-  // recruit once and spar for 6 fights
-  if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
-    visitUrl("place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
-    runChoice(3);
-    runChoice(1);
-    runChoice(4);
-    runChoice(5);
-    runChoice(4);
-  }
 
   // run optimizer and fight, choosing whatever mini you like this season
   cliExecute("uberpvpoptimizer");
@@ -50,9 +40,8 @@ cliExecute("mood apathetic");
 cliExecute("ccs libramMacro");
 
 Clan.join("Alliance from Hell");
-
 try {
-  assertTest(CommunityService.CoilWire.run(coilPrep, globalOptions.debug, 60), "Coil Wire");
+  assertTest(CommunityService.CoilWire.run(coilPrep, false, 60), "Coil Wire");
   if (myLevel() < 14 && !CommunityService.HP.isDone()) level();
   assertTest(CommunityService.HP.run(hpPrep, globalOptions.debug, 1), "HP");
   assertTest(CommunityService.Muscle.run(musPrep, globalOptions.debug, 1), "Muscle");
@@ -71,13 +60,16 @@ try {
   assertTest(CommunityService.SpellDamage.run(spellPrep, globalOptions.debug, 25), "Spell Damage");
   assertTest(CommunityService.BoozeDrop.run(itemPrep, globalOptions.debug, 1), "Item");
 } finally {
-  endOfRunPvp();
-  // CommunityService.donate();
-  if (!canInteract()) {
-    visitUrl("council.php");
-    visitUrl("choice.php?whichchoice=1089&option=30");
-  }
   propertyManager.resetAll();
+  setAutoAttack(0);
+  cliExecute("ccs default");
+  cliExecute("mood apathetic");
+}
+
+// only do pvp and donate if we're done with all the quests
+if (get("csServicesPerformed").split(",").length === 11) {
+  endOfRunPvp();
+  CommunityService.donate();
   CommunityService.printLog();
   resources.summarize();
-}
+} else print("You don't actually appear to be done.");

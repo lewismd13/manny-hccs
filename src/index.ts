@@ -70,6 +70,6 @@ try {
 if (get("csServicesPerformed").split(",").length === 11) {
   endOfRunPvp();
   CommunityService.donate();
-  CommunityService.printLog();
+  CommunityService.printLog("yellow");
   resources.summarize();
 } else print("You don't actually appear to be done.");

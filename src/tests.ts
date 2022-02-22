@@ -543,6 +543,7 @@ export function WeaponPrep() {
     if (have($item`corrupted marrow`)) {
       set("_locketMonstersFought", `1932,${get("_locketMonstersFought")}`);
       resources.lockets.push($monster`ungulith`);
+            resources.saberForces.push($effect`Meteor Showered`);
     }
     if (have($effect`Spit Upon`) && get("camelSpit") === 100) setProperty("camelSpit", "0");
     if (have($effect`Meteor Showered`)) set("_meteorShowerUses", 1 + get("_meteorShowerUses"));

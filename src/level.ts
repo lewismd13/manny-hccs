@@ -56,7 +56,6 @@ import {
     ensureNpcEffect,
     ensurePotionEffect,
     libramBurn,
-    mapMacro,
     oysterAvailable,
     sausageFightGuaranteed,
     setChoice,
@@ -129,7 +128,7 @@ export function level(): void {
             equip($slot`off-hand`, $item`none`);
             equip($slot`acc3`, $item`Lil' Doctor™ bag`);
             useDefaultFamiliar();
-            mapMacro(
+            resources.mapMacro(
                 $location`The Haunted Pantry`,
                 $monster`possessed can of tomatoes`,
                 Macro.skill($skill`Reflex Hammer`)
@@ -137,7 +136,7 @@ export function level(): void {
         }
         ensureMpTonic(50);
         useDefaultFamiliar();
-        mapMacro(
+        resources.mapMacro(
             $location`The Haiku Dungeon`,
             $monster`amateur ninja`,
             Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`)
@@ -281,7 +280,7 @@ export function level(): void {
             throw "Something went wrong at skeleton store.";
         }
         setChoice(1387, 3);
-        mapMacro(
+        resources.mapMacro(
             $location`The Skeleton Store`,
             $monster`novelty tropical skeleton`,
             Macro.skill($skill`Use the Force`)

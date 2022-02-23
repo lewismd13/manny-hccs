@@ -7,17 +7,22 @@ import {
     Item,
     itemAmount,
     itemType,
+    Location,
     Monster,
     myFullness,
     myInebriety,
     print,
     retrieveItem,
+    runChoice,
+    runCombat,
     Skill,
     toItem,
     toSkill,
+    toUrl,
     useSkill,
+    visitUrl,
 } from "kolmafia";
-import { $effect, $item, $skill, get, have } from "libram";
+import { $effect, $item, $skill, get, have, Macro } from "libram";
 
 export class ResourceTracker {
     deckCards: string[] = [];
@@ -29,6 +34,7 @@ export class ResourceTracker {
     consumedBooze = new Map<Item, number>();
     saberForces: (Item | Effect)[] = [];
     lockets: Monster[] = [];
+    maps: Monster[] = [];
 
     deck(card: string, attempt = false): void {
         if (get("_deckCardsSeen").toLowerCase().includes(card)) return;
@@ -90,6 +96,20 @@ export class ResourceTracker {
         }
     }
 
+    mapMacro(location: Location, monster: Monster, macro: Macro): void {
+        macro.setAutoAttack();
+        useSkill($skill`Map the Monsters`);
+        if (!get("mappingMonsters")) throw `I am not actually mapping anything. Weird!`;
+        else {
+            while (get("mappingMonsters")) {
+                visitUrl(toUrl(location));
+                runChoice(1, `heyscriptswhatsupwinkwink=${monster.id}`);
+                runCombat(macro.toString());
+            }
+            this.maps.push(monster);
+        }
+    }
+
     summarize(): void {
         print("====== RESOURCE SUMMARY ======");
         print(`Deck: ${this.deckCards.join(", ")}`);
@@ -98,6 +118,7 @@ export class ResourceTracker {
         // print(`Pulls: ${this.pulls.map((item) => item.name).join(", ")}`);
         print(`Sabers: ${this.saberForces.map((effectOrItem) => effectOrItem.name).join(", ")}`);
         print(`Locket Fights: ${this.lockets.map((monster) => monster.name).join(", ")}`);
+        print(`Maps: ${this.maps.map((monster) => monster.name).join(", ")}`);
         if (this.consumedFood.size > 0) {
             print("FOOD");
             for (const [food, count] of this.consumedFood) {

@@ -16,6 +16,12 @@ export default class Macro extends StrictMacro {
     static kill(): Macro {
         return new Macro().kill();
     }
+
+    toString(): string {
+        return `${StrictMacro.ifHolidayWanderer(
+            StrictMacro.skill($skill`Feel Hatred`)
+        ).toString()};${super.toString()}`;
+    }
 }
 
 export function withMacro<T>(macro: Macro, action: () => T): T {

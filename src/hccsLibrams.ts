@@ -1,4 +1,4 @@
-import { availableAmount, mpCost, myMaxmp, myMp, print, useSkill } from "kolmafia";
+import { availableAmount, mpCost, myMaxmp, myMp, useSkill } from "kolmafia";
 import { $item, $skill } from "libram";
 import { testDone } from "./hccs";
 

@@ -1,4 +1,13 @@
-import { cliExecute, hippyStoneBroken, myLevel, print, setAutoAttack, visitUrl } from "kolmafia";
+import {
+    cliExecute,
+    hippyStoneBroken,
+    myDaycount,
+    myLevel,
+    myTurncount,
+    print,
+    setAutoAttack,
+    visitUrl,
+} from "kolmafia";
 import { Clan, CommunityService } from "libram";
 import { get, PropertiesManager } from "libram/dist/property";
 import { level } from "./level";
@@ -31,7 +40,7 @@ export function endOfRunPvp(): void {
 
     // run optimizer and fight, choosing whatever mini you like this season
     cliExecute("uberpvpoptimizer");
-    cliExecute("pvp fame nice list");
+    cliExecute("pvp fame maul power");
 }
 
 cliExecute("mood apathetic");
@@ -74,5 +83,8 @@ if (get("csServicesPerformed").split(",").length === 11) {
     endOfRunPvp();
     CommunityService.donate();
     CommunityService.printLog("yellow");
+    print();
+    print(`That is a ${myDaycount()} day, ${myTurncount()} turn HCCS run. Nice work!`, `yellow`);
+    print();
     resources.summarize();
-} else print("You don't actually appear to be done.");
+} else print("You don't actually appear to be done.", "red");

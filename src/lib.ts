@@ -17,7 +17,6 @@ import {
     haveEffect,
     inMultiFight,
     Item,
-    Location,
     Monster,
     mpCost,
     myClass,
@@ -29,8 +28,6 @@ import {
     print,
     pullsRemaining,
     retrieveItem,
-    runChoice,
-    runCombat,
     setProperty,
     shopAmount,
     Skill,
@@ -40,7 +37,6 @@ import {
     toEffect,
     toString as toStringAsh,
     totalTurnsPlayed,
-    toUrl,
     use,
     useFamiliar,
     useSkill,
@@ -255,19 +251,6 @@ export function ensureAsdonEffect(ef: Effect) {
         fuelAsdon(37);
     }
     ensureEffect(ef);
-}
-
-export function mapMacro(location: Location, monster: Monster, macro: Macro): void {
-    macro.setAutoAttack();
-    useSkill($skill`Map the Monsters`);
-    if (!get("mappingMonsters")) throw `I am not actually mapping anything. Weird!`;
-    else {
-        while (get("mappingMonsters")) {
-            visitUrl(toUrl(location));
-            runChoice(1, `heyscriptswhatsupwinkwink=${monster.id}`);
-            runCombat(macro.toString());
-        }
-    }
 }
 
 export function tryUse(quantity: number, it: Item) {

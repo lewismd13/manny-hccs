@@ -1,4 +1,4 @@
-import { availableAmount, print, useSkill } from "kolmafia";
+import { availableAmount, mpCost, myMaxmp, myMp, print, useSkill } from "kolmafia";
 import { $item, $skill } from "libram";
 import { testDone } from "./hccs";
 
@@ -16,9 +16,8 @@ function castBestLibram() {
     useSkill($skill`Summon Party Favor`);
   }
 }
-export function libramCast() {
-  /*while (myMp() / myMaxmp() > 0.2 && nextLibramCost() <= myMp()) {
+export function libramBurn() {
+  while (myMp() / myMaxmp() > 0.2 && mpCost($skill`Summon BRICKOs`) <= myMp()) {
     castBestLibram();
-  } */
-  print("nevermind");
+  }
 }

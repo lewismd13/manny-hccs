@@ -4,11 +4,11 @@ import { $class, $item, $slot, ascend, Lifestyle, Paths, prepareAscension } from
 if (equippedItem($slot`bootskin`) !== $item`frontwinder skin`) {
   throw "Your cowboy boots have the wrong skin";
 }
-
+/*
 if (equippedItem($slot`bootspur`) !== $item`thicksilver spurs`) {
   throw "Your cowboy boots have the wrong spurs";
 }
-
+*/
 print("you're about to ascend! wait, is that good?", "green");
 
 wait(15);

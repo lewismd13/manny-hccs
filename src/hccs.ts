@@ -51,7 +51,6 @@ import {
   setProperty,
   Skill,
   sweetSynthesis,
-  toInt,
   totalFreeRests,
   use,
   useFamiliar,
@@ -60,6 +59,7 @@ import {
 } from "kolmafia";
 import {
   $class,
+  $coinmaster,
   $effect,
   $familiar,
   $item,
@@ -149,6 +149,7 @@ const START_TIME = gametimeToInt();
 
 const justKillTheThing = Macro.trySkill($skill`Curse of Weaksauce`)
   .trySkill($skill`Micrometeorite`)
+  .tryItem($item`Time-Spinner`)
   .trySkill($skill`Sing Along`)
   .trySkill($skill`Stuffed Mortar Shell`)
   .skill($skill`Candyblast`)
@@ -606,7 +607,7 @@ if (!testDone(TEST_MOX)) {
   tryUse(1, $item`a ten-percent bonus`);
 
   // Scavenge for gym equipment
-  if (toInt(get("_daycareGymScavenges")) < 1) {
+  if (get("_daycareGymScavenges") < 1) {
     visitUrl("/place.php?whichplace=town_wrong&action=townwrong_boxingdaycare");
     const pg = runChoice(3);
     if (containsText(pg, "[free]")) runChoice(2);
@@ -615,6 +616,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   // ensure_effect($effect[hulkien]);
+  ensureEffect($effect`Big`);
   ensureEffect($effect`Favored by Lyle`);
   ensureEffect($effect`Starry-Eyed`);
   ensureEffect($effect`Triple-Sized`);
@@ -783,7 +785,7 @@ if (!testDone(TEST_MOX)) {
     setChoice(1225, 1); // Fight LOV Engineer
     setChoice(1226, 2); // Open Heart Surgery
     setChoice(1227, 1); // Fight LOV Equivocator
-    setChoice(1228, 3); // Take chocolate
+    setChoice(1228, 1); // Take enamorang
     Macro.if_('monstername "LOV enforcer"', Macro.attack().repeat())
       .if_('monstername "lov engineer"', Macro.skill($skill`Saucegeyser`).repeat())
       .step(justKillTheThing)
@@ -798,7 +800,10 @@ if (!testDone(TEST_MOX)) {
   // spend 5 turns in DMT, skipping joy and cert, just get stats
   while (get("_machineTunnelsAdv") < 5) {
     useFamiliar($familiar`Machine Elf`);
-    adventureMacroAuto($location`The Deep Machine Tunnels`, kill());
+    adventureMacroAuto(
+      $location`The Deep Machine Tunnels`,
+      Macro.trySkill($skill`Bowl Sideways`).step(justKillTheThing)
+    );
     /* if ((availableAmount($item`abstraction: thought`) === 0) && (availableAmount($item`abstraction: certainty`) === 0) && (get("_machineTunnelsAdv") < 5)) {
       setAutoAttack("melfgetthought");
       adv1($location`the deep machine tunnels`, -1, "");
@@ -883,9 +888,9 @@ if (!testDone(TEST_MOX)) {
     }
   }
 
-  // Professor 5x free sausage fight @ NEP
-  // TODO: Maybe switch this to bishops
-  // TODO: make this work
+  // Professor 10x free sausage fight @ NEP
+
+  // TODO: probably ditch this now that we bowl sideways
 
   if (get("_sausageFights") === 0) {
     useFamiliar($familiar`Pocket Professor`);
@@ -988,7 +993,7 @@ if (!testDone(TEST_MOX)) {
   }
 
   if (!haveEquipped($item`makeshift garbage shirt`)) equip($item`makeshift garbage shirt`);
-
+  // TODO: bowl sideways for +exp% in NEP
   // 14 free NEP fights, using mob hit and xray
   while (
     get("_neverendingPartyFreeTurns") < 10 ||
@@ -1012,11 +1017,13 @@ if (!testDone(TEST_MOX)) {
     // Otherwise fight.
     setChoice(1324, 5);
     ensureMpSausage(100);
-    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 2) {
+    if (get("_neverendingPartyFreeTurns") < 10 && get("_feelPrideUsed") < 3) {
       useDefaultFamiliar();
       adventureMacroAuto(
         $location`The Neverending Party`,
-        Macro.trySkill($skill`Feel Pride`).step(justKillTheThing)
+        Macro.trySkill($skill`Feel Pride`)
+          .trySkill($skill`Bowl Sideways`)
+          .step(justKillTheThing)
       );
     } else if (get("_neverendingPartyFreeTurns") < 10) {
       useDefaultFamiliar();
@@ -1033,7 +1040,6 @@ if (!testDone(TEST_MOX)) {
   if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Undead Elbow Macaroni`);
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
-  // TODO: make moxie first and bridge an inner elf from levelling to moxie
   if (myClass() === $class`Pastamancer`) useSkill(1, $skill`Bind Penne Dreadful`);
   else ensurePotionEffect($effect`Expert Oiliness`, $item`oil of expertise`);
 
@@ -1150,7 +1156,9 @@ if (!testDone(TEST_MYS)) {
   // ensure_effect($effect[Tomato Power]);
   ensureEffect($effect`Mystically Oiled`);
   ensureNpcEffect($effect`Glittering Eyelashes`, 5, $item`glittery mascara`);
+
   maximize("mysticality", false);
+
   if (myBuffedstat($stat`mysticality`) - myBasestat($stat`mysticality`) < 1770) {
     throw "Not enough mysticality to cap.";
   }
@@ -1688,11 +1696,14 @@ if (!testDone(TEST_SPELL)) {
   // Beach Comb
   ensureEffect($effect`We're All Made of Starfish`);
 
-  // Tea party
-  ensureSewerItem(1, $item`mariachi hat`);
-  // ensure_effect($effect[Full Bottle in front of Me]);
-
   useSkill(1, $skill`Spirit of Cayenne`);
+
+  if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
+    useSkill(1, $skill`Summon Alice's Army Cards`);
+    buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
+  }
+
+  ensureEffect($effect`Pisces in the Skyces`);
 
   // Get flimsy hardwood scraps.
   visitUrl("shop.php?whichshop=lathe");
@@ -1715,6 +1726,7 @@ if (!testDone(TEST_SPELL)) {
     print("Something went wrong with getting inner elf");
   }
 
+  useDefaultFamiliar();
   // Meteor showered
   if (haveEffect($effect`Meteor Showered`) === 0) {
     equip($item`Fourth of May Cosplay Saber`);
@@ -1805,14 +1817,17 @@ if (!testDone(TEST_ITEM)) {
   }
 
   useDefaultFamiliar();
-
+  // Get bat-adjecent form and bowling straight up effect with a freerun
   if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
     if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
     equip($slot`acc3`, $item`Lil' Doctor™ bag`);
     equip($item`vampyric cloake`);
     adventureMacroAuto(
       $location`The Neverending Party`,
-      Macro.skill($skill`Become a Bat`).skill($skill`Reflex Hammer`)
+      Macro.skill($skill`Become a Bat`)
+        // eslint-disable-next-line libram/verify-constants
+        .trySkill($skill`Bowl Straight Up`)
+        .skill($skill`Reflex Hammer`)
     );
     setAutoAttack(0);
   }
@@ -1896,7 +1911,7 @@ if (get("_daycareRecruits") === 0 && hippyStoneBroken() === true) {
 }
 
 cliExecute("uberpvpoptimizer");
-cliExecute("pvp fame freshest");
+cliExecute("pvp fame nice list");
 
 doTest(DONATE);
 

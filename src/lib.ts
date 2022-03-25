@@ -438,7 +438,11 @@ export function equalizeStat(targetStat: Stat): void {
 }
 
 export function ensureInnerElf(): void {
-    if (haveEffect($effect`Inner Elf`) === 0 && myLevel() >= 13) {
+    if (
+        haveEffect($effect`Inner Elf`) === 0 &&
+        myLevel() >= 13 &&
+        get("_kgbTranquilizerDartUses") + get("_snokebombUsed") < 6
+    ) {
         const savedFam = myFamiliar();
         Clan.join("Beldungeon");
         try {

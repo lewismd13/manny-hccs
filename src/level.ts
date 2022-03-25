@@ -8,6 +8,7 @@ import {
     equip,
     handlingChoice,
     haveEffect,
+    inMultiFight,
     itemAmount,
     mpCost,
     myBasestat,
@@ -57,7 +58,6 @@ import {
     ensurePotionEffect,
     libramBurn,
     oysterAvailable,
-    sausageFightGuaranteed,
     setChoice,
     tryEnsureEffect,
     tryEquip,
@@ -145,7 +145,7 @@ export function level(): void {
 
         ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
     }
-
+    // TODO: make this more reentrant
     while (itemAmount($item`BRICKO eye brick`) < 1 || itemAmount($item`BRICKO brick`) < 8) {
         ensureMpTonic(mpCost($skill`Summon BRICKOs`));
         useSkill($skill`Summon BRICKOs`);
@@ -404,12 +404,34 @@ export function level(): void {
             Witchess.fightPiece($monster`Witchess Witch`);
             setAutoAttack(0);
         }
-        while (get("_witchessFights") === 3) {
+        while (get("_witchessFights") === 3 && !globalOptions.halloween) {
             useDefaultFamiliar();
             Macro.kill().setAutoAttack();
             Witchess.fightPiece($monster`Witchess Bishop`);
             setAutoAttack(0);
         }
+    }
+
+    // Professor 10x free witchess knight if on halloween
+    if (get("_witchessFights") === 3 && globalOptions.halloween) {
+        useFamiliar($familiar`Pocket Professor`);
+        equip($item`LOV Epaulettes`);
+        tryEquip($item`Pocket Professor memory chip`);
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        equip($item`Kramco Sausage-o-Matic™`);
+        equip($slot`acc1`, $item`hewn moon-rune spoon`);
+        equip($slot`acc2`, $item`Brutal brogues`);
+        equip($slot`acc3`, $item`Beach Comb`);
+        equip($item`Daylight Shavings Helmet`);
+        // ensureOutfit("CS Professor");
+
+        Macro.if_("!monstername witchess knight", Macro.abort())
+            .trySkill($skill`lecture on relativity`)
+            .kill()
+            .setAutoAttack();
+        Witchess.fightPiece($monster`Witchess Knight`);
+        while (inMultiFight()) runCombat();
+        setAutoAttack(0);
     }
 
     while (get("_machineTunnelsAdv") < 5) {
@@ -430,28 +452,6 @@ export function level(): void {
                 get("_machineTunnelsAdv") === 0 && get("_cosmicBowlingSkillsUsed") === 0,
                 Macro.trySkill($skill`Bowl Sideways`)
             ).kill()
-        );
-    }
-
-    // Professor 10x free sausage fight @ noob cave
-    if (sausageFightGuaranteed() && globalOptions.levelAggressively) {
-        useFamiliar($familiar`Pocket Professor`);
-        equip($item`LOV Epaulettes`);
-        tryEquip($item`Pocket Professor memory chip`);
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        equip($item`Kramco Sausage-o-Matic™`);
-        equip($slot`acc1`, $item`hewn moon-rune spoon`);
-        equip($slot`acc2`, $item`Brutal brogues`);
-        equip($slot`acc3`, $item`Beach Comb`);
-        equip($item`Daylight Shavings Helmet`);
-        // ensureOutfit("CS Professor");
-
-        adventureMacroAuto(
-            $location`Noob Cave`,
-            Macro.if_("!monstername sausage goblin", Macro.abort())
-                .trySkill($skill`lecture on relativity`)
-                .trySkill($skill`Feel Pride`)
-                .kill()
         );
     }
 

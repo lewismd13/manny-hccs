@@ -69,8 +69,6 @@ import uniform from "./outfits";
 
 // TODO: Use libram freekill and freerun handling
 
-// TODO: just use my own synth handling. hardcode that shit.
-
 export function level(): void {
     if (!have($effect`That's Just Cloud-Talk, Man`)) {
         visitUrl("place.php?whichplace=campaway&action=campaway_sky");
@@ -145,8 +143,12 @@ export function level(): void {
 
         ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
     }
-    // TODO: make this more reentrant
-    while (itemAmount($item`BRICKO eye brick`) < 1 || itemAmount($item`BRICKO brick`) < 8) {
+
+    // Summon brickos for the extra fights
+    while (
+        (itemAmount($item`BRICKO eye brick`) < 1 || itemAmount($item`BRICKO brick`) < 8) &&
+        get("_brickoFights") < 2
+    ) {
         ensureMpTonic(mpCost($skill`Summon BRICKOs`));
         useSkill($skill`Summon BRICKOs`);
     }
@@ -243,6 +245,7 @@ export function level(): void {
     }
     tryEnsureEffect($effect`Confidence of the Votive`);
     if (!get("_streamsCrossed")) cliExecute("crossstreams");
+    ensureEffect($effect`Broad-Spectrum Vaccine`);
 
     // Plan is for these buffs to fall all the way through to item -> hot res -> fam weight.
     ensureEffect($effect`Fidoxene`);
@@ -506,7 +509,7 @@ export function level(): void {
             Macro.externalIf(
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
-            )
+            ) // TODO: figure out how to save a feel price here without breaking everything
                 .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
                 .externalIf(
                     get("_neverendingPartyFreeTurns") === 10,

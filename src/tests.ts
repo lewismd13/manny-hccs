@@ -647,7 +647,7 @@ export function itemPrep() {
     ensureMpSausage(500);
 
     useFamiliar($familiar`Trick-or-Treating Tot`);
-    if (haveEffect($effect`Bat-Adjacent Form`) === 0) {
+    while (haveEffect($effect`Bat-Adjacent Form`) === 0) {
         propertyManager.setChoices({ [1324]: 5 });
         if (have($effect`Feeling Lost`)) throw "You have teleportitis, this will go badly for you";
         if (get("_reflexHammerUsed") >= 3) throw "Out of reflex hammers!";
@@ -685,7 +685,11 @@ export function itemPrep() {
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run
-    if (get("csServicesPerformed").split(",").length === 10) ensureEffect($effect`Feeling Lost`);
+    if (
+        get("csServicesPerformed").split(",").length === 10 &&
+        CommunityService.BoozeDrop.prediction < 2
+    )
+        ensureEffect($effect`Feeling Lost`);
 
     itemOutfit();
     if (globalOptions.debug) {

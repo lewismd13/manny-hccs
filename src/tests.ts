@@ -361,6 +361,7 @@ export function hotResPrep() {
 
     ensureEffect($effect`Feeling Peaceful`);
 
+    // TODO: Maybe ditch this
     if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
         useFamiliar($familiar`Exotic Parrot`);
         resources.clipArt($item`box of Familiar Jacks`);

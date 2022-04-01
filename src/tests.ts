@@ -687,7 +687,7 @@ export function itemPrep() {
     // only get Feeling Lost if this is the last test of the run
     if (
         get("csServicesPerformed").split(",").length === 10 &&
-        CommunityService.BoozeDrop.prediction < 2
+        CommunityService.BoozeDrop.prediction < 5
     )
         ensureEffect($effect`Feeling Lost`);
 

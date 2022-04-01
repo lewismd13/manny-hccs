@@ -10,6 +10,7 @@ import {
     getProperty,
     handlingChoice,
     haveEffect,
+    inHardcore,
     logprint,
     maximize,
     mpCost,
@@ -73,6 +74,7 @@ import {
     ensureSong,
     equalizeStat,
     incrementProperty,
+    pullIfPossible,
     setChoice,
     tryEnsureEffect,
     tryUse,
@@ -634,6 +636,9 @@ export function spellPrep() {
     if (availableAmount($item`flimsy hardwood scraps`) > 0) {
         retrieveItem(1, $item`weeping willow wand`);
     }
+
+    if (!inHardcore() && myBasestat($stat`mysticality`) >= 250)
+        pullIfPossible(1, $item`Staff of the Roaring Hearth`, 0);
 
     useFamiliar($familiar`Left-Hand Man`);
 

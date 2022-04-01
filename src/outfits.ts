@@ -381,7 +381,7 @@ export function spellOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $items`sugar chapeau, Hollandaise helmet`,
-            weapon: $item`weeping willow wand`,
+            weapon: $items`Staff of the Roaring Hearth, weeping willow wand`,
             offhand: [
                 $item`Abracandalabra`,
                 ...(inHardcore()

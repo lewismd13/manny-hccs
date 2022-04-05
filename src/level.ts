@@ -299,7 +299,7 @@ export function level(): void {
         libramBurn();
     }
 
-    if (oysterAvailable()) {
+    while (oysterAvailable()) {
         useDefaultFamiliar();
         equip($slot`acc2`, $item`Lil' Doctor™ bag`);
         create($item`BRICKO oyster`);

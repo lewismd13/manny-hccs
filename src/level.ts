@@ -58,6 +58,7 @@ import {
     ensurePotionEffect,
     libramBurn,
     oysterAvailable,
+    sausageFightGuaranteed,
     setChoice,
     tryEnsureEffect,
     tryEquip,
@@ -233,6 +234,10 @@ export function level(): void {
         runChoice(4);
     }
 
+    // Make umbrella +ML
+    visitUrl("inventory.php?action=useumbrella&pwd");
+    runChoice(1);
+
     equip($slot`acc1`, $item`Powerful Glove`);
     ensureEffect($effect`Starry-Eyed`);
     ensureEffect($effect`Favored by Lyle`);
@@ -371,7 +376,7 @@ export function level(): void {
 
         if (handlingChoice()) throw "Did not get all the way through LOV.";
     }
-
+    // TODO: switch to stats, do all 3 fights
     if (get("_godLobsterFights") < 2) {
         equip($item`LOV Epaulettes`);
         useFamiliar($familiar`God Lobster`);
@@ -395,6 +400,7 @@ export function level(): void {
         }
         while (get("_witchessFights") === 1) {
             useDefaultFamiliar();
+            equip($item`familiar scrapbook`);
             Macro.attack().repeat().setAutoAttack();
             ensureEffect($effect`Carol of the Bulls`);
             Witchess.fightPiece($monster`Witchess King`);
@@ -409,6 +415,8 @@ export function level(): void {
         }
         while (get("_witchessFights") === 3 && !globalOptions.halloween) {
             useDefaultFamiliar();
+            // eslint-disable-next-line libram/verify-constants
+            equip($item`unbreakable umbrella`);
             Macro.kill().setAutoAttack();
             Witchess.fightPiece($monster`Witchess Bishop`);
             setAutoAttack(0);
@@ -503,7 +511,9 @@ export function level(): void {
 
         // NEP noncombat. Fight.
         propertyManager.setChoices({ [1324]: 5 });
-
+        if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
+        // eslint-disable-next-line libram/verify-constants
+        else equip($item`unbreakable umbrella`);
         adventureMacroAuto(
             $location`The Neverending Party`,
             Macro.externalIf(
@@ -523,6 +533,7 @@ export function level(): void {
     // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
     if (get("_witchessFights") === 4) {
         useDefaultFamiliar();
+        equip($item`familiar scrapbook`);
         Macro.attack().repeat().setAutoAttack();
         ensureEffect($effect`Carol of the Bulls`);
         ensureEffect($effect`Song of the North`);

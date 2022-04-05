@@ -165,7 +165,8 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
         shirt: $item`fresh coat of paint`,
         pants: $items`pantogram pants, Cargo Cultist Shorts, old sweatpants`,
         weapon: $item`Fourth of May Cosplay Saber`,
-        offhand: $item`familiar scrapbook`,
+        // eslint-disable-next-line libram/verify-constants
+        offhand: $items`unbreakable umbrella, familiar scrapbook`,
         acc1: $items`meteorite necklace, your cowboy boots`,
         acc2: $items`Powerful Glove`,
         acc3: $items`battle broom, Retrospecs`,

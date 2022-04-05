@@ -254,6 +254,7 @@ export function mysPrep() {
 }
 
 export function nonCombatPrep() {
+    // TODO: Move to leveling, switch to stats
     if (get("_godLobsterFights") < 3) {
         if (myHp() < 0.8 * myMaxhp()) useSkill(1, $skill`Cannelloni Cocoon`);
         useFamiliar($familiar`God Lobster`);
@@ -279,6 +280,10 @@ export function nonCombatPrep() {
     ensureEffect($effect`Invisible Avatar`);
     ensureEffect($effect`Silent Running`);
     ensureEffect($effect`Feeling Lonely`);
+
+    // set umbrella to -combat
+    visitUrl("inventory.php?action=useumbrella&pwd");
+    runChoice(6);
 
     useFamiliar($familiar`Disgeist`);
 

@@ -5,6 +5,7 @@ import {
     cliExecute,
     cliExecuteOutput,
     containsText,
+    create,
     eat,
     equip,
     getProperty,
@@ -43,6 +44,7 @@ import {
     $effect,
     $familiar,
     $item,
+    $items,
     $location,
     $monster,
     $skill,
@@ -79,7 +81,7 @@ import {
     useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
-import {
+import uniform, {
     famweightOutfit,
     hotresOutfit,
     hpOutfit,
@@ -165,6 +167,43 @@ export function coilPrep() {
     if (!get("_borrowedTimeUsed")) {
         if (!have($item`borrowed time`)) resources.clipArt($item`borrowed time`);
         use($item`borrowed time`);
+    }
+
+    function firstFights() {
+        // eslint-disable-next-line libram/verify-constants
+        uniform(
+            ...$items`protonic accelerator pack, Daylight Shavings Helmet, Kramco Sausage-o-Matic™`
+        );
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`Noob Cave`,
+            Macro.skill($skill`Micrometeorite`)
+                .item($item`Time-Spinner`)
+                .attack()
+                .repeat()
+        );
+
+        if (have($item`magical sausage casing`)) {
+            create(1, $item`magical sausage`);
+        }
+        if (have($item`magical sausage`)) {
+            eat(1, $item`magical sausage`);
+        }
+
+        const ghostLocation = get("ghostLocation");
+        if (ghostLocation) {
+            uniform(...$items`latte lovers member's mug, protonic accelerator pack`);
+            useDefaultFamiliar();
+            adventureMacro(
+                ghostLocation,
+                Macro.delevel()
+                    .easyFight()
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Trap Ghost`)
+            );
+        }
     }
 
     visitUrl("council.php");
@@ -685,11 +724,8 @@ export function itemPrep() {
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run
-    if (
-        get("csServicesPerformed").split(",").length === 10 &&
-        CommunityService.BoozeDrop.prediction < 5
-    )
-        ensureEffect($effect`Feeling Lost`);
+    // TODO: figure out a final check here to make it not get the buff unless it will get the test to 1 turn
+    if (get("csServicesPerformed").split(",").length === 10) ensureEffect($effect`Feeling Lost`);
 
     itemOutfit();
     if (globalOptions.debug) {

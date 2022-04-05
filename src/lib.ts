@@ -499,3 +499,4 @@ export function oysterAvailable(): boolean {
 export function incrementProperty(name: NumericProperty): void {
     set(name, get(name) + 1);
 }
+

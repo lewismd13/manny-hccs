@@ -169,8 +169,14 @@ export function coilPrep() {
         use($item`borrowed time`);
     }
 
+    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
+        resources.clipArt($item`box of Familiar Jacks`);
+        useFamiliar($familiar`Melodramedary`);
+        use($item`box of Familiar Jacks`);
+    }
+
+    // fight a ghost and kramco before coiling
     function firstFights() {
-        // eslint-disable-next-line libram/verify-constants
         uniform(
             ...$items`protonic accelerator pack, Daylight Shavings Helmet, Kramco Sausage-o-Matic™`
         );
@@ -196,8 +202,9 @@ export function coilPrep() {
             useDefaultFamiliar();
             adventureMacro(
                 ghostLocation,
-                Macro.delevel()
-                    .easyFight()
+                Macro.skill($skill`Micrometeorite`)
+                    .item($item`Time-Spinner`)
+                    .skill($skill`Curse of Weaksauce`)
                     .trySkill($skill`Shoot Ghost`)
                     .trySkill($skill`Shoot Ghost`)
                     .trySkill($skill`Shoot Ghost`)
@@ -205,6 +212,8 @@ export function coilPrep() {
             );
         }
     }
+
+    firstFights();
 
     visitUrl("council.php");
     wireOutfit();
@@ -410,7 +419,6 @@ export function hotResPrep() {
     useFamiliar($familiar`Exotic Parrot`);
 
     // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
-    // FIXME: Outfit
     hotresOutfit();
     if (globalOptions.debug) {
         logprint(cliExecuteOutput("modtrace hot res"));
@@ -428,6 +436,7 @@ export function famWtPrep() {
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
+    tryEnsureEffect($effect`Shortly Stacked`);
 
     // NC reward
     ensureEffect($effect`Robot Friends`);

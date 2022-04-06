@@ -107,12 +107,6 @@ export function level(): void {
 
     ensureEffect($effect`You Learned Something Maybe!`);
 
-    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
-        resources.clipArt($item`box of Familiar Jacks`);
-        useFamiliar($familiar`Melodramedary`);
-        use($item`box of Familiar Jacks`);
-    }
-
     uniform();
 
     if (availableAmount($item`li'l ninja costume`) === 0) {
@@ -151,11 +145,6 @@ export function level(): void {
     ) {
         ensureMpTonic(mpCost($skill`Summon BRICKOs`));
         useSkill($skill`Summon BRICKOs`);
-    }
-
-    while (get("libramSummons") < 6) {
-        ensureMpTonic(mpCost($skill`Summon Candy Heart`));
-        useSkill($skill`Summon Candy Heart`);
     }
 
     if (get("_brickoFights") === 0 && oysterAvailable() && !have($item`bag of many confections`)) {

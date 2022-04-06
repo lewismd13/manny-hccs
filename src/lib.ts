@@ -57,6 +57,7 @@ import {
     adventureMacro,
     Clan,
     CommunityService,
+    ensureEffect,
     get,
     getModifier,
     have,
@@ -140,16 +141,6 @@ export function ensurePotionEffect(ef: Effect, potion: Item) {
         if (availableAmount(potion) === 0) {
             create(1, potion);
         }
-        if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
-            throw 'Failed to get effect " + ef.name + ".';
-        }
-    } else {
-        print(`Already have effect ${ef.name}.`);
-    }
-}
-
-export function ensureEffect(ef: Effect, turns = 1) {
-    if (haveEffect(ef) < turns) {
         if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
             throw 'Failed to get effect " + ef.name + ".';
         }

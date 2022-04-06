@@ -462,7 +462,7 @@ export function ensureInnerElf(): void {
 }
 
 function castBestLibram() {
-    if (availableAmount($item`BRICKO eye brick`) + get("_brickoFights") < 2 && myLevel() < 14) {
+    if (availableAmount($item`BRICKO eye brick`) + get("_brickoFights") < 4 && myLevel() < 14) {
         useSkill($skill`Summon BRICKOs`);
     } else if (
         availableAmount($item`green candy heart`) < 1 &&

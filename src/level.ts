@@ -302,6 +302,22 @@ export function level(): void {
         setAutoAttack(0);
     }
 
+    // fight ghost
+    const ghostLocation = get("ghostLocation");
+    if (ghostLocation) {
+        equip($slot`off-hand`, $item`latte lovers member's mug`);
+        equip($item`protonic accelerator pack`);
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            ghostLocation,
+            Macro.item($item`Time-Spinner`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Trap Ghost`)
+        );
+    }
+
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 

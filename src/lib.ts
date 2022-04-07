@@ -382,18 +382,18 @@ export function useDefaultFamiliar(): void {
         useFamiliar($familiar`Melodramedary`);
         equip($item`dromedary drinking helmet`);
     } else if (
+        availableAmount($item`short stack of pancakes`) === 0 &&
+        haveEffect($effect`Shortly Stacked`) === 0 &&
+        !CommunityService.FamiliarWeight.isDone()
+    ) {
+        useFamiliar($familiar`Shorter-Order Cook`);
+    } else if (
         availableAmount($item`rope`) < 1 &&
         availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) <
             1 &&
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Garbage Fire`);
-    } else if (
-        availableAmount($item`short stack of pancakes`) === 0 &&
-        haveEffect($effect`Shortly Stacked`) === 0 &&
-        !CommunityService.FamiliarWeight.isDone()
-    ) {
-        useFamiliar($familiar`Shorter-Order Cook`);
     } else {
         useFamiliar($familiar`Machine Elf`);
     }

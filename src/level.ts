@@ -480,6 +480,9 @@ export function level(): void {
         );
     }
 
+    // TODO: this needs to move down and become an if statement with umbrella
+    equip($item`Kramco Sausage-o-Matic™`);
+
     // 14 free NEP fights
     while (
         get("_neverendingPartyFreeTurns") < 10 ||

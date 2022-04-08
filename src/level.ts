@@ -487,9 +487,6 @@ export function level(): void {
         );
     }
 
-    // TODO: this needs to move down and become an if statement with umbrella
-    equip($item`Kramco Sausage-o-Matic™`);
-
     // 14 free NEP fights
     while (
         get("_neverendingPartyFreeTurns") < 10 ||
@@ -526,7 +523,7 @@ export function level(): void {
             Macro.externalIf(
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
-            ) // TODO: figure out how to save a feel price here without breaking everything
+            ) // TODO: figure out how to save a feel pride here without breaking everything
                 .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
                 .externalIf(
                     get("_neverendingPartyFreeTurns") === 10,

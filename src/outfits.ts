@@ -165,7 +165,6 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
         shirt: $item`fresh coat of paint`,
         pants: $items`pantogram pants, Cargo Cultist Shorts, old sweatpants`,
         weapon: $item`Fourth of May Cosplay Saber`,
-        // eslint-disable-next-line libram/verify-constants
         offhand: $items`unbreakable umbrella, familiar scrapbook`,
         acc1: $items`meteorite necklace, your cowboy boots`,
         acc2: $items`Powerful Glove`,
@@ -287,7 +286,6 @@ export function itemOutfit(): void {
         {
             hat: $item`wad of used tape`,
             weapon: $items`extra-large utility candle`,
-            // eslint-disable-next-line libram/verify-constants
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
@@ -322,7 +320,6 @@ export function noncombatOutfit(): void {
             hat: $item`very pointy crown`,
             back: $item`protonic accelerator pack`,
             weapon: $item`Fourth of May Cosplay Saber`,
-            // eslint-disable-next-line libram/verify-constants
             offhand: $items`unbreakable umbrella`,
             acc1: $item`Kremlin's Greatest Briefcase`,
             acc2: $items`hewn moon-rune spoon`,

@@ -5,6 +5,7 @@ import {
     cliExecute,
     cliExecuteOutput,
     containsText,
+    create,
     eat,
     equip,
     getProperty,
@@ -43,6 +44,7 @@ import {
     $effect,
     $familiar,
     $item,
+    $items,
     $location,
     $monster,
     $skill,
@@ -79,7 +81,7 @@ import {
     useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
-import {
+import uniform, {
     famweightOutfit,
     hotresOutfit,
     hpOutfit,
@@ -166,6 +168,52 @@ export function coilPrep() {
         if (!have($item`borrowed time`)) resources.clipArt($item`borrowed time`);
         use($item`borrowed time`);
     }
+
+    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
+        resources.clipArt($item`box of Familiar Jacks`);
+        useFamiliar($familiar`Melodramedary`);
+        use($item`box of Familiar Jacks`);
+    }
+
+    // fight a ghost and kramco before coiling
+    function firstFights() {
+        uniform(
+            ...$items`protonic accelerator pack, Daylight Shavings Helmet, Kramco Sausage-o-Matic™`
+        );
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`Noob Cave`,
+            Macro.skill($skill`Micrometeorite`)
+                .item($item`Time-Spinner`)
+                .attack()
+                .repeat()
+        );
+
+        if (have($item`magical sausage casing`)) {
+            create(1, $item`magical sausage`);
+        }
+        if (have($item`magical sausage`)) {
+            eat(1, $item`magical sausage`);
+        }
+
+        const ghostLocation = get("ghostLocation");
+        if (ghostLocation) {
+            uniform(...$items`latte lovers member's mug, protonic accelerator pack`);
+            useDefaultFamiliar();
+            adventureMacro(
+                ghostLocation,
+                Macro.skill($skill`Micrometeorite`)
+                    .item($item`Time-Spinner`)
+                    .skill($skill`Curse of Weaksauce`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Trap Ghost`)
+            );
+        }
+    }
+
+    firstFights();
 
     visitUrl("council.php");
     wireOutfit();
@@ -376,7 +424,6 @@ export function hotResPrep() {
     useFamiliar($familiar`Exotic Parrot`);
 
     // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
-    // FIXME: Outfit
     hotresOutfit();
     if (globalOptions.debug) {
         logprint(cliExecuteOutput("modtrace hot res"));
@@ -394,6 +441,7 @@ export function famWtPrep() {
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
+    tryEnsureEffect($effect`Shortly Stacked`);
 
     // NC reward
     ensureEffect($effect`Robot Friends`);
@@ -690,11 +738,8 @@ export function itemPrep() {
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run
-    if (
-        get("csServicesPerformed").split(",").length === 10 &&
-        CommunityService.BoozeDrop.prediction < 5
-    )
-        ensureEffect($effect`Feeling Lost`);
+    // TODO: figure out a final check here to make it not get the buff unless it will get the test to 1 turn
+    if (get("csServicesPerformed").split(",").length === 10) ensureEffect($effect`Feeling Lost`);
 
     itemOutfit();
     if (globalOptions.debug) {

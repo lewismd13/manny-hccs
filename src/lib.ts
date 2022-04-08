@@ -57,6 +57,7 @@ import {
     adventureMacro,
     Clan,
     CommunityService,
+    ensureEffect,
     get,
     getModifier,
     have,
@@ -140,16 +141,6 @@ export function ensurePotionEffect(ef: Effect, potion: Item) {
         if (availableAmount(potion) === 0) {
             create(1, potion);
         }
-        if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
-            throw 'Failed to get effect " + ef.name + ".';
-        }
-    } else {
-        print(`Already have effect ${ef.name}.`);
-    }
-}
-
-export function ensureEffect(ef: Effect, turns = 1) {
-    if (haveEffect(ef) < turns) {
         if (!cliExecute(ef.default) || haveEffect(ef) === 0) {
             throw 'Failed to get effect " + ef.name + ".';
         }
@@ -391,18 +382,18 @@ export function useDefaultFamiliar(): void {
         useFamiliar($familiar`Melodramedary`);
         equip($item`dromedary drinking helmet`);
     } else if (
+        availableAmount($item`short stack of pancakes`) === 0 &&
+        haveEffect($effect`Shortly Stacked`) === 0 &&
+        !CommunityService.FamiliarWeight.isDone()
+    ) {
+        useFamiliar($familiar`Shorter-Order Cook`);
+    } else if (
         availableAmount($item`rope`) < 1 &&
         availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) <
             1 &&
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Garbage Fire`);
-    } else if (
-        availableAmount($item`short stack of pancakes`) === 0 &&
-        haveEffect($effect`Shortly Stacked`) === 0 &&
-        !CommunityService.FamiliarWeight.isDone()
-    ) {
-        useFamiliar($familiar`Shorter-Order Cook`);
     } else {
         useFamiliar($familiar`Machine Elf`);
     }

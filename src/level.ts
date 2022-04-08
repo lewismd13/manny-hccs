@@ -380,19 +380,20 @@ export function level(): void {
 
         if (handlingChoice()) throw "Did not get all the way through LOV.";
     }
-    // TODO: switch to stats, do all 3 fights
-    if (get("_godLobsterFights") < 2) {
+
+    // TODO: get rid of withmacro, use CFF
+    if (get("_godLobsterFights") < 3) {
         equip($item`LOV Epaulettes`);
         useFamiliar($familiar`God Lobster`);
-        setChoice(1310, 1);
-        while (get("_godLobsterFights") < 2) {
-            tryEquip($item`God Lobster's Scepter`);
+        setChoice(1310, 3);
+        while (get("_godLobsterFights") < 3) {
             visitUrl("main.php?fightgodlobster=1");
             withMacro(Macro.kill(), () => runCombat());
             visitUrl("choice.php");
             if (handlingChoice()) runChoice(1);
         }
     }
+
     //witchess fights
     if (get("_witchessFights") < 5) {
         equip($item`Fourth of May Cosplay Saber`);

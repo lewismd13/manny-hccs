@@ -28,7 +28,6 @@ import {
     print,
     retrieveItem,
     runChoice,
-    runCombat,
     setAutoAttack,
     setProperty,
     sweetSynthesis,
@@ -62,7 +61,7 @@ import {
     SongBoom,
 } from "libram";
 import { propertyManager, resources } from ".";
-import Macro, { withMacro } from "./combat";
+import Macro from "./combat";
 import {
     ensureCreateItem,
     ensureInnerElf,
@@ -302,18 +301,6 @@ export function mysPrep() {
 }
 
 export function nonCombatPrep() {
-    // TODO: Move to leveling, switch to stats
-    if (get("_godLobsterFights") < 3) {
-        if (myHp() < 0.8 * myMaxhp()) useSkill(1, $skill`Cannelloni Cocoon`);
-        useFamiliar($familiar`God Lobster`);
-        // Get -combat buff.
-        propertyManager.setChoices({ [1310]: 2 });
-        equip($item`God Lobster's Ring`);
-        visitUrl("main.php?fightgodlobster=1");
-        withMacro(Macro.kill(), () => runCombat());
-        if (handlingChoice()) runChoice(2);
-    }
-
     if (getProperty("_horsery") !== "dark horse") cliExecute("horsery dark");
 
     if (myHp() < 30) useSkill(1, $skill`Cannelloni Cocoon`);

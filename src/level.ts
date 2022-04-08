@@ -416,7 +416,7 @@ export function level(): void {
         while (get("_witchessFights") === 3 && !globalOptions.halloween) {
             useDefaultFamiliar();
             // eslint-disable-next-line libram/verify-constants
-            equip($item`unbreakable umbrella`);
+            equip($item`unbreakable umbrella (broken)`);
             Macro.kill().setAutoAttack();
             Witchess.fightPiece($monster`Witchess Bishop`);
             setAutoAttack(0);
@@ -513,7 +513,7 @@ export function level(): void {
         propertyManager.setChoices({ [1324]: 5 });
         if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
         // eslint-disable-next-line libram/verify-constants
-        else equip($item`unbreakable umbrella`);
+        else equip($item`unbreakable umbrella (broken)`);
         adventureMacroAuto(
             $location`The Neverending Party`,
             Macro.externalIf(

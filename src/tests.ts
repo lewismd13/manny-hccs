@@ -302,6 +302,7 @@ export function mysPrep() {
 }
 
 export function nonCombatPrep() {
+    // TODO: Move to leveling, switch to stats
     if (get("_godLobsterFights") < 3) {
         if (myHp() < 0.8 * myMaxhp()) useSkill(1, $skill`Cannelloni Cocoon`);
         useFamiliar($familiar`God Lobster`);
@@ -338,6 +339,8 @@ export function nonCombatPrep() {
 
     // Pastamancer d1 is -combat.
     if (myClass() === $class`Pastamancer`) ensureEffect($effect`Blessing of the Bird`);
+
+    cliExecute("umbrella nc");
 
     noncombatOutfit();
 
@@ -725,10 +728,7 @@ export function itemPrep() {
         cliExecute("barrelprayer buff");
     }
 
-    if (!have($item`oversized sparkler`) && !get("_fireworksShopEquipmentBought")) {
-        visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
-        buy($item`oversized sparkler`);
-    }
+    cliExecute("umbrella item");
 
     ensureEffect($effect`Steely-Eyed Squint`);
 

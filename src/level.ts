@@ -206,7 +206,7 @@ export function level(): void {
         throw "Insufficient +stat%.";
     }
 
-    cliExecute("briefcase enchantment spell hot -combat");
+    cliExecute("briefcase enchantment spell hot");
 
     // Depends on Ez's Bastille script.
     cliExecute(`bastille ${myPrimestat() === $stat`Muscle` ? "muscle" : "myst"} brutalist`);
@@ -224,8 +224,7 @@ export function level(): void {
     }
 
     // Make umbrella +ML
-    visitUrl("inventory.php?action=useumbrella&pwd");
-    runChoice(1);
+    cliExecute("umbrella ml");
 
     equip($slot`acc1`, $item`Powerful Glove`);
     ensureEffect($effect`Starry-Eyed`);
@@ -421,7 +420,7 @@ export function level(): void {
         while (get("_witchessFights") === 3 && !globalOptions.halloween) {
             useDefaultFamiliar();
             // eslint-disable-next-line libram/verify-constants
-            equip($item`unbreakable umbrella (broken)`);
+            equip($item`unbreakable umbrella`);
             Macro.kill().setAutoAttack();
             Witchess.fightPiece($monster`Witchess Bishop`);
             setAutoAttack(0);
@@ -518,7 +517,7 @@ export function level(): void {
         propertyManager.setChoices({ [1324]: 5 });
         if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
         // eslint-disable-next-line libram/verify-constants
-        else equip($item`unbreakable umbrella (broken)`);
+        else equip($item`unbreakable umbrella`);
         adventureMacroAuto(
             $location`The Neverending Party`,
             Macro.externalIf(

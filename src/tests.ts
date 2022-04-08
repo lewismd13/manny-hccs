@@ -329,10 +329,6 @@ export function nonCombatPrep() {
     ensureEffect($effect`Silent Running`);
     ensureEffect($effect`Feeling Lonely`);
 
-    // set umbrella to -combat
-    visitUrl("inventory.php?action=useumbrella&pwd");
-    runChoice(6);
-
     useFamiliar($familiar`Disgeist`);
 
     if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Stealthily`, 1);
@@ -343,6 +339,8 @@ export function nonCombatPrep() {
 
     // Pastamancer d1 is -combat.
     if (myClass() === $class`Pastamancer`) ensureEffect($effect`Blessing of the Bird`);
+
+    cliExecute("umbrella nc");
 
     noncombatOutfit();
 
@@ -730,10 +728,7 @@ export function itemPrep() {
         cliExecute("barrelprayer buff");
     }
 
-    if (!have($item`oversized sparkler`) && !get("_fireworksShopEquipmentBought")) {
-        visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
-        buy($item`oversized sparkler`);
-    }
+    cliExecute("umbrella item");
 
     ensureEffect($effect`Steely-Eyed Squint`);
 

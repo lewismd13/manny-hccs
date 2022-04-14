@@ -399,13 +399,6 @@ export function hotResPrep() {
 
     ensureEffect($effect`Feeling Peaceful`);
 
-    // TODO: Maybe ditch this
-    if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
-        useFamiliar($familiar`Exotic Parrot`);
-        resources.clipArt($item`box of Familiar Jacks`);
-        use($item`box of Familiar Jacks`);
-    }
-
     useFamiliar($familiar`Exotic Parrot`);
 
     // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
@@ -430,6 +423,9 @@ export function famWtPrep() {
 
     // NC reward
     ensureEffect($effect`Robot Friends`);
+
+    useFamiliar($familiar`Baby Bugged Bugbear`);
+    visitUrl("arena.php");
 
     // use freeruns at gingerbread city to get gingerbread spice latte
     if (
@@ -497,8 +493,6 @@ export function famWtPrep() {
 
     tryEnsureEffect($effect`Heart of Green`);
 
-    if (have($item`cracker`)) useFamiliar($familiar`Exotic Parrot`);
-    else useFamiliar($familiar`Baby Bugged Bugbear`);
     famweightOutfit();
     if (globalOptions.debug) {
         print(

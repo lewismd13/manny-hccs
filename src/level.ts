@@ -179,9 +179,6 @@ export function level(): void {
         resources.tome($skill`Summon Sugar Sheets`);
         cliExecute("create 1 sugar shotgun");
         sweetSynthesis($item`sugar shotgun`, $item`Crimbo candied pecan`);
-        useFamiliar($familiar`Baby Bugged Bugbear`);
-        visitUrl("arena.php");
-        useDefaultFamiliar();
     } else if (
         availableAmount($item`Crimbo fudge`) >= 2 &&
         haveEffect($effect`Synthesis: Learning`) === 0

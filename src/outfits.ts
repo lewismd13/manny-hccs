@@ -308,7 +308,6 @@ export function hotresOutfit(): void {
             acc1: $item`your cowboy boots`,
             acc2: $item`Brutal brogues`,
             acc3: $item`Kremlin's Greatest Briefcase`,
-            familiar: $items`cracker`,
         },
         $familiar`Exotic Parrot`
     ).dress();
@@ -330,14 +329,6 @@ export function noncombatOutfit(): void {
 }
 
 export function famweightOutfit(): void {
-    const familiarAndEquip = have($item`cracker`)
-        ? { fam: $familiar`Exotic Parrot`, equip: $item`cracker` }
-        : have($familiar`Baby Bugged Bugbear`)
-        ? { fam: $familiar`Baby Bugged Bugbear`, equip: $item`bugged beanie` }
-        : {
-              fam: $familiar`Blood-Faced Volleyball`,
-              equip: have($item`astral pet sweater`) ? $item`astral pet sweater` : $item`none`,
-          };
     Outfit.doYourBest(
         {
             hat: $item`Daylight Shavings Helmet`,
@@ -347,9 +338,9 @@ export function famweightOutfit(): void {
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: familiarAndEquip.equip,
+            familiar: $item`bugged beanie`,
         },
-        familiarAndEquip.fam
+        $familiar`Baby Bugged Bugbear`
     ).dress();
 }
 

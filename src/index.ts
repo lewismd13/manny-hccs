@@ -50,7 +50,8 @@ cliExecute("ccs libramMacro");
 Clan.join("Alliance from Hell");
 try {
     assertTest(CommunityService.CoilWire.run(coilPrep, 60), "Coil Wire");
-    if (myLevel() < 14 || !CommunityService.HP.isDone()) level();
+    if (myLevel() < 14 || !CommunityService.HP.isDone())
+        CommunityService.logTask("leveling", level);
     assertTest(CommunityService.HP.run(hpPrep, 1), "HP");
     assertTest(CommunityService.Muscle.run(musPrep, 1), "Muscle");
     assertTest(CommunityService.Moxie.run(moxPrep, 1), "Moxie");

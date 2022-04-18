@@ -481,12 +481,8 @@ export function level(): void {
         );
     }
 
-    // 14 free NEP fights
-    while (
-        get("_neverendingPartyFreeTurns") < 10 ||
-        get("_shatteringPunchUsed") < 2 ||
-        !get("_gingerbreadMobHitUsed")
-    ) {
+    // 10 normal free NEP fights
+    while (get("_neverendingPartyFreeTurns") < 10) {
         useDefaultFamiliar();
         if (globalOptions.debug)
             print(
@@ -516,14 +512,37 @@ export function level(): void {
             Macro.externalIf(
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
-            ) // TODO: figure out how to save a feel pride here without breaking everything
+            )
                 .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
-                .externalIf(
-                    get("_neverendingPartyFreeTurns") === 10,
-                    Macro.trySkill($skill`Shattering Punch`, $skill`Gingerbread Mob Hit`).abort()
-                )
-
                 .kill()
+        );
+    }
+
+    // now do the mob hit fight
+    if (!get("_gingerbreadMobHitUsed")) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Gingerbread Mob Hit`).abort()
+        );
+    }
+
+    // now let's do the shattering punch fights
+    while (get("_shatteringPunchUsed") < 3) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Shattering Punch`).abort()
+        );
+    }
+
+    // and finally let's do the remaining chest x-ray fight, saving one for gingerbread city
+    if (get("_chestXRayUsed") < 2) {
+        useDefaultFamiliar();
+        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Chest X-Ray`).abort()
         );
     }
 

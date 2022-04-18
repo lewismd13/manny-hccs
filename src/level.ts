@@ -333,13 +333,6 @@ export function level(): void {
 
     ensureEffect($effect`Song of Bravado`);
 
-    if (
-        myPrimestat() === $stat`Mysticality` &&
-        availableAmount($item`flask of baconstone juice`) > 0
-    ) {
-        ensureEffect($effect`Baconstoned`);
-    }
-
     const mood = new Mood();
     mood.skill($skill`Blood Bond`);
     mood.skill($skill`Blood Bubble`);

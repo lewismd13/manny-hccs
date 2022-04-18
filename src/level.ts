@@ -204,6 +204,7 @@ export function level(): void {
     }
 
     cliExecute("briefcase enchantment spell hot");
+    equip($slot`offhand`, $item`familiar scrapbook`);
 
     // Depends on Ez's Bastille script.
     cliExecute(`bastille ${myPrimestat() === $stat`Muscle` ? "muscle" : "myst"} brutalist`);
@@ -247,6 +248,7 @@ export function level(): void {
     // initialize snojo, picking myst for ice rice
     setChoice(1310, 3);
     visitUrl("place.php?whichplace=snojo&action=snojo_controller");
+    uniform();
     while (get("_snojoFreeFights") < 10) {
         useDefaultFamiliar();
         adventureMacroAuto($location`The X-32-F Combat Training Snowman`, Macro.attack().repeat());
@@ -284,6 +286,7 @@ export function level(): void {
     }
 
     // Chateau rest
+    equip($slot`offhand`, $item`familiar scrapbook`);
     while (get("timesRested") < totalFreeRests()) {
         visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
         libramBurn();
@@ -291,6 +294,7 @@ export function level(): void {
 
     while (oysterAvailable()) {
         useDefaultFamiliar();
+        uniform();
         equip($slot`acc2`, $item`Lil' Doctor™ bag`);
         create($item`BRICKO oyster`);
         ensureMpTonic(34);

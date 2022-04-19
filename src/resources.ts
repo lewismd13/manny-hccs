@@ -12,6 +12,7 @@ import {
     myFullness,
     myInebriety,
     print,
+    pullsRemaining,
     retrieveItem,
     runChoice,
     runCombat,
@@ -23,6 +24,7 @@ import {
     visitUrl,
 } from "kolmafia";
 import { $effect, $item, $skill, get, have, Macro } from "libram";
+import { pullIfPossible } from "./lib";
 
 export class ResourceTracker {
     deckCards: string[] = [];
@@ -107,6 +109,14 @@ export class ResourceTracker {
                 runCombat(macro.toString());
             }
             this.maps.push(monster);
+        }
+    }
+
+    pull(item: Item, maxPrice: number, attempt = false): void {
+        if (pullsRemaining() > 0 && pullIfPossible(1, item, maxPrice)) {
+            this.pulls.push(item);
+        } else if (!attempt) {
+            print(`WARNING: Tried to pull ${item}, but we're out of pulls.`, "orange");
         }
     }
 

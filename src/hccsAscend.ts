@@ -1,5 +1,29 @@
-import { equippedItem, print, wait } from "kolmafia";
-import { $class, $item, $slot, ascend, Lifestyle, Paths, prepareAscension } from "libram";
+import {
+    cliExecute,
+    equippedItem,
+    fullnessLimit,
+    inebrietyLimit,
+    myFullness,
+    myInebriety,
+    print,
+    pvpAttacksLeft,
+    takeStash,
+    useSkill,
+    wait,
+} from "kolmafia";
+import {
+    $class,
+    $item,
+    $skill,
+    $slot,
+    ascend,
+    Clan,
+    get,
+    have,
+    Lifestyle,
+    Paths,
+    prepareAscension,
+} from "libram";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(args = ""): void {
@@ -13,6 +37,54 @@ export function main(args = ""): void {
         myClass = $class`Sauceror`;
     }
 
+    Clan.join("Alliance from Hell");
+
+    if (pvpAttacksLeft() > 0) {
+        cliExecute("uberpvpoptimizer");
+        cliExecute("swagger");
+    }
+
+    if (myInebriety() <= inebrietyLimit() || myFullness() < fullnessLimit()) {
+        throw "are you sure you want to ascend? you have some open organ space";
+    }
+
+    const playerIDs: string[] = [
+        "phreddrickkv2",
+        "2548033",
+        "Phillammon",
+        "2705901",
+        "ReverKiller",
+        "beldur",
+        "887028",
+        "786069",
+        "1197090",
+        "437479",
+        "playultm8",
+        "busta_rhymes",
+        "644996",
+        "kenny kamAKAzi",
+        "SSBBHax",
+        "1937905",
+        "2766368",
+        "2203016",
+        "1972588",
+        "Butts McGruff",
+        "burningbman",
+        "2533291",
+        "1741165",
+        "1993636",
+        "2339258",
+        "DanceCommander6",
+    ];
+
+    while ($skill`Experience Safari`.timescast < get("skillLevel180")) {
+        useSkill(
+            $skill`Experience Safari`,
+            1,
+            playerIDs[Math.round(Math.random() * playerIDs.length)]
+        );
+    }
+
     if (equippedItem($slot`bootskin`) !== $item`frontwinder skin`) {
         throw "Your cowboy boots have the wrong skin";
     }
@@ -21,12 +93,18 @@ export function main(args = ""): void {
         throw "Your cowboy boots have the wrong spurs";
     }
 
+    const stashpulls = [$item`Snow Suit`, $item`moveable feast`];
+
+    for (const pull of stashpulls) {
+        if (!have(pull)) takeStash(pull, 1);
+    }
+
     print(
         `you're about to ascend as a ${myClass} with a ${myworkshed}! you provided ${args} as options`,
         "green"
     );
 
-    wait(30);
+    wait(10);
 
     prepareAscension({
         workshed: myworkshed,
@@ -43,7 +121,7 @@ export function main(args = ""): void {
     ascend(
         Paths.CommunityService,
         myClass,
-        Lifestyle.hardcore,
+        Lifestyle.softcore,
         "wallaby",
         $item`astral six-pack`,
         $item`astral statuette`

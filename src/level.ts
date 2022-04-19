@@ -111,32 +111,16 @@ export function level(): void {
     uniform();
 
     if (availableAmount($item`li'l ninja costume`) === 0) {
-        if (
-            !have($item`tomato`) &&
-            !have($item`tomato juice of powerful power`) &&
-            !have($effect`Tomato Power`) &&
-            get("lastCopyableMonster") !== $monster`possessed can of tomatoes` &&
-            myClass() === $class`Pastamancer`
-        ) {
-            equip($slot`off-hand`, $item`none`);
-            equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-            useDefaultFamiliar();
-            resources.mapMacro(
-                $location`The Haunted Pantry`,
-                $monster`possessed can of tomatoes`,
-                Macro.skill($skill`Reflex Hammer`)
-            );
-        }
-        ensureMpTonic(50);
+        equip($slot`off-hand`, $item`none`);
+        equip($slot`acc3`, $item`Lil' Doctor™ bag`);
         useDefaultFamiliar();
+        ensureMpTonic(50);
         resources.mapMacro(
             $location`The Haiku Dungeon`,
             $monster`amateur ninja`,
-            Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`)
+            Macro.skill($skill`Chest X-Ray`)
         );
         runCombat();
-
-        ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
     }
 
     // Summon brickos for the extra fights

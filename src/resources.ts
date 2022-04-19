@@ -129,6 +129,7 @@ export class ResourceTracker {
         print(`Sabers: ${this.saberForces.map((effectOrItem) => effectOrItem.name).join(", ")}`);
         print(`Locket Fights: ${this.lockets.map((monster) => monster.name).join(", ")}`);
         print(`Maps: ${this.maps.map((monster) => monster.name).join(", ")}`);
+        print(`Pulls: ${this.pulls.map((item) => item.name).join(", ")}`);
         if (this.consumedFood.size > 0) {
             print("FOOD");
             for (const [food, count] of this.consumedFood) {

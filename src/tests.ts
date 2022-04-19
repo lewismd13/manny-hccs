@@ -21,7 +21,6 @@ import {
     myHp,
     myLevel,
     myMaxhp,
-    myMaxmp,
     myMp,
     mySpleenUse,
     numericModifier,
@@ -487,11 +486,23 @@ export function famWtPrep() {
     }
 
     // try to get a green heart
-    while (myMp() / myMaxmp() > 0.3 && mpCost($skill`Summon BRICKOs`) <= myMp()) {
-        useSkill($skill`Summon Candy Heart`);
-    }
+    if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
+        while (mpCost($skill`Summon Candy Heart`) <= myMp() && !have($item`green candy heart`)) {
+            useSkill($skill`Summon Candy Heart`);
+        }
 
-    tryEnsureEffect($effect`Heart of Green`);
+        if (myMp() < mpCost($skill`Summon Candy Heart`) && !have($item`green candy heart`)) {
+            ensureMpSausage(1);
+
+            while (
+                mpCost($skill`Summon Candy Heart`) <= myMp() &&
+                !have($item`green candy heart`)
+            ) {
+                useSkill($skill`Summon Candy Heart`);
+            }
+        }
+        tryEnsureEffect($effect`Heart of Green`);
+    }
 
     famweightOutfit();
     if (globalOptions.debug) {

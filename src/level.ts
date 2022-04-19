@@ -111,32 +111,16 @@ export function level(): void {
     uniform();
 
     if (availableAmount($item`li'l ninja costume`) === 0) {
-        if (
-            !have($item`tomato`) &&
-            !have($item`tomato juice of powerful power`) &&
-            !have($effect`Tomato Power`) &&
-            get("lastCopyableMonster") !== $monster`possessed can of tomatoes` &&
-            myClass() === $class`Pastamancer`
-        ) {
-            equip($slot`off-hand`, $item`none`);
-            equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-            useDefaultFamiliar();
-            resources.mapMacro(
-                $location`The Haunted Pantry`,
-                $monster`possessed can of tomatoes`,
-                Macro.skill($skill`Reflex Hammer`)
-            );
-        }
-        ensureMpTonic(50);
+        equip($slot`off-hand`, $item`none`);
+        equip($slot`acc3`, $item`Lil' Doctor™ bag`);
         useDefaultFamiliar();
+        ensureMpTonic(50);
         resources.mapMacro(
             $location`The Haiku Dungeon`,
             $monster`amateur ninja`,
-            Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`)
+            Macro.skill($skill`Chest X-Ray`)
         );
         runCombat();
-
-        ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
     }
 
     // Summon brickos for the extra fights
@@ -333,13 +317,6 @@ export function level(): void {
 
     ensureEffect($effect`Song of Bravado`);
 
-    if (
-        myPrimestat() === $stat`Mysticality` &&
-        availableAmount($item`flask of baconstone juice`) > 0
-    ) {
-        ensureEffect($effect`Baconstoned`);
-    }
-
     const mood = new Mood();
     mood.skill($skill`Blood Bond`);
     mood.skill($skill`Blood Bubble`);
@@ -488,12 +465,8 @@ export function level(): void {
         );
     }
 
-    // 14 free NEP fights
-    while (
-        get("_neverendingPartyFreeTurns") < 10 ||
-        get("_shatteringPunchUsed") < 2 ||
-        !get("_gingerbreadMobHitUsed")
-    ) {
+    // 10 normal free NEP fights
+    while (get("_neverendingPartyFreeTurns") < 10) {
         useDefaultFamiliar();
         if (globalOptions.debug)
             print(
@@ -523,14 +496,37 @@ export function level(): void {
             Macro.externalIf(
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
-            ) // TODO: figure out how to save a feel pride here without breaking everything
+            )
                 .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
-                .externalIf(
-                    get("_neverendingPartyFreeTurns") === 10,
-                    Macro.trySkill($skill`Shattering Punch`, $skill`Gingerbread Mob Hit`).abort()
-                )
-
                 .kill()
+        );
+    }
+
+    // now do the mob hit fight
+    if (!get("_gingerbreadMobHitUsed")) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Gingerbread Mob Hit`).abort()
+        );
+    }
+
+    // now let's do the shattering punch fights
+    while (get("_shatteringPunchUsed") < 3) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Shattering Punch`).abort()
+        );
+    }
+
+    // and finally let's do the remaining chest x-ray fight, saving one for gingerbread city
+    if (get("_chestXRayUsed") < 2) {
+        useDefaultFamiliar();
+        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Chest X-Ray`).abort()
         );
     }
 

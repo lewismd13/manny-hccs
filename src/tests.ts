@@ -5,6 +5,7 @@ import {
     cliExecute,
     cliExecuteOutput,
     containsText,
+    create,
     eat,
     equip,
     getProperty,
@@ -21,14 +22,12 @@ import {
     myHp,
     myLevel,
     myMaxhp,
-    myMaxmp,
     myMp,
     mySpleenUse,
     numericModifier,
     print,
     retrieveItem,
     runChoice,
-    runCombat,
     setAutoAttack,
     setProperty,
     sweetSynthesis,
@@ -44,6 +43,7 @@ import {
     $effect,
     $familiar,
     $item,
+    $items,
     $location,
     $monster,
     $skill,
@@ -61,7 +61,7 @@ import {
     SongBoom,
 } from "libram";
 import { propertyManager, resources } from ".";
-import Macro, { withMacro } from "./combat";
+import Macro from "./combat";
 import {
     ensureCreateItem,
     ensureInnerElf,
@@ -81,7 +81,7 @@ import {
     useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
-import {
+import uniform, {
     famweightOutfit,
     hotresOutfit,
     hpOutfit,
@@ -168,6 +168,52 @@ export function coilPrep() {
         if (!have($item`borrowed time`)) resources.clipArt($item`borrowed time`);
         use($item`borrowed time`);
     }
+
+    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
+        resources.clipArt($item`box of Familiar Jacks`);
+        useFamiliar($familiar`Melodramedary`);
+        use($item`box of Familiar Jacks`);
+    }
+
+    // fight a ghost and kramco before coiling
+    function firstFights() {
+        uniform(
+            ...$items`protonic accelerator pack, Daylight Shavings Helmet, Kramco Sausage-o-Matic™`
+        );
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`Noob Cave`,
+            Macro.skill($skill`Micrometeorite`)
+                .item($item`Time-Spinner`)
+                .attack()
+                .repeat()
+        );
+
+        if (have($item`magical sausage casing`)) {
+            create(1, $item`magical sausage`);
+        }
+        if (have($item`magical sausage`)) {
+            eat(1, $item`magical sausage`);
+        }
+
+        const ghostLocation = get("ghostLocation");
+        if (ghostLocation) {
+            uniform(...$items`latte lovers member's mug, protonic accelerator pack`);
+            useDefaultFamiliar();
+            adventureMacro(
+                ghostLocation,
+                Macro.skill($skill`Micrometeorite`)
+                    .item($item`Time-Spinner`)
+                    .skill($skill`Curse of Weaksauce`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Shoot Ghost`)
+                    .trySkill($skill`Trap Ghost`)
+            );
+        }
+    }
+
+    firstFights();
 
     visitUrl("council.php");
     wireOutfit();
@@ -256,17 +302,6 @@ export function mysPrep() {
 }
 
 export function nonCombatPrep() {
-    if (get("_godLobsterFights") < 3) {
-        if (myHp() < 0.8 * myMaxhp()) useSkill(1, $skill`Cannelloni Cocoon`);
-        useFamiliar($familiar`God Lobster`);
-        // Get -combat buff.
-        propertyManager.setChoices({ [1310]: 2 });
-        equip($item`God Lobster's Ring`);
-        visitUrl("main.php?fightgodlobster=1");
-        withMacro(Macro.kill(), () => runCombat());
-        if (handlingChoice()) runChoice(2);
-    }
-
     if (getProperty("_horsery") !== "dark horse") cliExecute("horsery dark");
 
     if (myHp() < 30) useSkill(1, $skill`Cannelloni Cocoon`);
@@ -292,6 +327,8 @@ export function nonCombatPrep() {
 
     // Pastamancer d1 is -combat.
     if (myClass() === $class`Pastamancer`) ensureEffect($effect`Blessing of the Bird`);
+
+    cliExecute("umbrella nc");
 
     noncombatOutfit();
 
@@ -363,17 +400,9 @@ export function hotResPrep() {
 
     ensureEffect($effect`Feeling Peaceful`);
 
-    // TODO: Maybe ditch this
-    if (availableAmount($item`cracker`) === 0 && get("tomeSummons") < 3) {
-        useFamiliar($familiar`Exotic Parrot`);
-        resources.clipArt($item`box of Familiar Jacks`);
-        use($item`box of Familiar Jacks`);
-    }
-
     useFamiliar($familiar`Exotic Parrot`);
 
     // Mafia sometimes can't figure out that multiple +weight things would get us to next tier.
-    // FIXME: Outfit
     hotresOutfit();
     if (globalOptions.debug) {
         logprint(cliExecuteOutput("modtrace hot res"));
@@ -391,9 +420,13 @@ export function famWtPrep() {
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
+    tryEnsureEffect($effect`Shortly Stacked`);
 
     // NC reward
     ensureEffect($effect`Robot Friends`);
+
+    useFamiliar($familiar`Baby Bugged Bugbear`);
+    visitUrl("arena.php");
 
     // use freeruns at gingerbread city to get gingerbread spice latte
     if (
@@ -455,14 +488,24 @@ export function famWtPrep() {
     }
 
     // try to get a green heart
-    while (myMp() / myMaxmp() > 0.3 && mpCost($skill`Summon BRICKOs`) <= myMp()) {
-        useSkill($skill`Summon Candy Heart`);
+    if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
+        while (mpCost($skill`Summon Candy Heart`) <= myMp() && !have($item`green candy heart`)) {
+            useSkill($skill`Summon Candy Heart`);
+        }
+
+        if (myMp() < mpCost($skill`Summon Candy Heart`) && !have($item`green candy heart`)) {
+            ensureMpSausage(1);
+
+            while (
+                mpCost($skill`Summon Candy Heart`) <= myMp() &&
+                !have($item`green candy heart`)
+            ) {
+                useSkill($skill`Summon Candy Heart`);
+            }
+        }
+        tryEnsureEffect($effect`Heart of Green`);
     }
 
-    tryEnsureEffect($effect`Heart of Green`);
-
-    if (have($item`cracker`)) useFamiliar($familiar`Exotic Parrot`);
-    else useFamiliar($familiar`Baby Bugged Bugbear`);
     famweightOutfit();
     if (globalOptions.debug) {
         print(
@@ -682,19 +725,13 @@ export function itemPrep() {
         cliExecute("barrelprayer buff");
     }
 
-    if (!have($item`oversized sparkler`) && !get("_fireworksShopEquipmentBought")) {
-        visitUrl("clan_viplounge.php?action=fwshop&whichfloor=2");
-        buy($item`oversized sparkler`);
-    }
+    cliExecute("umbrella item");
 
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run
-    if (
-        get("csServicesPerformed").split(",").length === 10 &&
-        CommunityService.BoozeDrop.prediction < 2
-    )
-        ensureEffect($effect`Feeling Lost`);
+    // TODO: figure out a final check here to make it not get the buff unless it will get the test to 1 turn
+    if (get("csServicesPerformed").split(",").length === 10) ensureEffect($effect`Feeling Lost`);
 
     itemOutfit();
     if (globalOptions.debug) {

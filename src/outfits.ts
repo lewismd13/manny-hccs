@@ -165,7 +165,7 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
         shirt: $item`fresh coat of paint`,
         pants: $items`pantogram pants, Cargo Cultist Shorts, old sweatpants`,
         weapon: $item`Fourth of May Cosplay Saber`,
-        offhand: $item`familiar scrapbook`,
+        offhand: $items`unbreakable umbrella, familiar scrapbook`,
         acc1: $items`meteorite necklace, your cowboy boots`,
         acc2: $items`Powerful Glove`,
         acc3: $items`battle broom, Retrospecs`,
@@ -286,7 +286,7 @@ export function itemOutfit(): void {
         {
             hat: $item`wad of used tape`,
             weapon: $items`extra-large utility candle`,
-            offhand: $item`cursed magnifying glass`,
+            offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
             acc2: $item`gold detective badge`,
@@ -308,7 +308,6 @@ export function hotresOutfit(): void {
             acc1: $item`your cowboy boots`,
             acc2: $item`Brutal brogues`,
             acc3: $item`Kremlin's Greatest Briefcase`,
-            familiar: $items`cracker`,
         },
         $familiar`Exotic Parrot`
     ).dress();
@@ -320,7 +319,7 @@ export function noncombatOutfit(): void {
             hat: $item`very pointy crown`,
             back: $item`protonic accelerator pack`,
             weapon: $item`Fourth of May Cosplay Saber`,
-            offhand: $items`burning paper crane, familiar scrapbook`,
+            offhand: $items`unbreakable umbrella`,
             acc1: $item`Kremlin's Greatest Briefcase`,
             acc2: $items`hewn moon-rune spoon`,
             acc3: $item`Brutal brogues`,
@@ -330,14 +329,6 @@ export function noncombatOutfit(): void {
 }
 
 export function famweightOutfit(): void {
-    const familiarAndEquip = have($item`cracker`)
-        ? { fam: $familiar`Exotic Parrot`, equip: $item`cracker` }
-        : have($familiar`Baby Bugged Bugbear`)
-        ? { fam: $familiar`Baby Bugged Bugbear`, equip: $item`bugged beanie` }
-        : {
-              fam: $familiar`Blood-Faced Volleyball`,
-              equip: have($item`astral pet sweater`) ? $item`astral pet sweater` : $item`none`,
-          };
     Outfit.doYourBest(
         {
             hat: $item`Daylight Shavings Helmet`,
@@ -347,9 +338,9 @@ export function famweightOutfit(): void {
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: familiarAndEquip.equip,
+            familiar: $item`bugged beanie`,
         },
-        familiarAndEquip.fam
+        $familiar`Baby Bugged Bugbear`
     ).dress();
 }
 

@@ -58,6 +58,7 @@ import {
     ensurePotionEffect,
     libramBurn,
     oysterAvailable,
+    sausageFightGuaranteed,
     setChoice,
     tryEnsureEffect,
     tryEquip,
@@ -107,41 +108,19 @@ export function level(): void {
 
     ensureEffect($effect`You Learned Something Maybe!`);
 
-    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
-        resources.clipArt($item`box of Familiar Jacks`);
-        useFamiliar($familiar`Melodramedary`);
-        use($item`box of Familiar Jacks`);
-    }
-
     uniform();
 
     if (availableAmount($item`li'l ninja costume`) === 0) {
-        if (
-            !have($item`tomato`) &&
-            !have($item`tomato juice of powerful power`) &&
-            !have($effect`Tomato Power`) &&
-            get("lastCopyableMonster") !== $monster`possessed can of tomatoes` &&
-            myClass() === $class`Pastamancer`
-        ) {
-            equip($slot`off-hand`, $item`none`);
-            equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-            useDefaultFamiliar();
-            resources.mapMacro(
-                $location`The Haunted Pantry`,
-                $monster`possessed can of tomatoes`,
-                Macro.skill($skill`Reflex Hammer`)
-            );
-        }
-        ensureMpTonic(50);
+        equip($slot`off-hand`, $item`none`);
+        equip($slot`acc3`, $item`Lil' Doctor™ bag`);
         useDefaultFamiliar();
+        ensureMpTonic(50);
         resources.mapMacro(
             $location`The Haiku Dungeon`,
             $monster`amateur ninja`,
-            Macro.skill($skill`Feel Nostalgic`).skill($skill`Chest X-Ray`)
+            Macro.skill($skill`Chest X-Ray`)
         );
         runCombat();
-
-        ensurePotionEffect($effect`Tomato Power`, $item`tomato juice of powerful power`);
     }
 
     // Summon brickos for the extra fights
@@ -151,11 +130,6 @@ export function level(): void {
     ) {
         ensureMpTonic(mpCost($skill`Summon BRICKOs`));
         useSkill($skill`Summon BRICKOs`);
-    }
-
-    while (get("libramSummons") < 6) {
-        ensureMpTonic(mpCost($skill`Summon Candy Heart`));
-        useSkill($skill`Summon Candy Heart`);
     }
 
     if (get("_brickoFights") === 0 && oysterAvailable() && !have($item`bag of many confections`)) {
@@ -189,9 +163,6 @@ export function level(): void {
         resources.tome($skill`Summon Sugar Sheets`);
         cliExecute("create 1 sugar shotgun");
         sweetSynthesis($item`sugar shotgun`, $item`Crimbo candied pecan`);
-        useFamiliar($familiar`Baby Bugged Bugbear`);
-        visitUrl("arena.php");
-        useDefaultFamiliar();
     } else if (
         availableAmount($item`Crimbo fudge`) >= 2 &&
         haveEffect($effect`Synthesis: Learning`) === 0
@@ -216,7 +187,8 @@ export function level(): void {
         throw "Insufficient +stat%.";
     }
 
-    cliExecute("briefcase enchantment spell hot -combat");
+    cliExecute("briefcase enchantment spell hot");
+    equip($slot`offhand`, $item`familiar scrapbook`);
 
     // Depends on Ez's Bastille script.
     cliExecute(`bastille ${myPrimestat() === $stat`Muscle` ? "muscle" : "myst"} brutalist`);
@@ -232,6 +204,9 @@ export function level(): void {
         runChoice(5);
         runChoice(4);
     }
+
+    // Make umbrella +ML
+    cliExecute("umbrella ml");
 
     equip($slot`acc1`, $item`Powerful Glove`);
     ensureEffect($effect`Starry-Eyed`);
@@ -257,6 +232,7 @@ export function level(): void {
     // initialize snojo, picking myst for ice rice
     setChoice(1310, 3);
     visitUrl("place.php?whichplace=snojo&action=snojo_controller");
+    uniform();
     while (get("_snojoFreeFights") < 10) {
         useDefaultFamiliar();
         adventureMacroAuto($location`The X-32-F Combat Training Snowman`, Macro.attack().repeat());
@@ -294,13 +270,15 @@ export function level(): void {
     }
 
     // Chateau rest
+    equip($slot`offhand`, $item`familiar scrapbook`);
     while (get("timesRested") < totalFreeRests()) {
         visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
         libramBurn();
     }
 
-    if (oysterAvailable()) {
+    while (oysterAvailable()) {
         useDefaultFamiliar();
+        uniform();
         equip($slot`acc2`, $item`Lil' Doctor™ bag`);
         create($item`BRICKO oyster`);
         ensureMpTonic(34);
@@ -313,6 +291,22 @@ export function level(): void {
         setAutoAttack(0);
     }
 
+    // fight ghost
+    const ghostLocation = get("ghostLocation");
+    if (ghostLocation) {
+        equip($slot`off-hand`, $item`latte lovers member's mug`);
+        equip($item`protonic accelerator pack`);
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            ghostLocation,
+            Macro.item($item`Time-Spinner`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Shoot Ghost`)
+                .trySkill($skill`Trap Ghost`)
+        );
+    }
+
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
@@ -322,13 +316,6 @@ export function level(): void {
     }
 
     ensureEffect($effect`Song of Bravado`);
-
-    if (
-        myPrimestat() === $stat`Mysticality` &&
-        availableAmount($item`flask of baconstone juice`) > 0
-    ) {
-        ensureEffect($effect`Baconstoned`);
-    }
 
     const mood = new Mood();
     mood.skill($skill`Blood Bond`);
@@ -372,18 +359,19 @@ export function level(): void {
         if (handlingChoice()) throw "Did not get all the way through LOV.";
     }
 
-    if (get("_godLobsterFights") < 2) {
+    // TODO: get rid of withmacro, use CFF
+    if (get("_godLobsterFights") < 3) {
         equip($item`LOV Epaulettes`);
         useFamiliar($familiar`God Lobster`);
-        setChoice(1310, 1);
-        while (get("_godLobsterFights") < 2) {
-            tryEquip($item`God Lobster's Scepter`);
+        setChoice(1310, 3);
+        while (get("_godLobsterFights") < 3) {
             visitUrl("main.php?fightgodlobster=1");
             withMacro(Macro.kill(), () => runCombat());
             visitUrl("choice.php");
             if (handlingChoice()) runChoice(1);
         }
     }
+
     //witchess fights
     if (get("_witchessFights") < 5) {
         equip($item`Fourth of May Cosplay Saber`);
@@ -395,6 +383,7 @@ export function level(): void {
         }
         while (get("_witchessFights") === 1) {
             useDefaultFamiliar();
+            equip($item`familiar scrapbook`);
             Macro.attack().repeat().setAutoAttack();
             ensureEffect($effect`Carol of the Bulls`);
             Witchess.fightPiece($monster`Witchess King`);
@@ -409,6 +398,7 @@ export function level(): void {
         }
         while (get("_witchessFights") === 3 && !globalOptions.halloween) {
             useDefaultFamiliar();
+            equip($item`unbreakable umbrella`);
             Macro.kill().setAutoAttack();
             Witchess.fightPiece($monster`Witchess Bishop`);
             setAutoAttack(0);
@@ -475,12 +465,8 @@ export function level(): void {
         );
     }
 
-    // 14 free NEP fights
-    while (
-        get("_neverendingPartyFreeTurns") < 10 ||
-        get("_shatteringPunchUsed") < 2 ||
-        !get("_gingerbreadMobHitUsed")
-    ) {
+    // 10 normal free NEP fights
+    while (get("_neverendingPartyFreeTurns") < 10) {
         useDefaultFamiliar();
         if (globalOptions.debug)
             print(
@@ -503,26 +489,51 @@ export function level(): void {
 
         // NEP noncombat. Fight.
         propertyManager.setChoices({ [1324]: 5 });
-
+        if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
+        else equip($item`unbreakable umbrella`);
         adventureMacroAuto(
             $location`The Neverending Party`,
             Macro.externalIf(
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
-            ) // TODO: figure out how to save a feel price here without breaking everything
+            )
                 .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
-                .externalIf(
-                    get("_neverendingPartyFreeTurns") === 10,
-                    Macro.trySkill($skill`Shattering Punch`, $skill`Gingerbread Mob Hit`).abort()
-                )
-
                 .kill()
+        );
+    }
+
+    // now do the mob hit fight
+    if (!get("_gingerbreadMobHitUsed")) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Gingerbread Mob Hit`).abort()
+        );
+    }
+
+    // now let's do the shattering punch fights
+    while (get("_shatteringPunchUsed") < 3) {
+        useDefaultFamiliar();
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Shattering Punch`).abort()
+        );
+    }
+
+    // and finally let's do the remaining chest x-ray fight, saving one for gingerbread city
+    if (get("_chestXRayUsed") < 2) {
+        useDefaultFamiliar();
+        equip($slot`acc2`, $item`Lil' Doctor™ bag`);
+        adventureMacroAuto(
+            $location`The Neverending Party`,
+            Macro.trySkill($skill`Chest X-Ray`).abort()
         );
     }
 
     // fight a witchess queen for pointy crown, getting a couple weapon damage effects just in case
     if (get("_witchessFights") === 4) {
         useDefaultFamiliar();
+        equip($item`familiar scrapbook`);
         Macro.attack().repeat().setAutoAttack();
         ensureEffect($effect`Carol of the Bulls`);
         ensureEffect($effect`Song of the North`);

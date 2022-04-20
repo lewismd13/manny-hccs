@@ -26,7 +26,7 @@ export function main(args = ""): void {
         "green"
     );
 
-    wait(30);
+    wait(10);
 
     prepareAscension({
         workshed: myworkshed,

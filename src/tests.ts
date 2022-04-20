@@ -501,7 +501,7 @@ export function famWtPrep() {
                 useSkill($skill`Summon Candy Heart`);
             }
         }
-        tryEnsureEffect($effect`Heart of Green`);
+    tryEnsureEffect($effect`Heart of Green`);
     }
 
     famweightOutfit();

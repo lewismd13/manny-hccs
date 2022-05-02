@@ -387,6 +387,8 @@ export function hotResPrep() {
                 .skill($skill`Use the Force`)
         );
         resources.saberForces.push($effect`Fireproof Foam Suit`);
+        if (have($effect`Fireproof Foam Suit`))
+            set("_fireExtinguisherCharge", get("_fireExtinguisherCharge") - 10);
     }
 
     if (

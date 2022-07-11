@@ -208,6 +208,9 @@ export function level(): void {
     // Make umbrella +ML
     cliExecute("umbrella ml");
 
+    // eslint-disable-next-line libram/verify-constants
+    while (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
+
     equip($slot`acc1`, $item`Powerful Glove`);
     ensureEffect($effect`Starry-Eyed`);
     ensureEffect($effect`Favored by Lyle`);

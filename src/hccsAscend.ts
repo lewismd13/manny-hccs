@@ -4,10 +4,11 @@ import {
     fullnessLimit,
     inebrietyLimit,
     myFullness,
+    myGardenType,
     myInebriety,
     print,
     pvpAttacksLeft,
-    takeStash,
+    use,
     useSkill,
     wait,
 } from "kolmafia";
@@ -50,7 +51,7 @@ export function main(args = ""): void {
 
     const playerIDs: string[] = [
         "phreddrickkv2",
-        "2548033",
+        // "boesbert",
         "Phillammon",
         "2705901",
         "ReverKiller",
@@ -84,6 +85,14 @@ export function main(args = ""): void {
             playerIDs[Math.round(Math.random() * playerIDs.length)]
         );
     }
+
+    if (myGardenType() !== "peppermint") {
+        cliExecute("garden pick");
+        use($item`Peppermint Pip Packet`);
+    }
+
+    // eslint-disable-next-line libram/verify-constants
+    while (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
 
     if (equippedItem($slot`bootskin`) !== $item`frontwinder skin`) {
         throw "Your cowboy boots have the wrong skin";

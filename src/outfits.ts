@@ -163,7 +163,7 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
     const defaultUniform = {
         hat: $item`Iunion Crown`,
         shirt: $item`fresh coat of paint`,
-        pants: $items`pantogram pants, Cargo Cultist Shorts, old sweatpants`,
+        pants: $items`designer sweatpants, Cargo Cultist Shorts, old sweatpants`,
         weapon: $item`Fourth of May Cosplay Saber`,
         offhand: $items`unbreakable umbrella, familiar scrapbook`,
         acc1: $items`meteorite necklace, your cowboy boots`,

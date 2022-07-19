@@ -8,6 +8,7 @@ import {
     myInebriety,
     print,
     pvpAttacksLeft,
+    takeStash,
     use,
     useSkill,
     wait,

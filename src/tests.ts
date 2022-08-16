@@ -585,7 +585,7 @@ export function WeaponPrep() {
         equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
         setChoice(1387, 3);
         Macro.skill($skill`Meteor Shower`)
-            .skill($skill`%fn\, spit on me!`)
+            .skill($skill`%fn, spit on me!`)
             .skill($skill`Use the Force`)
             .setAutoAttack();
         if (CombatLoversLocket.availableLocketMonsters().includes($monster`ungulith`)) {

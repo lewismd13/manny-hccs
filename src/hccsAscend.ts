@@ -15,6 +15,7 @@ import {
 import {
     $class,
     $item,
+    $path,
     $skill,
     $slot,
     ascend,
@@ -22,7 +23,6 @@ import {
     get,
     have,
     Lifestyle,
-    Paths,
     prepareAscension,
 } from "libram";
 
@@ -122,7 +122,7 @@ export function main(args = ""): void {
     });
 
     ascend(
-        Paths.CommunityService,
+        $path`Community Service`,
         myClass,
         Lifestyle.hardcore,
         "wallaby",

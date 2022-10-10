@@ -1,5 +1,6 @@
 import {
     abort,
+    adv1,
     availableAmount,
     buy,
     buyUsingStorage,
@@ -492,4 +493,11 @@ export function oysterAvailable(): boolean {
 
 export function incrementProperty(name: NumericProperty): void {
     set(name, get(name) + 1);
+}
+
+export function juneCleave(): void {
+    if (get("_juneCleaverFightsLeft") > 0) return;
+    equip($item`June cleaver`);
+    adv1($location`Noob Cave`, -1, "");
+    if (get("lastEncounter") === "Poetic Justice") useSkill($skill`Tongue of the Walrus`);
 }

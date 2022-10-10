@@ -14,7 +14,7 @@ import {
     toSlot,
     useFamiliar,
 } from "kolmafia";
-import { $familiar, $item, $items, $slot, $slots, have } from "libram";
+import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
 
 // shamelessly stolen wholesale from https://github.com/horrible-little-slime/phccs.git
 
@@ -164,7 +164,10 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
         hat: $item`Iunion Crown`,
         shirt: $item`fresh coat of paint`,
         pants: $items`designer sweatpants, Cargo Cultist Shorts, old sweatpants`,
-        weapon: $item`Fourth of May Cosplay Saber`,
+        weapon:
+            get("_juneCleaverFightsLeft") > 0 && get("_juneCleaverEncounters") < 2
+                ? $item`June cleaver`
+                : $item`Fourth of May Cosplay Saber`,
         offhand: $items`unbreakable umbrella, familiar scrapbook`,
         acc1: $items`meteorite necklace, your cowboy boots`,
         acc2: $items`Powerful Glove`,

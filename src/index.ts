@@ -47,6 +47,19 @@ cliExecute("mood apathetic");
 // All combat handled by our consult script (libramMacro.js).
 cliExecute("ccs libramMacro");
 
+// set June cleaver choices before we do anything
+propertyManager.setChoices({
+    1467: 3,
+    1468: 2,
+    1469: 3,
+    1470: 2,
+    1471: 3,
+    1472: 1,
+    1473: 1,
+    1474: 1,
+    1475: 1,
+});
+
 Clan.join("Alliance from Hell");
 try {
     assertTest(CommunityService.CoilWire.run(coilPrep, 60), "Coil Wire");

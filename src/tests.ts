@@ -73,6 +73,7 @@ import {
     ensureSong,
     equalizeStat,
     incrementProperty,
+    juneCleave,
     setChoice,
     tryEnsureEffect,
     tryUse,
@@ -214,6 +215,7 @@ export function coilPrep() {
     }
 
     firstFights();
+    juneCleave();
 
     visitUrl("council.php");
     wireOutfit();

@@ -56,6 +56,7 @@ import {
     ensureMpTonic,
     ensureNpcEffect,
     ensurePotionEffect,
+    juneCleave,
     libramBurn,
     oysterAvailable,
     sausageFightGuaranteed,
@@ -240,6 +241,15 @@ export function level(): void {
         useDefaultFamiliar();
         adventureMacroAuto($location`The X-32-F Combat Training Snowman`, Macro.attack().repeat());
     }
+
+    // get rid of snojo debuffs
+    cliExecute("hottub");
+
+    // should have second cleaver adventure primed now
+    juneCleave();
+
+    // back to saber now that we're done cleavering
+    uniform();
 
     const missingOintment =
         availableAmount($item`ointment of the occult`) === 0 &&

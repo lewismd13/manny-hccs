@@ -222,12 +222,13 @@ export function moxieOutfit(): void {
 
 export function hpOutfit(): void {
     cliExecute("retrocape vampire");
+    cliExecute("parka hp");
     if (!have($item`wad of used tape`)) cliExecute("fold wad of used tape");
     Outfit.doYourBest({
         hat: $item`wad of used tape`,
         weapon: $item`dented scepter`,
         offhand: $item`Fourth of May Cosplay Saber`,
-        shirt: $items`shoe ad T-shirt, fresh coat of paint`,
+        shirt: $items`Jurassic Parka, fresh coat of paint`,
         back: $item`unwrapped knock-off retro superhero cape`,
         pants: $item`Cargo Cultist Shorts`,
         acc1: $item`Brutal brogues`,
@@ -299,30 +300,36 @@ export function itemOutfit(): void {
 
 export function hotresOutfit(): void {
     cliExecute("retrocape vampire hold");
+    cliExecute("parka hot");
     Outfit.doYourBest(
         {
             back: $item`unwrapped knock-off retro superhero cape`,
+            shirt: $item`Jurassic Parka`,
             weapon: $item`Fourth of May Cosplay Saber`,
             offhand: $item`industrial fire extinguisher`,
             pants: $items`pantogram pants, Cargo Cultist Shorts`,
             acc1: $item`your cowboy boots`,
             acc2: $item`Brutal brogues`,
             acc3: $item`Kremlin's Greatest Briefcase`,
+            familiar: $item`tiny stillsuit`,
         },
         $familiar`Exotic Parrot`
     ).dress();
 }
 
 export function noncombatOutfit(): void {
+    cliExecute("parka pterodactyl");
     Outfit.doYourBest(
         {
             hat: $item`very pointy crown`,
             back: $item`protonic accelerator pack`,
+            shirt: $item`Jurassic Parka`,
             weapon: $item`Fourth of May Cosplay Saber`,
             offhand: $items`unbreakable umbrella`,
             acc1: $item`Kremlin's Greatest Briefcase`,
             acc2: $items`hewn moon-rune spoon`,
             acc3: $item`Brutal brogues`,
+            familiar: $item`tiny stillsuit`,
         },
         $familiar`Disgeist`
     ).dress();

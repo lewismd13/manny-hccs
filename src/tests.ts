@@ -167,6 +167,8 @@ export function coilPrep() {
         use($item`borrowed time`);
     }
 
+    equip($familiar`Shorter-Order Cook`, $item`tiny stillsuit`);
+
     if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
         resources.clipArt($item`box of Familiar Jacks`);
         useFamiliar($familiar`Melodramedary`);

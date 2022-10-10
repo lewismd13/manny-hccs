@@ -387,6 +387,7 @@ export function useDefaultFamiliar(): void {
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Shorter-Order Cook`);
+        equip($item`tiny stillsuit`);
     } else if (
         availableAmount($item`rope`) < 1 &&
         availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) <
@@ -394,8 +395,10 @@ export function useDefaultFamiliar(): void {
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Garbage Fire`);
+        equip($item`tiny stillsuit`);
     } else {
         useFamiliar($familiar`Machine Elf`);
+        equip($item`tiny stillsuit`);
     }
 }
 

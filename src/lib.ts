@@ -1,5 +1,6 @@
 import {
     abort,
+    adv1,
     availableAmount,
     buy,
     buyUsingStorage,
@@ -387,6 +388,7 @@ export function useDefaultFamiliar(): void {
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Shorter-Order Cook`);
+        equip($item`tiny stillsuit`);
     } else if (
         availableAmount($item`rope`) < 1 &&
         availableAmount($item`burning newspaper`) + availableAmount($item`burning paper crane`) <
@@ -394,8 +396,10 @@ export function useDefaultFamiliar(): void {
         !CommunityService.FamiliarWeight.isDone()
     ) {
         useFamiliar($familiar`Garbage Fire`);
+        equip($item`tiny stillsuit`);
     } else {
         useFamiliar($familiar`Machine Elf`);
+        equip($item`tiny stillsuit`);
     }
 }
 
@@ -489,4 +493,11 @@ export function oysterAvailable(): boolean {
 
 export function incrementProperty(name: NumericProperty): void {
     set(name, get(name) + 1);
+}
+
+export function juneCleave(): void {
+    if (get("_juneCleaverFightsLeft") > 0) return;
+    equip($item`June cleaver`);
+    adv1($location`Noob Cave`, -1, "");
+    if (get("lastEncounter") === "Poetic Justice") useSkill($skill`Tongue of the Walrus`);
 }

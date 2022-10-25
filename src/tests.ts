@@ -8,6 +8,7 @@ import {
     create,
     eat,
     equip,
+    getFuel,
     getProperty,
     handlingChoice,
     haveEffect,
@@ -23,6 +24,7 @@ import {
     myLevel,
     myMaxhp,
     myMp,
+    mySign,
     mySpleenUse,
     numericModifier,
     print,
@@ -78,6 +80,7 @@ import {
     setChoice,
     tryEnsureEffect,
     tryUse,
+    unequip,
     useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
@@ -160,6 +163,16 @@ export function coilPrep() {
     if (get("_detectiveCasesCompleted") < 3 && myClass() !== $class`Pastamancer`)
         cliExecute("detective solver");
     else visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct");
+
+    // Fuel asdon while knoll is still available to make soda bread
+    if (getFuel() === 0) {
+        retrieveItem($item`loaf of soda bread`, 13);
+        AsdonMartin.insertFuel($item`loaf of soda bread`, 13);
+        while (getFuel() < 74) {
+            retrieveItem($item`loaf of soda bread`, 1);
+            AsdonMartin.insertFuel($item`loaf of soda bread`, 1);
+        }
+    }
 
     // Set doc bag choice
     setChoice(1340, 3);
@@ -512,6 +525,11 @@ export function famWtPrep() {
     }
 
     tryEnsureEffect($effect`Heart of Green`);
+
+    if (mySign() !== "Platypus" && !get("moonTuned")) {
+        unequip($item`hewn moon-rune spoon`);
+        visitUrl("inv_use.php?whichitem=10254&pwd&doit=96&whichsign=4");
+    }
 
     famweightOutfit();
     if (globalOptions.debug) {

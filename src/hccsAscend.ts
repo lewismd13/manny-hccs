@@ -8,10 +8,10 @@ import {
     myInebriety,
     print,
     pvpAttacksLeft,
+    stashAmount,
     takeStash,
     use,
     useSkill,
-    wait,
 } from "kolmafia";
 import {
     $class,
@@ -26,6 +26,8 @@ import {
     Lifestyle,
     prepareAscension,
 } from "libram";
+
+export const stashpulls = [$item`Snow Suit`, $item`moveable feast`, $item`repaid diaper`];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(args = ""): void {
@@ -92,7 +94,6 @@ export function main(args = ""): void {
         use($item`Peppermint Pip Packet`);
     }
 
-    // eslint-disable-next-line libram/verify-constants
     while (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
 
     if (equippedItem($slot`bootskin`) !== $item`frontwinder skin`) {
@@ -103,18 +104,15 @@ export function main(args = ""): void {
         throw "Your cowboy boots have the wrong spurs";
     }
 
-    const stashpulls = [$item`Snow Suit`, $item`moveable feast`];
-
+    Clan.join("Alliance From Heck");
     for (const pull of stashpulls) {
-        if (!have(pull)) takeStash(pull, 1);
+        if (!have(pull) && stashAmount(pull) > 0) takeStash(pull, 1);
     }
 
     print(
         `you're about to ascend as a ${myClass} with a ${myworkshed}! you provided ${args} as options`,
         "green"
     );
-
-    wait(10);
 
     prepareAscension({
         workshed: myworkshed,

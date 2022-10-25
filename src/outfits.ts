@@ -344,6 +344,7 @@ export function famweightOutfit(): void {
     if (!inHardcore()) {
         if (storageAmount($item`Snow Suit`)) resources.pull($item`Snow Suit`, 0);
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
+        else resources.pull($item`Great Wolf's beastly trousers`, 0);
         if (have($item`Snow Suit`) && storageAmount($item`moveable feast`)) {
             resources.pull($item`moveable feast`, 0);
             useFamiliar($familiar`Blood-Faced Volleyball`);

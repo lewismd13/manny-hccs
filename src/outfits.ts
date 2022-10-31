@@ -13,7 +13,8 @@ import {
     Slot,
     storageAmount,
     toSlot,
-    useFamiliar,
+    use,
+    useFamiliar
 } from "kolmafia";
 import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
 import { resources } from ".";
@@ -348,7 +349,7 @@ export function famweightOutfit(): void {
         if (have($item`Snow Suit`) && storageAmount($item`moveable feast`)) {
             resources.pull($item`moveable feast`, 0);
             useFamiliar($familiar`Blood-Faced Volleyball`);
-            equip($item`moveable feast`);
+            use($item`moveable feast`);
         }
     }
 

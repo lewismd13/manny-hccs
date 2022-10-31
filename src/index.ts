@@ -1,5 +1,6 @@
 import {
     cliExecute,
+    equip,
     hippyStoneBroken,
     inHardcore,
     myDaycount,
@@ -10,7 +11,7 @@ import {
     setAutoAttack,
     visitUrl,
 } from "kolmafia";
-import { Clan, CommunityService, have } from "libram";
+import { $item, $slot, Clan, CommunityService, have } from "libram";
 import { get, PropertiesManager } from "libram/dist/property";
 import { stashpulls } from "./hccsAscend";
 import { level } from "./level";
@@ -76,6 +77,7 @@ try {
     assertTest(CommunityService.HotRes.run(hotResPrep, 1), "Hot Res");
     assertTest(CommunityService.Noncombat.run(nonCombatPrep, 1), "Noncombat");
     assertTest(CommunityService.FamiliarWeight.run(famWtPrep, 25), "Familiar Weight");
+    equip($item`none`, $slot`familiar`);
     assertTest(CommunityService.WeaponDamage.run(WeaponPrep, 1), "Weapon Damage");
     assertTest(CommunityService.SpellDamage.run(spellPrep, 25), "Spell Damage");
     assertTest(CommunityService.BoozeDrop.run(itemPrep, 1), "Item");

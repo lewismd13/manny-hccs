@@ -101,6 +101,12 @@ export function level(): void {
             resources.wish($effect`New and Improved`);
             resources.wish($effect`Different Way of Seeing Things`);
         }
+        if (globalOptions.halloween) {
+            resources.deck("magician");
+            resources.wish($effect`New and Improved`);
+            resources.wish($effect`Thou Shant Not Sing`);
+            resources.wish($effect`HGH-charged`);
+        }
 
         if (!get("_preventScurvy")) useSkill($skill`Prevent Scurvy and Sobriety`);
         if (get("reagentSummons") === 0) useSkill($skill`Advanced Saucecrafting`);
@@ -420,11 +426,12 @@ export function level(): void {
 
     // Professor 10x free witchess knight if on halloween
     if (get("_witchessFights") === 3 && globalOptions.halloween) {
+        cliExecute("umbrella ml");
         useFamiliar($familiar`Pocket Professor`);
         equip($item`LOV Epaulettes`);
         tryEquip($item`Pocket Professor memory chip`);
         equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        equip($item`Kramco Sausage-o-Matic™`);
+        equip($item`unbreakable umbrella`);
         equip($slot`acc1`, $item`hewn moon-rune spoon`);
         equip($slot`acc2`, $item`Brutal brogues`);
         equip($slot`acc3`, $item`Beach Comb`);
@@ -464,6 +471,7 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
+    // TODO: make this usable
     while (
         globalOptions.levelAggressively &&
         get("lastCopyableMonster") === $monster`sausage goblin` &&

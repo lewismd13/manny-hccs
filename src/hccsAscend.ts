@@ -41,6 +41,12 @@ export function main(args = ""): void {
         myClass = $class`Sauceror`;
     }
 
+    let lifestyleMode = Lifestyle.softcore;
+
+    if (args.split(" ").includes("hardcore")) {
+        lifestyleMode = Lifestyle.hardcore;
+    }
+
     Clan.join("Alliance from Hell");
 
     if (pvpAttacksLeft() > 0) {
@@ -103,12 +109,12 @@ export function main(args = ""): void {
     if (equippedItem($slot`bootspur`) !== $item`nicksilver spurs`) {
         throw "Your cowboy boots have the wrong spurs";
     }
-
-    Clan.join("Alliance From Heck");
-    for (const pull of stashpulls) {
-        if (!have(pull) && stashAmount(pull) > 0) takeStash(pull, 1);
+    if (lifestyleMode === Lifestyle.softcore) {
+        Clan.join("Alliance From Heck");
+        for (const pull of stashpulls) {
+            if (!have(pull) && stashAmount(pull) > 0) takeStash(pull, 1);
+        }
     }
-
     print(
         `you're about to ascend as a ${myClass} with a ${myworkshed}! you provided ${args} as options`,
         "green"
@@ -129,7 +135,7 @@ export function main(args = ""): void {
     ascend(
         $path`Community Service`,
         myClass,
-        Lifestyle.softcore,
+        lifestyleMode,
         "wallaby",
         $item`astral six-pack`,
         $item`astral statuette`

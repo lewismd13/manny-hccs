@@ -100,7 +100,7 @@ import uniform, {
 
 export function coilPrep() {
     if (myLevel() === 1 && mySpleenUse() === 0) {
-        while (get("_universeCalculated") < get("skillLevel144")) {
+        while (get("_universeCalculated") < 3) {
             cliExecute("numberology 69");
         }
     }

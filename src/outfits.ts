@@ -14,7 +14,7 @@ import {
     storageAmount,
     toSlot,
     use,
-    useFamiliar
+    useFamiliar,
 } from "kolmafia";
 import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
 import { resources } from ".";
@@ -331,9 +331,9 @@ export function noncombatOutfit(): void {
             back: $item`protonic accelerator pack`,
             shirt: $item`Jurassic Parka`,
             weapon: $item`Fourth of May Cosplay Saber`,
-            offhand: $items`unbreakable umbrella`,
+            offhand: $item`unbreakable umbrella`,
             acc1: $item`Kremlin's Greatest Briefcase`,
-            acc2: $items`hewn moon-rune spoon`,
+            acc2: $item`hewn moon-rune spoon`,
             acc3: $item`Brutal brogues`,
             familiar: $item`tiny stillsuit`,
         },

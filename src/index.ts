@@ -44,7 +44,7 @@ export function endOfRunPvp(): void {
     // run optimizer and fight, choosing whatever mini you like this season
 
     cliExecute("uberpvpoptimizer");
-    cliExecute("pvp fame square one");
+    cliExecute("pvp fame fashion");
 }
 
 cliExecute("mood apathetic");

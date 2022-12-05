@@ -166,12 +166,7 @@ export function coilPrep() {
 
     // Fuel asdon while knoll is still available to make soda bread
     if (getFuel() === 0) {
-        retrieveItem($item`loaf of soda bread`, 13);
-        AsdonMartin.insertFuel($item`loaf of soda bread`, 13);
-        while (getFuel() < 74) {
-            retrieveItem($item`loaf of soda bread`, 1);
-            AsdonMartin.insertFuel($item`loaf of soda bread`, 1);
-        }
+        AsdonMartin.fillTo(74);
     }
 
     // Set doc bag choice

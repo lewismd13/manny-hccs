@@ -8,9 +8,11 @@ import {
     create,
     eat,
     equip,
+    getFuel,
     getProperty,
     handlingChoice,
     haveEffect,
+    inHardcore,
     logprint,
     maximize,
     mpCost,
@@ -22,6 +24,7 @@ import {
     myLevel,
     myMaxhp,
     myMp,
+    mySign,
     mySpleenUse,
     numericModifier,
     print,
@@ -77,6 +80,7 @@ import {
     setChoice,
     tryEnsureEffect,
     tryUse,
+    unequip,
     useDefaultFamiliar,
 } from "./lib";
 import { globalOptions } from "./options";
@@ -96,7 +100,7 @@ import uniform, {
 
 export function coilPrep() {
     if (myLevel() === 1 && mySpleenUse() === 0) {
-        while (get("_universeCalculated") < get("skillLevel144")) {
+        while (get("_universeCalculated") < 3) {
             cliExecute("numberology 69");
         }
     }
@@ -159,6 +163,11 @@ export function coilPrep() {
     if (get("_detectiveCasesCompleted") < 3 && myClass() !== $class`Pastamancer`)
         cliExecute("detective solver");
     else visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct");
+
+    // Fuel asdon while knoll is still available to make soda bread
+    if (getFuel() === 0) {
+        AsdonMartin.fillTo(74);
+    }
 
     // Set doc bag choice
     setChoice(1340, 3);
@@ -428,9 +437,10 @@ export function famWtPrep() {
 
     // NC reward
     ensureEffect($effect`Robot Friends`);
-
-    useFamiliar($familiar`Baby Bugged Bugbear`);
-    visitUrl("arena.php");
+    if (inHardcore()) {
+        useFamiliar($familiar`Baby Bugged Bugbear`);
+        visitUrl("arena.php");
+    }
 
     // use freeruns at gingerbread city to get gingerbread spice latte
     if (
@@ -510,6 +520,11 @@ export function famWtPrep() {
     }
 
     tryEnsureEffect($effect`Heart of Green`);
+
+    if (mySign() !== "Platypus" && !get("moonTuned")) {
+        unequip($item`hewn moon-rune spoon`);
+        visitUrl("inv_use.php?whichitem=10254&pwd&doit=96&whichsign=4");
+    }
 
     famweightOutfit();
     if (globalOptions.debug) {

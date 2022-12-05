@@ -12,6 +12,7 @@ import {
     myFullness,
     myInebriety,
     print,
+    pullsRemaining,
     retrieveItem,
     runChoice,
     runCombat,
@@ -23,6 +24,7 @@ import {
     visitUrl,
 } from "kolmafia";
 import { $effect, $item, $skill, get, have, Macro } from "libram";
+import { pullIfPossible } from "./lib";
 
 export class ResourceTracker {
     deckCards: string[] = [];
@@ -110,6 +112,14 @@ export class ResourceTracker {
         }
     }
 
+    pull(item: Item, maxPrice: number, attempt = false): void {
+        if (pullsRemaining() > 0 && pullIfPossible(1, item, maxPrice)) {
+            this.pulls.push(item);
+        } else if (!attempt) {
+            print(`WARNING: Tried to pull ${item}, but we're out of pulls.`, "orange");
+        }
+    }
+
     summarize(): void {
         print("====== RESOURCE SUMMARY ======");
         print(`Deck: ${this.deckCards.join(", ")}`);
@@ -119,6 +129,7 @@ export class ResourceTracker {
         print(`Sabers: ${this.saberForces.map((effectOrItem) => effectOrItem.name).join(", ")}`);
         print(`Locket Fights: ${this.lockets.map((monster) => monster.name).join(", ")}`);
         print(`Maps: ${this.maps.map((monster) => monster.name).join(", ")}`);
+        print(`Pulls: ${this.pulls.map((item) => item.name).join(", ")}`);
         if (this.consumedFood.size > 0) {
             print("FOOD");
             for (const [food, count] of this.consumedFood) {

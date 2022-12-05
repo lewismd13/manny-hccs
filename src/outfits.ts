@@ -11,10 +11,13 @@ import {
     Item,
     myFamiliar,
     Slot,
+    storageAmount,
     toSlot,
+    use,
     useFamiliar,
 } from "kolmafia";
 import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
+import { resources } from ".";
 
 // shamelessly stolen wholesale from https://github.com/horrible-little-slime/phccs.git
 
@@ -328,9 +331,9 @@ export function noncombatOutfit(): void {
             back: $item`protonic accelerator pack`,
             shirt: $item`Jurassic Parka`,
             weapon: $item`Fourth of May Cosplay Saber`,
-            offhand: $items`unbreakable umbrella`,
+            offhand: $item`unbreakable umbrella`,
             acc1: $item`Kremlin's Greatest Briefcase`,
-            acc2: $items`hewn moon-rune spoon`,
+            acc2: $item`hewn moon-rune spoon`,
             acc3: $item`Brutal brogues`,
             familiar: $item`tiny stillsuit`,
         },
@@ -339,23 +342,48 @@ export function noncombatOutfit(): void {
 }
 
 export function famweightOutfit(): void {
+    if (!inHardcore()) {
+        if (storageAmount($item`Snow Suit`)) resources.pull($item`Snow Suit`, 0);
+        if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
+        else resources.pull($item`Great Wolf's beastly trousers`, 0);
+        if (have($item`Snow Suit`) && storageAmount($item`moveable feast`)) {
+            resources.pull($item`moveable feast`, 0);
+            useFamiliar($familiar`Blood-Faced Volleyball`);
+            use($item`moveable feast`);
+        }
+    }
+
+    const familiarAndEquip = have($item`Snow Suit`)
+        ? { fam: $familiar`Blood-Faced Volleyball`, equip: $item`Snow Suit` }
+        : have($item`cracker`)
+        ? { fam: $familiar`Exotic Parrot`, equip: $item`cracker` }
+        : have($familiar`Baby Bugged Bugbear`)
+        ? { fam: $familiar`Baby Bugged Bugbear`, equip: $item`bugged beanie` }
+        : {
+              fam: $familiar`Blood-Faced Volleyball`,
+              equip: $items`astral pet sweater`,
+          };
+
     Outfit.doYourBest(
         {
             hat: $item`Daylight Shavings Helmet`,
             weapon: $item`Fourth of May Cosplay Saber`,
             offhand: $items`burning paper crane, familiar scrapbook`,
-            pants: $items`pantogram pants, Cargo Cultist Shorts`,
+            pants: $items`repaid diaper, Great Wolf's beastly trousers, Cargo Cultist Shorts`,
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: $item`bugged beanie`,
+            familiar: familiarAndEquip.equip,
         },
-        $familiar`Baby Bugged Bugbear`
+        familiarAndEquip.fam
     ).dress();
 }
 
 export function weaponOutfit(): void {
     if (!have($item`broken champagne bottle`)) cliExecute("fold broken champagne bottle");
+
+    if (!inHardcore()) resources.pull($item`Stick-Knife of Loathing`, 0);
+
     Outfit.doYourBest(
         {
             hat: $items`seal-skull helmet`,
@@ -374,15 +402,18 @@ export function spellOutfit(): void {
     if (!have($item`Abracandalabra`) && !have($item`obsidian nutcracker`) && inHardcore()) {
         buy($item`obsidian nutcracker`);
     }
+
+    if (!inHardcore()) resources.pull($item`Staff of the Roaring Hearth`, 0);
+
     const { familiar, famEquip } = {
-        familiar: $familiar`Left-Hand Man`,
-        famEquip: $items`astral statuette`,
+        familiar: $familiar`Disembodied Hand`,
+        famEquip: $items`Stick-Knife of Loathing`,
     };
 
     Outfit.doYourBest(
         {
             hat: $items`sugar chapeau, Hollandaise helmet`,
-            weapon: $item`weeping willow wand`,
+            weapon: $items`Staff of the Roaring Hearth, weeping willow wand`,
             offhand: [
                 $item`Abracandalabra`,
                 ...(inHardcore()

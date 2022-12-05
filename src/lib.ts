@@ -11,6 +11,8 @@ import {
     eat,
     Effect,
     equip,
+    equippedAmount,
+    equippedItem,
     familiarWeight,
     getClanName,
     getFuel,
@@ -32,6 +34,7 @@ import {
     setProperty,
     shopAmount,
     Skill,
+    Slot,
     Stat,
     storageAmount,
     takeShop,
@@ -500,4 +503,12 @@ export function juneCleave(): void {
     equip($item`June cleaver`);
     adv1($location`Noob Cave`, -1, "");
     if (get("lastEncounter") === "Poetic Justice") useSkill($skill`Tongue of the Walrus`);
+}
+
+export function unequip(item: Item): void {
+    while (equippedAmount(item) > 0) {
+        const slot = Slot.all().find((equipmentSlot) => equippedItem(equipmentSlot) === item);
+        if (!slot) return;
+        equip(slot, $item`none`);
+    }
 }

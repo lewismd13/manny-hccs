@@ -329,11 +329,6 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
-    if (!have($effect`Holiday Yoked`) || !have($item`Sacramento wine`)) {
-        useFamiliar($familiar`Ghost of Crimbo Carols`);
-        withMacro(Macro.kill(), () => Witchess.fightPiece($monster`Witchess Bishop`));
-    }
-
     ensureEffect($effect`Song of Bravado`);
 
     const mood = new Mood();

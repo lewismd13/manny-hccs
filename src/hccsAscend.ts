@@ -27,7 +27,7 @@ import {
     prepareAscension,
 } from "libram";
 
-export const stashpulls = [$item`Snow Suit`, $item`moveable feast`, $item`repaid diaper`];
+export const stashpulls = [$item`moveable feast`, $item`repaid diaper`];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(args = ""): void {

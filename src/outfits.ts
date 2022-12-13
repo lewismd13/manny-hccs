@@ -343,26 +343,15 @@ export function noncombatOutfit(): void {
 
 export function famweightOutfit(): void {
     if (!inHardcore()) {
-        if (storageAmount($item`Snow Suit`)) resources.pull($item`Snow Suit`, 0);
+        resources.pull($item`tiny costume wardrobe`, 0);
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
         else resources.pull($item`Great Wolf's beastly trousers`, 0);
-        if (have($item`Snow Suit`) && storageAmount($item`moveable feast`)) {
+        if (have($item`tiny costume wardrobe`) && storageAmount($item`moveable feast`)) {
             resources.pull($item`moveable feast`, 0);
-            useFamiliar($familiar`Blood-Faced Volleyball`);
+            useFamiliar($familiar`Doppelshifter`);
             use($item`moveable feast`);
         }
     }
-
-    const familiarAndEquip = have($item`Snow Suit`)
-        ? { fam: $familiar`Blood-Faced Volleyball`, equip: $item`Snow Suit` }
-        : have($item`cracker`)
-        ? { fam: $familiar`Exotic Parrot`, equip: $item`cracker` }
-        : have($familiar`Baby Bugged Bugbear`)
-        ? { fam: $familiar`Baby Bugged Bugbear`, equip: $item`bugged beanie` }
-        : {
-              fam: $familiar`Blood-Faced Volleyball`,
-              equip: $items`astral pet sweater`,
-          };
 
     Outfit.doYourBest(
         {
@@ -373,9 +362,9 @@ export function famweightOutfit(): void {
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: familiarAndEquip.equip,
+            familiar: $item`tiny costume wardrobe`,
         },
-        familiarAndEquip.fam
+        $familiar`Doppelshifter`
     ).dress();
 }
 

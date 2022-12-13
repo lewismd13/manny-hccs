@@ -45,7 +45,6 @@ import {
     ensureEffect,
     get,
     have,
-    Mood,
     TunnelOfLove,
     Witchess,
 } from "libram";
@@ -238,6 +237,11 @@ export function level(): void {
     ensureEffect($effect`Lack of Body-Building`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
+    ensureEffect($effect`Carol of the Thrills`);
+    ensureEffect($effect`Carol of the Bulls`);
+    ensureEffect($effect`Drescher's Annoying Noise`);
+    ensureEffect($effect`Pride of the Puffin`);
+    if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
     // initialize snojo, picking myst for ice rice
     setChoice(1310, 3);
@@ -256,6 +260,12 @@ export function level(): void {
 
     // back to saber now that we're done cleavering
     uniform();
+
+    while (get("_speakeasyFreeFights") < 3) {
+        useDefaultFamiliar();
+        // eslint-disable-next-line libram/verify-constants
+        adventureMacroAuto($location`An Unusually Quiet Barroom Brawl`, Macro.attack().repeat());
+    }
 
     const missingOintment =
         availableAmount($item`ointment of the occult`) === 0 &&
@@ -329,29 +339,16 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
-    if (!have($effect`Holiday Yoked`) || !have($item`Sacramento wine`)) {
-        useFamiliar($familiar`Ghost of Crimbo Carols`);
-        withMacro(Macro.kill(), () => Witchess.fightPiece($monster`Witchess Bishop`));
-    }
-
     ensureEffect($effect`Song of Bravado`);
-
-    const mood = new Mood();
-    mood.skill($skill`Blood Bond`);
-    mood.skill($skill`Blood Bubble`);
-    mood.skill($skill`Carol of the Bulls`);
-    mood.skill($skill`Carol of the Hells`);
-    mood.skill($skill`Carol of the Thrills`);
-    mood.skill($skill`Drescher's Annoying Noise`);
-    mood.skill($skill`Get Big`);
-    mood.skill($skill`Leash of Linguini`);
-    mood.skill($skill`Pride of the Puffin`);
-    mood.skill($skill`Rage of the Reindeer`);
-    mood.skill($skill`Singer's Faithful Ocelot`);
-    mood.skill($skill`Stevedave's Shanty of Superiority`);
-    mood.skill($skill`Ur-Kel's Aria of Annoyance`);
-    if (myPrimestat() === $stat`Mysticality`) mood.skill($skill`Inscrutable Gaze`);
-    mood.execute();
+    ensureEffect($effect`Blood Bond`);
+    ensureEffect($effect`Blood Bubble`);
+    ensureEffect($effect`Carol of the Hells`);
+    ensureEffect($effect`Big`);
+    ensureEffect($effect`Leash of Linguini`);
+    ensureEffect($effect`Rage of the Reindeer`);
+    ensureEffect($effect`Singer's Faithful Ocelot`);
+    ensureEffect($effect`Stevedave's Shanty of Superiority`);
+    ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
 
     // LOV Tunnel
     if (!TunnelOfLove.isUsed()) {

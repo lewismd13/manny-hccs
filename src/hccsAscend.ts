@@ -27,7 +27,7 @@ import {
     prepareAscension,
 } from "libram";
 
-export const stashpulls = [$item`Snow Suit`, $item`moveable feast`, $item`repaid diaper`];
+export const stashpulls = [$item`moveable feast`, $item`repaid diaper`];
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(args = ""): void {
@@ -60,31 +60,39 @@ export function main(args = ""): void {
 
     const playerIDs: string[] = [
         "phreddrickkv2",
-        // "boesbert",
-        "Phillammon",
-        "2705901",
+        "Malibu Stacey",
         "ReverKiller",
         "beldur",
-        "887028",
-        "786069",
-        "1197090",
-        "437479",
+        "BC_Goldman",
+        "katarn",
+        "gausie",
+        "Captain Scotch",
         "playultm8",
         "busta_rhymes",
-        "644996",
+        "freddyjoehanson",
         "kenny kamAKAzi",
         "SSBBHax",
-        "1937905",
-        "2766368",
-        "2203016",
-        "1972588",
+        "tHE eROsIoNseEker",
+        "The Dictator",
+        "ALAVG",
+        "worthawholebean",
         "Butts McGruff",
         "burningbman",
-        "2533291",
-        "1741165",
-        "1993636",
-        "2339258",
+        "kha0z",
+        "Grushvak",
+        "threebullethamburgler",
+        "Superechidna",
         "DanceCommander6",
+        "Baden",
+        "irrat",
+        "Kasekopf",
+        "king dave",
+        "slifty",
+        "dician",
+        "Joe The Sauceror",
+        "beldur",
+        "soolar",
+        "blazex",
     ];
 
     while ($skill`Experience Safari`.timescast < get("skillLevel180")) {

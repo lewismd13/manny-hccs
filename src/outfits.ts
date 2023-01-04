@@ -292,12 +292,12 @@ export function itemOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $item`wad of used tape`,
-            weapon: $items`extra-large utility candle`,
+            weapon: $item`extra-large utility candle`,
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
             acc2: $item`gold detective badge`,
-            acc3: $items`government-issued night-vision goggles`,
+            acc3: $item`your cowboy boots`,
             familiar: $item`li'l ninja costume`,
         },
         $familiar`Trick-or-Treating Tot`

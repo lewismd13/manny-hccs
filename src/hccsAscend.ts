@@ -2,12 +2,14 @@ import {
     cliExecute,
     equippedItem,
     fullnessLimit,
+    getPermedSkills,
     inebrietyLimit,
     myFullness,
     myGardenType,
     myInebriety,
     print,
     pvpAttacksLeft,
+    Skill,
     stashAmount,
     takeStash,
     use,
@@ -28,6 +30,20 @@ import {
 } from "libram";
 
 export const stashpulls = [$item`moveable feast`, $item`repaid diaper`];
+
+export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean } {
+    return {
+        permSkills: new Map(
+            Skill.all()
+                .filter(
+                    (skill) =>
+                        have(skill) && skill.permable && getPermedSkills()[skill.name] === undefined
+                )
+                .map((skill) => [skill, Lifestyle.hardcore])
+        ),
+        neverAbort: false,
+    };
+}
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function main(args = ""): void {
@@ -146,6 +162,9 @@ export function main(args = ""): void {
         lifestyleMode,
         "wallaby",
         $item`astral six-pack`,
-        $item`astral statuette`
+        $item`astral statuette`,
+        createPermOptions()
     );
+
+    if (have($item`Asdon Martin keyfob`)) use($item`Asdon Martin keyfob`);
 }

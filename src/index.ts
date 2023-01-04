@@ -98,7 +98,11 @@ if (get("csServicesPerformed").split(",").length === 11) {
     }
     CommunityService.printLog("yellow");
     print();
-    print(`That is a ${myDaycount()} day, ${myTurncount()} turn HCCS run. Nice work!`, `yellow`);
+    const runtype = inHardcore() ? "HCCS" : "SCCS";
+    print(
+        `That is a ${myDaycount()} day, ${myTurncount()} turn ${runtype} run. Nice work!`,
+        `yellow`
+    );
     print();
     resources.summarize();
 } else print("You don't actually appear to be done.", "red");

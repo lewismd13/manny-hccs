@@ -441,7 +441,6 @@ export function ensureInnerElf(): void {
         myLevel() >= 13 &&
         get("_kgbTranquilizerDartUses") + get("_snokebombUsed") < 6
     ) {
-        const savedFam = myFamiliar();
         Clan.join("Beldungeon");
         try {
             useFamiliar($familiar`Machine Elf`);
@@ -454,7 +453,7 @@ export function ensureInnerElf(): void {
             );
         } finally {
             Clan.join("Alliance From Hell");
-            useFamiliar(savedFam);
+            useDefaultFamiliar();
         }
     }
 }

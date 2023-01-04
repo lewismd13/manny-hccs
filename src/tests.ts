@@ -165,7 +165,7 @@ export function coilPrep() {
     else visitUrl("place.php?whichplace=town_wrong&action=townwrong_precinct");
 
     // Fuel asdon while knoll is still available to make soda bread
-    if (getFuel() === 0) {
+    if (getFuel() === 0 && globalOptions.workshed === "Asdon") {
         AsdonMartin.fillTo(74);
     }
 
@@ -588,13 +588,6 @@ export function WeaponPrep() {
     }
 
     ensureInnerElf();
-
-    // free run from fluffy bunny for crimbo ghost buff
-    if (!have($effect`Do You Crush What I Crush?`)) {
-        useFamiliar($familiar`Ghost of Crimbo Carols`);
-        equip($slot`acc3`, $item`Lil' Doctor™ bag`);
-        adventureMacroAuto($location`The Dire Warren`, Macro.skill($skill`Reflex Hammer`));
-    }
 
     // fax ungulith (Saber YR)
     if (!have($item`corrupted marrow`) && !have($effect`Cowrruption`)) {

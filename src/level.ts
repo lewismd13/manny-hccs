@@ -241,6 +241,7 @@ export function level(): void {
     ensureEffect($effect`Carol of the Bulls`);
     ensureEffect($effect`Drescher's Annoying Noise`);
     ensureEffect($effect`Pride of the Puffin`);
+    ensureEffect($effect`Empathy`);
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
     // initialize snojo, picking myst for ice rice

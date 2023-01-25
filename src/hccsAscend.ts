@@ -29,7 +29,7 @@ import {
     prepareAscension,
 } from "libram";
 
-export const stashpulls = [$item`moveable feast`, $item`repaid diaper`];
+export const stashpulls = [$item`moveable feast`];
 
 export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean } {
     return {

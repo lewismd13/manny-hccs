@@ -145,7 +145,6 @@ export function main(args = ""): void {
     );
 
     prepareAscension({
-        workshed: myworkshed,
         garden: "Peppermint Pip Packet",
         eudora: "Our Daily Candles™ order form",
 

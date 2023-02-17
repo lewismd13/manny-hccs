@@ -29,7 +29,7 @@ import {
     prepareAscension,
 } from "libram";
 
-export const stashpulls = [$item`moveable feast`, $item`repaid diaper`];
+export const stashpulls = [$item`moveable feast`];
 
 export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean } {
     return {
@@ -145,7 +145,6 @@ export function main(args = ""): void {
     );
 
     prepareAscension({
-        workshed: myworkshed,
         garden: "Peppermint Pip Packet",
         eudora: "Our Daily Candles™ order form",
 

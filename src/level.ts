@@ -23,6 +23,7 @@ import {
     runCombat,
     setAutoAttack,
     setLocation,
+    storageAmount,
     sweetSynthesis,
     totalFreeRests,
     toUrl,
@@ -214,7 +215,6 @@ export function level(): void {
     // Make umbrella +ML
     cliExecute("umbrella ml");
 
-    // eslint-disable-next-line libram/verify-constants
     while (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
 
     equip($slot`acc1`, $item`Powerful Glove`);
@@ -241,6 +241,7 @@ export function level(): void {
     ensureEffect($effect`Carol of the Bulls`);
     ensureEffect($effect`Drescher's Annoying Noise`);
     ensureEffect($effect`Pride of the Puffin`);
+    ensureEffect($effect`Empathy`);
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
     // initialize snojo, picking myst for ice rice
@@ -263,7 +264,6 @@ export function level(): void {
 
     while (get("_speakeasyFreeFights") < 3) {
         useDefaultFamiliar();
-        // eslint-disable-next-line libram/verify-constants
         adventureMacroAuto($location`An Unusually Quiet Barroom Brawl`, Macro.attack().repeat());
     }
 
@@ -440,6 +440,32 @@ export function level(): void {
             .kill()
             .setAutoAttack();
         Witchess.fightPiece($monster`Witchess Knight`);
+        while (inMultiFight()) runCombat();
+        setAutoAttack(0);
+    }
+
+    if (sausageFightGuaranteed() && storageAmount($item`magical sausage casing`) < 200) {
+        equip($item`Kramco Sausage-o-Matic™`);
+        useFamiliar($familiar`Pocket Professor`);
+        equip($item`LOV Epaulettes`);
+        tryEquip($item`Pocket Professor memory chip`);
+        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+        equip($slot`acc1`, $item`hewn moon-rune spoon`);
+        equip($slot`acc2`, $item`Brutal brogues`);
+        equip($slot`acc3`, $item`Beach Comb`);
+        equip($item`Daylight Shavings Helmet`);
+        if (have($item`repaid diaper`)) equip($item`repaid diaper`);
+        else tryEquip($item`Great Wolf's beastly trousers`);
+
+        adventureMacroAuto(
+            $location`Noob Cave`,
+            Macro.if_("!monstername sausage goblin", Macro.abort())
+                .trySkill($skill`lecture on relativity`)
+                .kill(),
+            Macro.if_("!monstername sausage goblin", Macro.abort())
+                .trySkill($skill`lecture on relativity`)
+                .kill()
+        );
         while (inMultiFight()) runCombat();
         setAutoAttack(0);
     }

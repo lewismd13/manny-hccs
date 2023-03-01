@@ -14,6 +14,7 @@ import {
     takeStash,
     use,
     useSkill,
+    visitUrl,
 } from "kolmafia";
 import {
     $class,
@@ -123,6 +124,8 @@ export function main(args = ""): void {
         cliExecute("garden pick");
         use($item`Peppermint Pip Packet`);
     }
+
+    visitUrl("council.php");
 
     while (have($item`MayDay™ supply package`)) use($item`MayDay™ supply package`);
 

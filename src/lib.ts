@@ -382,10 +382,7 @@ export function horse(horse: string): void {
 }
 
 export function useDefaultFamiliar(): void {
-    if (get("camelSpit") < 100 && !CommunityService.WeaponDamage.isDone()) {
-        useFamiliar($familiar`Melodramedary`);
-        equip($item`dromedary drinking helmet`);
-    } else if (
+    if (
         availableAmount($item`short stack of pancakes`) === 0 &&
         haveEffect($effect`Shortly Stacked`) === 0 &&
         !CommunityService.FamiliarWeight.isDone()

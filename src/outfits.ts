@@ -343,14 +343,19 @@ export function noncombatOutfit(): void {
 
 export function famweightOutfit(): void {
     if (!inHardcore()) {
-        resources.pull($item`tiny costume wardrobe`, 0);
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
         else resources.pull($item`Great Wolf's beastly trousers`, 0);
-        if (have($item`tiny costume wardrobe`) && storageAmount($item`moveable feast`)) {
+        if (storageAmount($item`moveable feast`)) {
             resources.pull($item`moveable feast`, 0);
-            useFamiliar($familiar`Doppelshifter`);
+            useFamiliar($familiar`Mini-Trainbot`);
             use($item`moveable feast`);
         }
+    }
+
+    if (!have($item`overloaded Yule battery`)) {
+        useFamiliar($familiar`Mini-Trainbot`);
+        resources.clipArt($item`box of Familiar Jacks`);
+        use($item`box of Familiar Jacks`);
     }
 
     Outfit.doYourBest(
@@ -362,9 +367,9 @@ export function famweightOutfit(): void {
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: $item`tiny costume wardrobe`,
+            familiar: $item`overloaded Yule battery`,
         },
-        $familiar`Doppelshifter`
+        $familiar`Mini-Trainbot`
     ).dress();
 }
 

@@ -179,12 +179,6 @@ export function coilPrep() {
 
     equip($familiar`Shorter-Order Cook`, $item`tiny stillsuit`);
 
-    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
-        resources.clipArt($item`box of Familiar Jacks`);
-        useFamiliar($familiar`Melodramedary`);
-        use($item`box of Familiar Jacks`);
-    }
-
     // fight a ghost and kramco before coiling
     function firstFights() {
         uniform(
@@ -591,11 +585,10 @@ export function WeaponPrep() {
 
     // fax ungulith (Saber YR)
     if (!have($item`corrupted marrow`) && !have($effect`Cowrruption`)) {
-        useFamiliar($familiar`Melodramedary`);
+        useDefaultFamiliar();
         equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
         setChoice(1387, 3);
         Macro.skill($skill`Meteor Shower`)
-            .skill($skill`%fn, spit on me!`)
             .skill($skill`Use the Force`)
             .setAutoAttack();
         if (CombatLoversLocket.availableLocketMonsters().includes($monster`ungulith`)) {
@@ -609,7 +602,6 @@ export function WeaponPrep() {
             resources.lockets.push($monster`ungulith`);
             resources.saberForces.push($effect`Meteor Showered`);
         }
-        if (have($effect`Spit Upon`) && get("camelSpit") === 100) setProperty("camelSpit", "0");
         if (have($effect`Meteor Showered`)) set("_meteorShowerUses", 1 + get("_meteorShowerUses"));
         setAutoAttack(0);
         useDefaultFamiliar();

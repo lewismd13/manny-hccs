@@ -711,15 +711,17 @@ export function itemPrep() {
         );
     }
 
+    if (have($item`government cheese`) && have($item`anticheese`)) {
+        create($item`government`);
+        use($item`government`);
+    }
+
     ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`The Spirit of Taking`);
     tryEnsureEffect($effect`Heart of Lavender`);
 
-    if (haveEffect($effect`Synthesis: Collection`) === 0) {
-        use(1, $item`peppermint sprout`);
-        sweetSynthesis($item`peppermint sprout`, $item`peppermint twist`);
-    }
+    ensureEffect($effect`Nearly All-Natural`);
 
     if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Observantly`, 1);
 

@@ -262,9 +262,20 @@ export function level(): void {
     // back to saber now that we're done cleavering
     uniform();
 
+    SourceTerminal.educate($skill`Portscan`);
+
     while (get("_speakeasyFreeFights") < 3) {
         useDefaultFamiliar();
-        adventureMacroAuto($location`An Unusually Quiet Barroom Brawl`, Macro.attack().repeat());
+        adventureMacroAuto(
+            $location`An Unusually Quiet Barroom Brawl`,
+            Macro.externalIf(
+                !have($item`government cheese`),
+                Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
+            )
+                .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
+                .attack()
+                .repeat()
+        );
     }
 
     const missingOintment =
@@ -583,6 +594,13 @@ export function level(): void {
         ensureEffect($effect`Song of the North`);
         Witchess.fightPiece($monster`Witchess Queen`);
         setAutoAttack(0);
+    }
+
+    if (!have($item`anticheese`)) {
+        if (!canAdventure($location`South of the Border`)) cliExecute(`create bitchin' meatcar`);
+        if (!have($item`bitchin' meatcar`)) {
+            throw "You failed to make a meatcar, and can't access the desert";
+        } else visitUrl("place.php?whichplace=desertbeach&action=db_nukehouse");
     }
 
     if (globalOptions.debug)

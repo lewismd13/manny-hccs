@@ -731,6 +731,8 @@ export function itemPrep() {
 
     cliExecute("umbrella item");
 
+    libramBurn();
+
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run

@@ -113,6 +113,8 @@ export function level(): void {
         ensurePotionEffect($effect`Mystically Oiled`, $item`ointment of the occult`);
     }
 
+    if (!have($item`meteorite necklace`)) resources.pull($item`meteorite necklace`, 0);
+
     ensureEffect($effect`You Learned Something Maybe!`);
 
     uniform();

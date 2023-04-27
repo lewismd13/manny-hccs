@@ -1,4 +1,7 @@
 import {
+    Familiar,
+    Item,
+    Slot,
     abort,
     buy,
     canEquip,
@@ -6,17 +9,15 @@ import {
     equip,
     equippedAmount,
     equippedItem,
-    Familiar,
     inHardcore,
-    Item,
+    myBasestat,
     myFamiliar,
-    Slot,
     storageAmount,
     toSlot,
     use,
     useFamiliar,
 } from "kolmafia";
-import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
+import { $familiar, $item, $items, $slot, $slots, $stat, get, have } from "libram";
 import { resources } from ".";
 
 // shamelessly stolen wholesale from https://github.com/horrible-little-slime/phccs.git
@@ -34,7 +35,7 @@ const outfitSlots = [
     "familiar",
 ] as const;
 
-type OutfitSlots = typeof outfitSlots[number];
+type OutfitSlots = (typeof outfitSlots)[number];
 
 type OutfitParts = Partial<{ [slot in OutfitSlots]: Item }>;
 type OutfitAttempt = Partial<{ [slot in OutfitSlots]: Item | Item[] }>;
@@ -293,7 +294,7 @@ export function itemOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $item`wad of used tape`,
-            weapon: $item`extra-large utility candle`,
+            weapon: $items`extra-large utility candle, Fourth of May Cosplay Saber`,
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,

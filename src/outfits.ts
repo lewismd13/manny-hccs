@@ -173,8 +173,8 @@ export default function uniform(...changes: (Item | [Item, Slot])[]): void {
                 ? $item`June cleaver`
                 : $item`Fourth of May Cosplay Saber`,
         offhand: $items`unbreakable umbrella, familiar scrapbook`,
-        acc1: $items`meteorite necklace, your cowboy boots`,
-        acc2: $items`Powerful Glove`,
+        acc1: $items`meteorite necklace`,
+        acc2: $items`your cowboy boots, Powerful Glove`,
         acc3: $items`battle broom, Retrospecs`,
         back: $items`LOV Epaulettes, vampyric cloake`,
         familiar: null,

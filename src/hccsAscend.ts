@@ -1,3 +1,4 @@
+import { Args } from "grimoire-kolmafia";
 import {
     Skill,
     cliExecute,
@@ -8,7 +9,6 @@ import {
     myFullness,
     myGardenType,
     myInebriety,
-    print,
     pvpAttacksLeft,
     stashAmount,
     takeStash,
@@ -30,6 +30,21 @@ import {
     prepareAscension,
 } from "libram";
 
+const args = Args.create("hccsAscend", "Manny's script to ascend into a CS loop", {
+    core: Args.string({
+        help: "Hardcore or softcore",
+        options: [
+            ["hard", "Ascend HCCS"],
+            ["soft", "Ascend SCCS"],
+        ],
+        default: "soft",
+    }),
+    class: Args.class({
+        help: "What class should we ascend as? Currently only PM is stable, S is probably fine, the others are not supported",
+        default: $class`Pastamancer`,
+    }),
+});
+
 export const stashpulls = [$item`moveable feast`];
 
 export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean } {
@@ -47,22 +62,12 @@ export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverA
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function main(args = ""): void {
-    const myworkshed = args.split(" ").includes("dna")
-        ? `Little Geneticist DNA-Splicing Lab`
-        : `Asdon Martin keyfob`;
+export function main(command?: string): void {
+    Args.fill(args, command);
 
-    let myClass = $class`Pastamancer`;
+    const myClass = args.class;
 
-    if (args.split(" ").includes("sauceror")) {
-        myClass = $class`Sauceror`;
-    }
-
-    let lifestyleMode = Lifestyle.softcore;
-
-    if (args.split(" ").includes("hardcore")) {
-        lifestyleMode = Lifestyle.hardcore;
-    }
+    const lifestyleMode = args.core === "soft" ? Lifestyle.softcore : Lifestyle.hardcore;
 
     Clan.join("Alliance from Hell");
 
@@ -142,10 +147,6 @@ export function main(args = ""): void {
             if (!have(pull) && stashAmount(pull) > 0) takeStash(pull, 1);
         }
     }
-    print(
-        `you're about to ascend as a ${myClass} with a ${myworkshed}! you provided ${args} as options`,
-        "green"
-    );
 
     prepareAscension({
         garden: "Peppermint Pip Packet",

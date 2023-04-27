@@ -1,7 +1,6 @@
 export const globalOptions = {
     levelAggressively: false,
-    debug: false,
-    hardcorePvp: true,
+    debug: true,
     workshed: `Asdon`,
     halloween: false,
 };

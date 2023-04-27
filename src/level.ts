@@ -423,7 +423,7 @@ export function level(): void {
             Witchess.fightPiece($monster`Witchess Witch`);
             setAutoAttack(0);
         }
-        while (get("_witchessFights") === 3 && !globalOptions.halloween) {
+        while (get("_witchessFights") === 3) {
             useDefaultFamiliar();
             equip($item`unbreakable umbrella`);
             Macro.kill().setAutoAttack();
@@ -455,30 +455,36 @@ export function level(): void {
         setAutoAttack(0);
     }
 */
-    if (sausageFightGuaranteed() && storageAmount($item`magical sausage casing`) < 200) {
-        equip($item`Kramco Sausage-o-Matic™`);
-        useFamiliar($familiar`Pocket Professor`);
-        equip($item`LOV Epaulettes`);
-        tryEquip($item`Pocket Professor memory chip`);
-        equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
-        equip($slot`acc1`, $item`hewn moon-rune spoon`);
-        equip($slot`acc2`, $item`Brutal brogues`);
-        equip($slot`acc3`, $item`Beach Comb`);
-        equip($item`Daylight Shavings Helmet`);
-        if (have($item`repaid diaper`)) equip($item`repaid diaper`);
-        else tryEquip($item`Great Wolf's beastly trousers`);
+    if (
+        storageAmount($item`magical sausage casing`) < 200 ||
+        globalOptions.levelAggressively ||
+        globalOptions.halloween
+    ) {
+        if (sausageFightGuaranteed()) {
+            equip($item`Kramco Sausage-o-Matic™`);
+            useFamiliar($familiar`Pocket Professor`);
+            equip($item`LOV Epaulettes`);
+            tryEquip($item`Pocket Professor memory chip`);
+            equip($slot`weapon`, $item`Fourth of May Cosplay Saber`);
+            equip($slot`acc1`, $item`hewn moon-rune spoon`);
+            equip($slot`acc2`, $item`Brutal brogues`);
+            equip($slot`acc3`, $item`Beach Comb`);
+            equip($item`Daylight Shavings Helmet`);
+            if (have($item`repaid diaper`)) equip($item`repaid diaper`);
+            else tryEquip($item`Great Wolf's beastly trousers`);
 
-        adventureMacroAuto(
-            $location`Noob Cave`,
-            Macro.if_("!monstername sausage goblin", Macro.abort())
-                .trySkill($skill`lecture on relativity`)
-                .kill(),
-            Macro.if_("!monstername sausage goblin", Macro.abort())
-                .trySkill($skill`lecture on relativity`)
-                .kill()
-        );
-        while (inMultiFight()) runCombat();
-        setAutoAttack(0);
+            adventureMacroAuto(
+                $location`Noob Cave`,
+                Macro.if_("!monstername sausage goblin", Macro.abort())
+                    .trySkill($skill`lecture on relativity`)
+                    .kill(),
+                Macro.if_("!monstername sausage goblin", Macro.abort())
+                    .trySkill($skill`lecture on relativity`)
+                    .kill()
+            );
+            while (inMultiFight()) runCombat();
+            setAutoAttack(0);
+        } else print("You didn't have a guaranteed sausage gobbo, weird.", "red");
     }
 
     while (get("_machineTunnelsAdv") < 5) {

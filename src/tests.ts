@@ -685,6 +685,9 @@ export function spellPrep() {
         retrieveItem(1, $item`weeping willow wand`);
     }
 
+    // TODO: Maybe don't do this. or make it more robust.
+    pawWish($effect`Witch Breaded`);
+
     useFamiliar($familiar`Left-Hand Man`);
 
     spellOutfit();

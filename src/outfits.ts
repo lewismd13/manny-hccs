@@ -163,9 +163,10 @@ export function withOutfit<T>(outfit: Outfit, callback: () => T): T {
 }
 
 export default function uniform(...changes: (Item | [Item, Slot])[]): void {
+    cliExecute("parka spikolodon");
     const defaultUniform = {
         hat: $item`Iunion Crown`,
-        shirt: $item`fresh coat of paint`,
+        shirt: $items`Jurassic Parka, fresh coat of paint`,
         pants: $items`designer sweatpants, Cargo Cultist Shorts, old sweatpants`,
         weapon:
             get("_juneCleaverFightsLeft") > 0 && get("_juneCleaverEncounters") < 2

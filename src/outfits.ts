@@ -280,7 +280,7 @@ export function mysticalityOutfit(): void {
             shirt: $items`denim jacket, shoe ad T-shirt, fresh coat of paint`,
             pants: $items`pantogram pants, Cargo Cultist Shorts`,
             acc1: $item`your cowboy boots`,
-            acc2: $item`Retrospecs`,
+            acc2: $items`meteorite necklace, Retrospecs`,
             acc3: $item`battle broom`,
             familiar: $items`Abracandalabra`,
         },

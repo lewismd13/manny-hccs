@@ -125,7 +125,7 @@ export function coilPrep() {
     // Vote.
     if (get("_voteModifier") === "") {
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
-        visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=1&local%5B%5D=2");
+        visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=2&local%5B%5D=2");
         // Make sure initiative-tracking works.
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
     }

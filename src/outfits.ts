@@ -398,7 +398,11 @@ export function spellOutfit(): void {
         buy($item`obsidian nutcracker`);
     }
 
-    if (!inHardcore()) resources.pull($item`Staff of the Roaring Hearth`, 0);
+    if (!inHardcore()) {
+        if (myBasestat($stat`mysticality`) >= 250)
+            resources.pull($item`Staff of the Roaring Hearth`, 0);
+        else resources.pull($item`Staff of Simmering Hatred`, 0);
+    }
 
     const { familiar, famEquip } = {
         familiar: $familiar`Disembodied Hand`,
@@ -408,7 +412,7 @@ export function spellOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $items`sugar chapeau, Hollandaise helmet`,
-            weapon: $items`Staff of the Roaring Hearth, weeping willow wand`,
+            weapon: $items`Staff of the Roaring Hearth, Staff of Simmering Hatred, weeping willow wand`,
             offhand: [
                 $item`Abracandalabra`,
                 ...(inHardcore()

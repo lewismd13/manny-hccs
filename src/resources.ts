@@ -1,14 +1,15 @@
 import {
+    Effect,
+    Item,
+    Location,
+    Monster,
+    Skill,
     cliExecute,
     create,
     eat,
-    Effect,
     haveEffect,
-    Item,
     itemAmount,
     itemType,
-    Location,
-    Monster,
     myFullness,
     myInebriety,
     print,
@@ -16,14 +17,13 @@ import {
     retrieveItem,
     runChoice,
     runCombat,
-    Skill,
     toItem,
     toSkill,
     toUrl,
     useSkill,
     visitUrl,
 } from "kolmafia";
-import { $effect, $item, $skill, get, have, Macro } from "libram";
+import { $effect, $item, $skill, Macro, get, have } from "libram";
 import { pullIfPossible } from "./lib";
 
 export class ResourceTracker {

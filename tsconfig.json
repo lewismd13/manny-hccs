@@ -1,22 +1,21 @@
 {
-  "compilerOptions": {
-    "rootDir": "src",
-    "noEmit": true,
-    "allowUnreachableCode": false,
-    "allowUnusedLabels": false,
-    "declaration": false,
-    "forceConsistentCasingInFileNames": true,
-    "lib": ["es2020"],
-    "module": "commonjs",
-    "noEmitOnError": true,
-    "noFallthroughCasesInSwitch": true,
-    "noImplicitReturns": true,
-    "pretty": true,
-    "strict": true,
-    "target": "es2018",
-    "types": []
-  },
-  "include": ["src/**/*.ts"],
-  "exclude": ["src/hccs.ts"],
-  "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
+    "compilerOptions": {
+        "rootDir": "src",
+        "noEmit": true,
+        "allowUnreachableCode": false,
+        "allowUnusedLabels": false,
+        "declaration": false,
+        "forceConsistentCasingInFileNames": true,
+        "lib": ["es2020"],
+        "module": "commonjs",
+        "noEmitOnError": true,
+        "noFallthroughCasesInSwitch": true,
+        "noImplicitReturns": true,
+        "pretty": true,
+        "strict": true,
+        "target": "es2018",
+        "types": []
+    },
+    "include": ["src/**/*.ts"],
+    "isolatedModules": true /* Transpile each file as a separate module (similar to 'ts.transpileModule'). */
 }

@@ -1,4 +1,10 @@
 import {
+    Effect,
+    Item,
+    Monster,
+    Skill,
+    Slot,
+    Stat,
     abort,
     adv1,
     availableAmount,
@@ -9,7 +15,6 @@ import {
     cliExecute,
     create,
     eat,
-    Effect,
     equip,
     equippedAmount,
     equippedItem,
@@ -19,8 +24,6 @@ import {
     getProperty,
     haveEffect,
     inMultiFight,
-    Item,
-    Monster,
     mpCost,
     myClass,
     myFamiliar,
@@ -31,11 +34,9 @@ import {
     print,
     pullsRemaining,
     retrieveItem,
+    runChoice,
     setProperty,
     shopAmount,
-    Skill,
-    Slot,
-    Stat,
     storageAmount,
     takeShop,
     toEffect,
@@ -58,9 +59,9 @@ import {
     $skill,
     $slot,
     $stat,
-    adventureMacro,
     Clan,
     CommunityService,
+    adventureMacro,
     ensureEffect,
     get,
     getModifier,
@@ -382,10 +383,7 @@ export function horse(horse: string): void {
 }
 
 export function useDefaultFamiliar(): void {
-    if (get("camelSpit") < 100 && !CommunityService.WeaponDamage.isDone()) {
-        useFamiliar($familiar`Melodramedary`);
-        equip($item`dromedary drinking helmet`);
-    } else if (
+    if (
         availableAmount($item`short stack of pancakes`) === 0 &&
         haveEffect($effect`Shortly Stacked`) === 0 &&
         !CommunityService.FamiliarWeight.isDone()
@@ -509,5 +507,31 @@ export function unequip(item: Item): void {
         const slot = Slot.all().find((equipmentSlot) => equippedItem(equipmentSlot) === item);
         if (!slot) return;
         equip(slot, $item`none`);
+    }
+}
+
+export function pawWish(ef: Effect): boolean {
+    // TODO: check pref for wishes left once it exists
+    // eslint-disable-next-line libram/verify-constants
+    if (!have($item`cursed monkey's paw`)) {
+        print(`You don't have a monkey's paw`, "red");
+        return false;
+    }
+    if (get("_monkeyPawWishesUsed") > 4) {
+        print(`You don't have any monkey's paw wishes remaining`, "red");
+        return false;
+    }
+    if (have(ef)) {
+        print(`You already have ${ef.name}`, `yellow`);
+        return true;
+    } else {
+        visitUrl(`main.php?action=cmonk&pwd`);
+        runChoice(1, `wish=${ef.name}`);
+        visitUrl("main.php");
+        if (have(ef)) return true;
+        else {
+            print(`failed to wish for ${ef.name}`, `red`);
+            return false;
+        }
     }
 }

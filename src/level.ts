@@ -2,6 +2,7 @@ import {
     adv1,
     autosell,
     availableAmount,
+    canAdventure,
     cliExecute,
     containsText,
     create,
@@ -15,18 +16,16 @@ import {
     myClass,
     myLevel,
     myPrimestat,
-    numericModifier,
     print,
     retrieveItem,
-    round,
     runChoice,
     runCombat,
     setAutoAttack,
     setLocation,
     storageAmount,
     sweetSynthesis,
-    totalFreeRests,
     toUrl,
+    totalFreeRests,
     use,
     useFamiliar,
     useSkill,
@@ -42,12 +41,13 @@ import {
     $skill,
     $slot,
     $stat,
+    SourceTerminal,
+    TunnelOfLove,
+    Witchess,
     adventureMacroAuto,
     ensureEffect,
     get,
     have,
-    TunnelOfLove,
-    Witchess,
 } from "libram";
 import { propertyManager, resources } from ".";
 import Macro, { withMacro } from "./combat";
@@ -113,6 +113,8 @@ export function level(): void {
         ensurePotionEffect($effect`Mystically Oiled`, $item`ointment of the occult`);
     }
 
+    if (!have($item`meteorite necklace`)) resources.pull($item`meteorite necklace`, 0);
+
     ensureEffect($effect`You Learned Something Maybe!`);
 
     uniform();
@@ -162,6 +164,7 @@ export function level(): void {
 
     // Depending on crimbo candy summons, gets synth learning, possibly getting bugged beanie if it needs a tome summon
     // TODO: muscle support
+    /*
     if (
         availableAmount($item`Crimbo candied pecan`) > 1 &&
         availableAmount($item`Crimbo peppermint bark`) === 0 &&
@@ -182,16 +185,13 @@ export function level(): void {
         sweetSynthesis($item`Crimbo peppermint bark`, $item`peppermint sprout`);
     }
 
+    if (round(numericModifier("mysticality experience percent")) < 100) {
+        throw "Insufficient +stat%.";
+    }
+*/
     // synthesis: smart
     if (haveEffect($effect`Synthesis: Smart`) === 0) {
         sweetSynthesis($item`bag of many confections`, $item`Chubby and Plump bar`);
-    }
-    // This is the sequence of synthesis effects; synthesis_plan will, if possible, come up with a plan for allocating candy to each of these.
-    // SynthesisPlanner.synthesize($effect`Synthesis: Learning`);
-    // SynthesisPlanner.synthesize($effect`Synthesis: Smart`);
-
-    if (round(numericModifier("mysticality experience percent")) < 100) {
-        throw "Insufficient +stat%.";
     }
 
     cliExecute("briefcase enchantment spell hot");
@@ -242,6 +242,17 @@ export function level(): void {
     ensureEffect($effect`Drescher's Annoying Noise`);
     ensureEffect($effect`Pride of the Puffin`);
     ensureEffect($effect`Empathy`);
+    ensureEffect($effect`Song of Bravado`);
+    ensureEffect($effect`Blood Bond`);
+    ensureEffect($effect`Blood Bubble`);
+    ensureEffect($effect`Carol of the Hells`);
+    ensureEffect($effect`Big`);
+    ensureEffect($effect`Leash of Linguini`);
+    ensureEffect($effect`Rage of the Reindeer`);
+    ensureEffect($effect`Singer's Faithful Ocelot`);
+    ensureEffect($effect`Stevedave's Shanty of Superiority`);
+    ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
+
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
     // initialize snojo, picking myst for ice rice
@@ -262,9 +273,20 @@ export function level(): void {
     // back to saber now that we're done cleavering
     uniform();
 
+    SourceTerminal.educate($skill`Portscan`);
+
     while (get("_speakeasyFreeFights") < 3) {
         useDefaultFamiliar();
-        adventureMacroAuto($location`An Unusually Quiet Barroom Brawl`, Macro.attack().repeat());
+        adventureMacroAuto(
+            $location`An Unusually Quiet Barroom Brawl`,
+            Macro.externalIf(
+                !have($item`government cheese`),
+                Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
+            )
+                .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
+                .attack()
+                .repeat()
+        );
     }
 
     const missingOintment =
@@ -339,17 +361,6 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
-    ensureEffect($effect`Song of Bravado`);
-    ensureEffect($effect`Blood Bond`);
-    ensureEffect($effect`Blood Bubble`);
-    ensureEffect($effect`Carol of the Hells`);
-    ensureEffect($effect`Big`);
-    ensureEffect($effect`Leash of Linguini`);
-    ensureEffect($effect`Rage of the Reindeer`);
-    ensureEffect($effect`Singer's Faithful Ocelot`);
-    ensureEffect($effect`Stevedave's Shanty of Superiority`);
-    ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
-
     // LOV Tunnel
     if (!TunnelOfLove.isUsed()) {
         useDefaultFamiliar();
@@ -420,7 +431,7 @@ export function level(): void {
             setAutoAttack(0);
         }
     }
-
+    /*
     // Professor 10x free witchess knight if on halloween
     if (get("_witchessFights") === 3 && globalOptions.halloween) {
         cliExecute("umbrella ml");
@@ -443,7 +454,7 @@ export function level(): void {
         while (inMultiFight()) runCombat();
         setAutoAttack(0);
     }
-
+*/
     if (sausageFightGuaranteed() && storageAmount($item`magical sausage casing`) < 200) {
         equip($item`Kramco Sausage-o-Matic™`);
         useFamiliar($familiar`Pocket Professor`);
@@ -583,6 +594,13 @@ export function level(): void {
         ensureEffect($effect`Song of the North`);
         Witchess.fightPiece($monster`Witchess Queen`);
         setAutoAttack(0);
+    }
+
+    if (!have($item`anticheese`)) {
+        if (!canAdventure($location`South of the Border`)) cliExecute(`create bitchin' meatcar`);
+        if (!have($item`bitchin' meatcar`)) {
+            throw "You failed to make a meatcar, and can't access the desert";
+        } else visitUrl("place.php?whichplace=desertbeach&action=db_nukehouse");
     }
 
     if (globalOptions.debug)

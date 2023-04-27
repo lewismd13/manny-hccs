@@ -12,11 +12,12 @@ import {
     visitUrl,
 } from "kolmafia";
 import { $item, $slot, Clan, CommunityService, have } from "libram";
-import { get, PropertiesManager } from "libram/dist/property";
+import { PropertiesManager, get } from "libram/dist/property";
 import { stashpulls } from "./hccsAscend";
 import { level } from "./level";
 import { ResourceTracker } from "./resources";
 import {
+    WeaponPrep,
     coilPrep,
     famWtPrep,
     hotResPrep,
@@ -27,7 +28,6 @@ import {
     mysPrep,
     nonCombatPrep,
     spellPrep,
-    WeaponPrep,
 } from "./tests";
 
 export const resources = new ResourceTracker();

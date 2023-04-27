@@ -31,8 +31,6 @@ import {
     retrieveItem,
     runChoice,
     setAutoAttack,
-    setProperty,
-    sweetSynthesis,
     use,
     useFamiliar,
     useSkill,
@@ -51,16 +49,16 @@ import {
     $skill,
     $slot,
     $stat,
-    adventureMacro,
-    adventureMacroAuto,
     AsdonMartin,
     CombatLoversLocket,
     CommunityService,
+    SongBoom,
+    adventureMacro,
+    adventureMacroAuto,
     ensureEffect,
     get,
     have,
     set,
-    SongBoom,
 } from "libram";
 import { propertyManager, resources } from ".";
 import Macro from "./combat";
@@ -77,6 +75,8 @@ import {
     equalizeStat,
     incrementProperty,
     juneCleave,
+    libramBurn,
+    pawWish,
     setChoice,
     tryEnsureEffect,
     tryUse,
@@ -125,7 +125,7 @@ export function coilPrep() {
     // Vote.
     if (get("_voteModifier") === "") {
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
-        visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=1&local%5B%5D=2");
+        visitUrl("choice.php?option=1&whichchoice=1331&g=2&local%5B%5D=2&local%5B%5D=2");
         // Make sure initiative-tracking works.
         visitUrl("place.php?whichplace=town_right&action=townright_vote");
     }
@@ -178,12 +178,6 @@ export function coilPrep() {
     }
 
     equip($familiar`Shorter-Order Cook`, $item`tiny stillsuit`);
-
-    if (!have($item`dromedary drinking helmet`) && get("tomeSummons") < 3) {
-        resources.clipArt($item`box of Familiar Jacks`);
-        useFamiliar($familiar`Melodramedary`);
-        use($item`box of Familiar Jacks`);
-    }
 
     // fight a ghost and kramco before coiling
     function firstFights() {
@@ -591,11 +585,10 @@ export function WeaponPrep() {
 
     // fax ungulith (Saber YR)
     if (!have($item`corrupted marrow`) && !have($effect`Cowrruption`)) {
-        useFamiliar($familiar`Melodramedary`);
+        useDefaultFamiliar();
         equip($item`Fourth of May Cosplay Saber`, $slot`weapon`);
         setChoice(1387, 3);
         Macro.skill($skill`Meteor Shower`)
-            .skill($skill`%fn, spit on me!`)
             .skill($skill`Use the Force`)
             .setAutoAttack();
         if (CombatLoversLocket.availableLocketMonsters().includes($monster`ungulith`)) {
@@ -609,7 +602,6 @@ export function WeaponPrep() {
             resources.lockets.push($monster`ungulith`);
             resources.saberForces.push($effect`Meteor Showered`);
         }
-        if (have($effect`Spit Upon`) && get("camelSpit") === 100) setProperty("camelSpit", "0");
         if (have($effect`Meteor Showered`)) set("_meteorShowerUses", 1 + get("_meteorShowerUses"));
         setAutoAttack(0);
         useDefaultFamiliar();
@@ -693,6 +685,9 @@ export function spellPrep() {
         retrieveItem(1, $item`weeping willow wand`);
     }
 
+    // TODO: Maybe don't do this. or make it more robust.
+    pawWish($effect`Witch Breaded`);
+
     useFamiliar($familiar`Left-Hand Man`);
 
     spellOutfit();
@@ -719,15 +714,17 @@ export function itemPrep() {
         );
     }
 
+    if (have($item`government cheese`) && have($item`anticheese`)) {
+        create($item`government`);
+        use($item`government`);
+    }
+
     ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`The Spirit of Taking`);
     tryEnsureEffect($effect`Heart of Lavender`);
 
-    if (haveEffect($effect`Synthesis: Collection`) === 0) {
-        use(1, $item`peppermint sprout`);
-        sweetSynthesis($item`peppermint sprout`, $item`peppermint twist`);
-    }
+    ensureEffect($effect`Nearly All-Natural`);
 
     if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Observantly`, 1);
 
@@ -736,6 +733,8 @@ export function itemPrep() {
     }
 
     cliExecute("umbrella item");
+
+    libramBurn();
 
     ensureEffect($effect`Steely-Eyed Squint`);
 

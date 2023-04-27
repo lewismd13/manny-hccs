@@ -1,51 +1,51 @@
 {
-  "name": "manny-hccs",
-  "version": "0.0.1",
-  "description": "HCCS 1-day script",
-  "main": "KoLmafia/scripts/manny-hccs/mannyLoop.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "yarn run build:types && yarn run build:js",
-    "build:types": "tsc",
-    "build:js": "webpack",
-    "lint": "eslint src && prettier --check .",
-    "watch": "webpack --watch --progress"
-  },
-  "devDependencies": {
-    "@babel/cli": "^7.15.4",
-    "@babel/compat-data": "^7.15.0",
-    "@babel/core": "^7.15.5",
-    "@babel/plugin-proposal-class-properties": "^7.12.1",
-    "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
-    "@babel/preset-env": "^7.12.7",
-    "@babel/preset-typescript": "^7.12.7",
-    "@typescript-eslint/eslint-plugin": "^4.28.3",
-    "@typescript-eslint/parser": "^4.28.3",
-    "babel-loader": "^8.2.2",
-    "eslint": "^7.28.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-libram": "^0.2.27",
-    "prettier": "^2.3.1",
-    "set-value": "^4.1.0",
-    "typescript": "^4.0.3",
-    "webpack": "^5.8.0",
-    "webpack-cli": "^4.2.0"
-  },
-  "dependencies": {
-    "core-js": "^3.8.0",
-    "kolmafia": "^5.27119.0",
-    "libram": "^0.7.10"
-  },
-  "author": "Manendra 148308",
-  "license": "ISC",
-  "repository": "https://github.com/lewismd13/manny-hccs.git",
-  "keywords": [
-    "KoLMafia",
-    "JS",
-    "TS"
-  ],
-  "bugs": {
-    "url": "https://github.com/lewismd13/manny-hccs/issues"
-  },
-  "homepage": "https://github.com/lewismd13/manny-hccs"
+    "name": "manny-hccs",
+    "version": "0.0.1",
+    "description": "HCCS 1-day script",
+    "main": "KoLmafia/scripts/manny-hccs/mannyLoop.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "yarn run build:types && yarn run build:js",
+        "build:types": "tsc",
+        "build:js": "webpack",
+        "lint": "eslint src && prettier --check .",
+        "watch": "webpack --watch --progress"
+    },
+    "devDependencies": {
+        "@babel/cli": "^7.15.4",
+        "@babel/compat-data": "^7.15.0",
+        "@babel/core": "^7.15.5",
+        "@babel/plugin-proposal-class-properties": "^7.12.1",
+        "@babel/plugin-proposal-object-rest-spread": "^7.12.1",
+        "@babel/preset-env": "^7.12.7",
+        "@babel/preset-typescript": "^7.12.7",
+        "@typescript-eslint/eslint-plugin": "^5.59.0",
+        "@typescript-eslint/parser": "^5.59.0",
+        "babel-loader": "^8.2.2",
+        "eslint": "^8.38.0",
+        "eslint-config-prettier": "^8.8.0",
+        "eslint-plugin-libram": "^0.2.30",
+        "prettier": "^2.8.7",
+        "set-value": "^4.1.0",
+        "typescript": "^4.0.3",
+        "webpack": "^5.8.0",
+        "webpack-cli": "^4.2.0"
+    },
+    "dependencies": {
+        "core-js": "^3.8.0",
+        "kolmafia": "^5.27330.0",
+        "libram": "^0.7.17"
+    },
+    "author": "Manendra 148308",
+    "license": "ISC",
+    "repository": "https://github.com/lewismd13/manny-hccs.git",
+    "keywords": [
+        "KoLMafia",
+        "JS",
+        "TS"
+    ],
+    "bugs": {
+        "url": "https://github.com/lewismd13/manny-hccs/issues"
+    },
+    "homepage": "https://github.com/lewismd13/manny-hccs"
 }

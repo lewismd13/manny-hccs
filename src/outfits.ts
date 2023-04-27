@@ -1,4 +1,7 @@
 import {
+    Familiar,
+    Item,
+    Slot,
     abort,
     buy,
     canEquip,
@@ -6,17 +9,15 @@ import {
     equip,
     equippedAmount,
     equippedItem,
-    Familiar,
     inHardcore,
-    Item,
+    myBasestat,
     myFamiliar,
-    Slot,
     storageAmount,
     toSlot,
     use,
     useFamiliar,
 } from "kolmafia";
-import { $familiar, $item, $items, $slot, $slots, get, have } from "libram";
+import { $familiar, $item, $items, $slot, $slots, $stat, get, have } from "libram";
 import { resources } from ".";
 
 // shamelessly stolen wholesale from https://github.com/horrible-little-slime/phccs.git
@@ -34,7 +35,7 @@ const outfitSlots = [
     "familiar",
 ] as const;
 
-type OutfitSlots = typeof outfitSlots[number];
+type OutfitSlots = (typeof outfitSlots)[number];
 
 type OutfitParts = Partial<{ [slot in OutfitSlots]: Item }>;
 type OutfitAttempt = Partial<{ [slot in OutfitSlots]: Item | Item[] }>;
@@ -163,17 +164,18 @@ export function withOutfit<T>(outfit: Outfit, callback: () => T): T {
 }
 
 export default function uniform(...changes: (Item | [Item, Slot])[]): void {
+    cliExecute("parka spikolodon");
     const defaultUniform = {
         hat: $item`Iunion Crown`,
-        shirt: $item`fresh coat of paint`,
+        shirt: $items`Jurassic Parka, fresh coat of paint`,
         pants: $items`designer sweatpants, Cargo Cultist Shorts, old sweatpants`,
         weapon:
             get("_juneCleaverFightsLeft") > 0 && get("_juneCleaverEncounters") < 2
                 ? $item`June cleaver`
                 : $item`Fourth of May Cosplay Saber`,
         offhand: $items`unbreakable umbrella, familiar scrapbook`,
-        acc1: $items`meteorite necklace, your cowboy boots`,
-        acc2: $items`Powerful Glove`,
+        acc1: $items`meteorite necklace`,
+        acc2: $items`your cowboy boots, Powerful Glove`,
         acc3: $items`battle broom, Retrospecs`,
         back: $items`LOV Epaulettes, vampyric cloake`,
         familiar: null,
@@ -279,7 +281,7 @@ export function mysticalityOutfit(): void {
             shirt: $items`denim jacket, shoe ad T-shirt, fresh coat of paint`,
             pants: $items`pantogram pants, Cargo Cultist Shorts`,
             acc1: $item`your cowboy boots`,
-            acc2: $item`Retrospecs`,
+            acc2: $items`meteorite necklace, Retrospecs`,
             acc3: $item`battle broom`,
             familiar: $items`Abracandalabra`,
         },
@@ -292,7 +294,7 @@ export function itemOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $item`wad of used tape`,
-            weapon: $item`extra-large utility candle`,
+            weapon: $items`extra-large utility candle, Fourth of May Cosplay Saber`,
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
@@ -343,14 +345,19 @@ export function noncombatOutfit(): void {
 
 export function famweightOutfit(): void {
     if (!inHardcore()) {
-        resources.pull($item`tiny costume wardrobe`, 0);
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
         else resources.pull($item`Great Wolf's beastly trousers`, 0);
-        if (have($item`tiny costume wardrobe`) && storageAmount($item`moveable feast`)) {
+        if (storageAmount($item`moveable feast`)) {
             resources.pull($item`moveable feast`, 0);
-            useFamiliar($familiar`Doppelshifter`);
+            useFamiliar($familiar`Mini-Trainbot`);
             use($item`moveable feast`);
         }
+    }
+
+    if (!have($item`overloaded Yule battery`)) {
+        useFamiliar($familiar`Mini-Trainbot`);
+        resources.clipArt($item`box of Familiar Jacks`);
+        use($item`box of Familiar Jacks`);
     }
 
     Outfit.doYourBest(
@@ -362,9 +369,9 @@ export function famweightOutfit(): void {
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: $item`tiny costume wardrobe`,
+            familiar: $item`overloaded Yule battery`,
         },
-        $familiar`Doppelshifter`
+        $familiar`Mini-Trainbot`
     ).dress();
 }
 
@@ -392,7 +399,11 @@ export function spellOutfit(): void {
         buy($item`obsidian nutcracker`);
     }
 
-    if (!inHardcore()) resources.pull($item`Staff of the Roaring Hearth`, 0);
+    if (!inHardcore()) {
+        if (myBasestat($stat`mysticality`) >= 250)
+            resources.pull($item`Staff of the Roaring Hearth`, 0);
+        else resources.pull($item`Staff of Simmering Hatred`, 0);
+    }
 
     const { familiar, famEquip } = {
         familiar: $familiar`Disembodied Hand`,
@@ -402,7 +413,7 @@ export function spellOutfit(): void {
     Outfit.doYourBest(
         {
             hat: $items`sugar chapeau, Hollandaise helmet`,
-            weapon: $items`Staff of the Roaring Hearth, weeping willow wand`,
+            weapon: $items`Staff of the Roaring Hearth, Staff of Simmering Hatred, weeping willow wand`,
             offhand: [
                 $item`Abracandalabra`,
                 ...(inHardcore()

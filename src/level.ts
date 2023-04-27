@@ -611,6 +611,6 @@ export function level(): void {
 
     if (myLevel() >= 13) {
         tryUse(1, $item`astral six-pack`);
-        resources.consumeTo(5, $item`astral pilsner`);
+        resources.consumeTo(3, $item`astral pilsner`);
     } else throw "You're not level 13 at the end of leveling and that is bad";
 }

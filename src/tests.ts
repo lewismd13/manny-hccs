@@ -714,6 +714,8 @@ export function itemPrep() {
         use($item`government`);
     }
 
+    libramBurn();
+
     ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`The Spirit of Taking`);
@@ -728,8 +730,6 @@ export function itemPrep() {
     }
 
     cliExecute("umbrella item");
-
-    libramBurn();
 
     ensureEffect($effect`Steely-Eyed Squint`);
 

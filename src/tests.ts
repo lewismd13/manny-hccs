@@ -12,7 +12,6 @@ import {
     getProperty,
     handlingChoice,
     haveEffect,
-    inHardcore,
     logprint,
     maximize,
     mpCost,
@@ -431,10 +430,6 @@ export function famWtPrep() {
 
     // NC reward
     ensureEffect($effect`Robot Friends`);
-    if (inHardcore()) {
-        useFamiliar($familiar`Baby Bugged Bugbear`);
-        visitUrl("arena.php");
-    }
 
     // use freeruns at gingerbread city to get gingerbread spice latte
     if (

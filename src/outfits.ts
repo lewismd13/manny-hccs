@@ -291,6 +291,9 @@ export function mysticalityOutfit(): void {
 
 export function itemOutfit(): void {
     if (!have($item`wad of used tape`)) cliExecute("fold wad of used tape");
+
+    cliExecute("umbrella item");
+
     Outfit.doYourBest(
         {
             hat: $item`wad of used tape`,
@@ -298,7 +301,7 @@ export function itemOutfit(): void {
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
-            acc2: $item`gold detective badge`,
+            acc2: $items`Cincho de Mayo, gold detective badge`,
             acc3: $item`your cowboy boots`,
             familiar: $item`li'l ninja costume`,
         },

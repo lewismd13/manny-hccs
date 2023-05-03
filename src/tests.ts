@@ -729,8 +729,6 @@ export function itemPrep() {
         cliExecute("barrelprayer buff");
     }
 
-    cliExecute("umbrella item");
-
     ensureEffect($effect`Steely-Eyed Squint`);
 
     // only get Feeling Lost if this is the last test of the run

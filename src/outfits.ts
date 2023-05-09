@@ -222,7 +222,7 @@ export function moxieOutfit(): void {
         weapon: $item`Fourth of May Cosplay Saber`,
         pants: $item`Cargo Cultist Shorts`,
         acc1: $item`Beach Comb`,
-        acc2: $item`"I Voted!" sticker`,
+        acc2: $item`Cincho de Mayo`,
         acc3: $item`Retrospecs`,
         familiar: $item`miniature crystal ball`,
     }).dress();

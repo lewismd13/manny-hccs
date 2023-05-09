@@ -319,13 +319,6 @@ export function level(): void {
         // setProperty("mappingMonsters", "false");
     }
 
-    // Chateau rest
-    equip($slot`offhand`, $item`familiar scrapbook`);
-    while (get("timesRested") < totalFreeRests()) {
-        visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
-        libramBurn();
-    }
-
     while (oysterAvailable()) {
         useDefaultFamiliar();
         uniform();
@@ -360,6 +353,8 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
+    tryEnsureEffect($effect`Wisdom of Others`);
+
     // LOV Tunnel
     if (!TunnelOfLove.isUsed()) {
         useDefaultFamiliar();
@@ -385,6 +380,8 @@ export function level(): void {
         if (handlingChoice()) throw "Did not get all the way through LOV.";
     }
 
+    libramBurn();
+
     // TODO: get rid of withmacro, use CFF
     if (get("_godLobsterFights") < 3) {
         equip($item`LOV Epaulettes`);
@@ -397,6 +394,8 @@ export function level(): void {
             if (handlingChoice()) runChoice(1);
         }
     }
+
+    libramBurn();
 
     //witchess fights
     if (get("_witchessFights") < 5) {
@@ -454,6 +453,9 @@ export function level(): void {
         setAutoAttack(0);
     }
 */
+
+    libramBurn();
+
     if (
         storageAmount($item`magical sausage casing`) < 200 ||
         globalOptions.levelAggressively ||
@@ -485,6 +487,8 @@ export function level(): void {
             setAutoAttack(0);
         } else print("You didn't have a guaranteed sausage gobbo, weird.", "red");
     }
+    tryEnsureEffect($effect`Wisdom of Others`);
+    libramBurn();
 
     while (get("_machineTunnelsAdv") < 5) {
         // DMT noncombat. Run.
@@ -507,24 +511,11 @@ export function level(): void {
         );
     }
 
+    libramBurn();
+
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
-
-    // TODO: make this usable
-    while (
-        globalOptions.levelAggressively &&
-        get("lastCopyableMonster") === $monster`sausage goblin` &&
-        get("_backUpUses") < 11
-    ) {
-        useDefaultFamiliar();
-        if (get("backupCameraMode") !== "ml") cliExecute("backupcamera ml");
-        equip($item`backup camera`);
-        adventureMacroAuto(
-            $location`Noob Cave`,
-            Macro.skill($skill`Back-Up to your Last Enemy`).kill()
-        );
-    }
-
+    tryEnsureEffect($effect`Wisdom of Others`);
     // 10 normal free NEP fights
     while (get("_neverendingPartyFreeTurns") < 10) {
         useDefaultFamiliar();

@@ -426,7 +426,6 @@ export function famWtPrep() {
     ensureEffect($effect`Empathy`);
 
     // These should have fallen through all the way from leveling.
-    ensureEffect($effect`Fidoxene`);
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);

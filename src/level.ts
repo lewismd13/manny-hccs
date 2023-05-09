@@ -232,7 +232,6 @@ export function level(): void {
     ensureEffect($effect`Broad-Spectrum Vaccine`);
 
     // Plan is for these buffs to fall all the way through to item -> hot res -> fam weight.
-    ensureEffect($effect`Fidoxene`);
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Lack of Body-Building`);
     ensureEffect($effect`Puzzle Champ`);

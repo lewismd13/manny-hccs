@@ -14,7 +14,6 @@ import {
     myFamiliar,
     storageAmount,
     toSlot,
-    use,
     useFamiliar,
 } from "kolmafia";
 import { $familiar, $item, $items, $slot, $slots, $stat, get, have } from "libram";
@@ -222,7 +221,7 @@ export function moxieOutfit(): void {
         weapon: $item`Fourth of May Cosplay Saber`,
         pants: $item`Cargo Cultist Shorts`,
         acc1: $item`Beach Comb`,
-        acc2: $item`"I Voted!" sticker`,
+        acc2: $item`Cincho de Mayo`,
         acc3: $item`Retrospecs`,
         familiar: $item`miniature crystal ball`,
     }).dress();
@@ -291,6 +290,9 @@ export function mysticalityOutfit(): void {
 
 export function itemOutfit(): void {
     if (!have($item`wad of used tape`)) cliExecute("fold wad of used tape");
+
+    cliExecute("umbrella item");
+
     Outfit.doYourBest(
         {
             hat: $item`wad of used tape`,
@@ -298,7 +300,7 @@ export function itemOutfit(): void {
             offhand: $item`unbreakable umbrella`,
             back: $item`protonic accelerator pack`,
             acc1: $item`Guzzlr tablet`,
-            acc2: $item`gold detective badge`,
+            acc2: $items`Cincho de Mayo, gold detective badge`,
             acc3: $item`your cowboy boots`,
             familiar: $item`li'l ninja costume`,
         },
@@ -347,31 +349,22 @@ export function famweightOutfit(): void {
     if (!inHardcore()) {
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
         else resources.pull($item`Great Wolf's beastly trousers`, 0);
-        if (storageAmount($item`moveable feast`)) {
-            resources.pull($item`moveable feast`, 0);
-            useFamiliar($familiar`Mini-Trainbot`);
-            use($item`moveable feast`);
-        }
-    }
-
-    if (!have($item`overloaded Yule battery`)) {
-        useFamiliar($familiar`Mini-Trainbot`);
-        resources.clipArt($item`box of Familiar Jacks`);
-        use($item`box of Familiar Jacks`);
+        resources.pull($item`Stephen's lab coat`, 0);
     }
 
     Outfit.doYourBest(
         {
             hat: $item`Daylight Shavings Helmet`,
+            shirt: $items`Stephen's lab coat, Jurassic Parka`,
+            back: $items`Buddy Bjorn, protonic accelerator pack`,
             weapon: $item`Fourth of May Cosplay Saber`,
             offhand: $items`burning paper crane, familiar scrapbook`,
             pants: $items`repaid diaper, Great Wolf's beastly trousers, Cargo Cultist Shorts`,
             acc1: $item`Beach Comb`,
             acc2: $item`Brutal brogues`,
             acc3: $item`hewn moon-rune spoon`,
-            familiar: $item`overloaded Yule battery`,
         },
-        $familiar`Mini-Trainbot`
+        $familiar`Comma Chameleon`
     ).dress();
 }
 

@@ -45,7 +45,7 @@ const args = Args.create("hccsAscend", "Manny's script to ascend into a CS loop"
     }),
 });
 
-export const stashpulls = [$item`moveable feast`];
+export const stashpulls = [];
 
 export function createPermOptions(): { permSkills: Map<Skill, Lifestyle>; neverAbort: boolean } {
     return {

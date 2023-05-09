@@ -12,7 +12,7 @@ import {
     getProperty,
     handlingChoice,
     haveEffect,
-    inHardcore,
+    itemAmount,
     logprint,
     maximize,
     mpCost,
@@ -31,6 +31,7 @@ import {
     retrieveItem,
     runChoice,
     setAutoAttack,
+    toInt,
     use,
     useFamiliar,
     useSkill,
@@ -120,6 +121,11 @@ export function coilPrep() {
     if (get("_saberMod") === 0) {
         visitUrl("main.php?action=may4");
         runChoice(4);
+    }
+
+    // S.I.T. course voucher, insectologist for aftercore
+    if (!get("_sitCourseCompleted")) {
+        use($item`S.I.T. Course Completion Certificate`);
     }
 
     // Vote.
@@ -350,7 +356,6 @@ export function hotResPrep() {
     useFamiliar($familiar`Exotic Parrot`);
 
     // These should have fallen through all the way from leveling.
-    ensureEffect($effect`Fidoxene`);
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
@@ -423,18 +428,16 @@ export function famWtPrep() {
     ensureEffect($effect`Empathy`);
 
     // These should have fallen through all the way from leveling.
-    ensureEffect($effect`Fidoxene`);
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Puzzle Champ`);
     ensureEffect($effect`Billiards Belligerence`);
     tryEnsureEffect($effect`Shortly Stacked`);
 
+    if (itemAmount($item`love song of icy revenge`) >= 2 && !have($effect`Cold Hearted`))
+        use($item`love song of icy revenge`, 2);
+
     // NC reward
     ensureEffect($effect`Robot Friends`);
-    if (inHardcore()) {
-        useFamiliar($familiar`Baby Bugged Bugbear`);
-        visitUrl("arena.php");
-    }
 
     // use freeruns at gingerbread city to get gingerbread spice latte
     if (
@@ -518,6 +521,20 @@ export function famWtPrep() {
     if (mySign() !== "Platypus" && !get("moonTuned")) {
         unequip($item`hewn moon-rune spoon`);
         visitUrl("inv_use.php?whichitem=10254&pwd&doit=96&whichsign=4");
+    }
+
+    if (!have($item`homemade robot gear`) && get("commaFamiliar") !== $familiar`Homemade Robot`) {
+        useFamiliar($familiar`Homemade Robot`);
+        resources.clipArt($item`box of Familiar Jacks`);
+        use($item`box of Familiar Jacks`);
+    }
+
+    if (have($item`homemade robot gear`) && get("commaFamiliar") !== $familiar`Homemade Robot`) {
+        useFamiliar($familiar`Comma Chameleon`);
+        visitUrl(
+            `inv_equip.php?which=2&action=equip&whichitem=${toInt($item`homemade robot gear`)}&pwd`
+        );
+        visitUrl("charpane.php");
     }
 
     famweightOutfit();
@@ -719,6 +736,8 @@ export function itemPrep() {
         use($item`government`);
     }
 
+    libramBurn();
+
     ensureEffect($effect`Fat Leon's Phat Loot Lyric`);
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`The Spirit of Taking`);
@@ -731,10 +750,6 @@ export function itemPrep() {
     if (myClass() === $class`Pastamancer`) {
         cliExecute("barrelprayer buff");
     }
-
-    cliExecute("umbrella item");
-
-    libramBurn();
 
     ensureEffect($effect`Steely-Eyed Squint`);
 

@@ -1,6 +1,5 @@
 import {
     cliExecute,
-    equip,
     hippyStoneBroken,
     inHardcore,
     myDaycount,
@@ -11,10 +10,11 @@ import {
     setAutoAttack,
     visitUrl,
 } from "kolmafia";
-import { $item, $slot, Clan, CommunityService, have } from "libram";
+import { Clan, CommunityService, have } from "libram";
 import { PropertiesManager, get } from "libram/dist/property";
 import { stashpulls } from "./hccsAscend";
 import { level } from "./level";
+import { globalOptions } from "./options";
 import { ResourceTracker } from "./resources";
 import {
     WeaponPrep,
@@ -63,7 +63,12 @@ propertyManager.setChoices({
     1473: 1,
     1474: 1,
     1475: 1,
+    1494: 2, // SIT Course insectologist
 });
+
+if (globalOptions.debug) {
+    propertyManager.set({ logPreferenceChange: true });
+}
 
 Clan.join("Alliance From Heck");
 try {
@@ -77,11 +82,11 @@ try {
     assertTest(CommunityService.HotRes.run(hotResPrep, 1), "Hot Res");
     assertTest(CommunityService.Noncombat.run(nonCombatPrep, 1), "Noncombat");
     assertTest(CommunityService.FamiliarWeight.run(famWtPrep, 25), "Familiar Weight");
-    equip($item`none`, $slot`familiar`);
     assertTest(CommunityService.WeaponDamage.run(WeaponPrep, 1), "Weapon Damage");
-    assertTest(CommunityService.SpellDamage.run(spellPrep, 25), "Spell Damage");
+    assertTest(CommunityService.SpellDamage.run(spellPrep, 10), "Spell Damage");
     assertTest(CommunityService.BoozeDrop.run(itemPrep, 1), "Item");
 } finally {
+    visitUrl("desc_item.php?whichitem=408302806");
     propertyManager.resetAll();
     setAutoAttack(0);
     cliExecute("ccs default");

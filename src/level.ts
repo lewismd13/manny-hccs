@@ -23,9 +23,7 @@ import {
     setAutoAttack,
     setLocation,
     storageAmount,
-    sweetSynthesis,
     toUrl,
-    totalFreeRests,
     use,
     useFamiliar,
     useSkill,
@@ -190,10 +188,12 @@ export function level(): void {
     }
 */
     // synthesis: smart
+
+    /*
     if (haveEffect($effect`Synthesis: Smart`) === 0) {
         sweetSynthesis($item`bag of many confections`, $item`Chubby and Plump bar`);
     }
-
+    */
     cliExecute("briefcase enchantment spell hot");
     equip($slot`offhand`, $item`familiar scrapbook`);
 
@@ -232,7 +232,6 @@ export function level(): void {
     ensureEffect($effect`Broad-Spectrum Vaccine`);
 
     // Plan is for these buffs to fall all the way through to item -> hot res -> fam weight.
-    ensureEffect($effect`Fidoxene`);
     ensureEffect($effect`Do I Know You From Somewhere?`);
     ensureEffect($effect`Lack of Body-Building`);
     ensureEffect($effect`Puzzle Champ`);
@@ -252,6 +251,7 @@ export function level(): void {
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`Stevedave's Shanty of Superiority`);
     ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
+    tryEnsureEffect($effect`Party Soundtrack`);
 
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
@@ -275,18 +275,31 @@ export function level(): void {
 
     SourceTerminal.educate($skill`Portscan`);
 
+    if (!have($item`green mana`) && !have($effect`Giant Growth`)) resources.deck("Forest");
+
     while (get("_speakeasyFreeFights") < 3) {
-        useDefaultFamiliar();
-        adventureMacroAuto(
-            $location`An Unusually Quiet Barroom Brawl`,
-            Macro.externalIf(
-                !have($item`government cheese`),
-                Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
-            )
-                .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
-                .attack()
-                .repeat()
-        );
+        if (have($item`government cheese`) && !have($effect`Nanobrainy`)) {
+            useFamiliar($familiar`Nanorhino`);
+            adventureMacroAuto(
+                $location`An Unusually Quiet Barroom Brawl`,
+                Macro.trySkill($skill`Entangling Noodles`)
+                    .trySkill($skill`Giant Growth`)
+                    .attack()
+                    .repeat()
+            );
+        } else {
+            useDefaultFamiliar();
+            adventureMacroAuto(
+                $location`An Unusually Quiet Barroom Brawl`,
+                Macro.externalIf(
+                    !have($item`government cheese`),
+                    Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
+                )
+                    .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
+                    .attack()
+                    .repeat()
+            );
+        }
     }
 
     const missingOintment =
@@ -318,13 +331,6 @@ export function level(): void {
         if (handlingChoice()) runChoice(-1);
         resources.saberForces.push($item`cherry`);
         // setProperty("mappingMonsters", "false");
-    }
-
-    // Chateau rest
-    equip($slot`offhand`, $item`familiar scrapbook`);
-    while (get("timesRested") < totalFreeRests()) {
-        visitUrl("place.php?whichplace=chateau&action=chateau_restbox");
-        libramBurn();
     }
 
     while (oysterAvailable()) {
@@ -361,6 +367,8 @@ export function level(): void {
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
 
+    tryEnsureEffect($effect`Wisdom of Others`);
+
     // LOV Tunnel
     if (!TunnelOfLove.isUsed()) {
         useDefaultFamiliar();
@@ -386,6 +394,8 @@ export function level(): void {
         if (handlingChoice()) throw "Did not get all the way through LOV.";
     }
 
+    libramBurn();
+
     // TODO: get rid of withmacro, use CFF
     if (get("_godLobsterFights") < 3) {
         equip($item`LOV Epaulettes`);
@@ -398,6 +408,8 @@ export function level(): void {
             if (handlingChoice()) runChoice(1);
         }
     }
+
+    libramBurn();
 
     //witchess fights
     if (get("_witchessFights") < 5) {
@@ -455,6 +467,9 @@ export function level(): void {
         setAutoAttack(0);
     }
 */
+
+    libramBurn();
+
     if (
         storageAmount($item`magical sausage casing`) < 200 ||
         globalOptions.levelAggressively ||
@@ -486,6 +501,8 @@ export function level(): void {
             setAutoAttack(0);
         } else print("You didn't have a guaranteed sausage gobbo, weird.", "red");
     }
+    tryEnsureEffect($effect`Wisdom of Others`);
+    libramBurn();
 
     while (get("_machineTunnelsAdv") < 5) {
         // DMT noncombat. Run.
@@ -508,24 +525,11 @@ export function level(): void {
         );
     }
 
+    libramBurn();
+
     cliExecute("fold makeshift garbage shirt");
     uniform($item`makeshift garbage shirt`);
-
-    // TODO: make this usable
-    while (
-        globalOptions.levelAggressively &&
-        get("lastCopyableMonster") === $monster`sausage goblin` &&
-        get("_backUpUses") < 11
-    ) {
-        useDefaultFamiliar();
-        if (get("backupCameraMode") !== "ml") cliExecute("backupcamera ml");
-        equip($item`backup camera`);
-        adventureMacroAuto(
-            $location`Noob Cave`,
-            Macro.skill($skill`Back-Up to your Last Enemy`).kill()
-        );
-    }
-
+    tryEnsureEffect($effect`Wisdom of Others`);
     // 10 normal free NEP fights
     while (get("_neverendingPartyFreeTurns") < 10) {
         useDefaultFamiliar();
@@ -548,6 +552,9 @@ export function level(): void {
             }
         }
 
+        // TODO: once mafia isn't buggy, only cincho 9(?) times
+        if (have($effect`Inner Elf`)) equip($item`Cincho de Mayo`, $slot`acc2`);
+
         // NEP noncombat. Fight.
         propertyManager.setChoices({ [1324]: 5 });
         if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
@@ -558,10 +565,17 @@ export function level(): void {
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
             )
-                .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
+                .if_(
+                    $effect`Inner Elf`,
+                    Macro.trySkill($skill`Feel Pride`).trySkill(
+                        $skill`Cincho: Confetti Extravaganza`
+                    )
+                )
                 .kill()
         );
     }
+
+    libramBurn();
 
     // now do the mob hit fight
     if (!get("_gingerbreadMobHitUsed")) {

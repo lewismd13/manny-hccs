@@ -12,6 +12,7 @@ import {
     getProperty,
     handlingChoice,
     haveEffect,
+    itemAmount,
     logprint,
     maximize,
     mpCost,
@@ -30,6 +31,7 @@ import {
     retrieveItem,
     runChoice,
     setAutoAttack,
+    toInt,
     use,
     useFamiliar,
     useSkill,
@@ -519,6 +521,20 @@ export function famWtPrep() {
     if (mySign() !== "Platypus" && !get("moonTuned")) {
         unequip($item`hewn moon-rune spoon`);
         visitUrl("inv_use.php?whichitem=10254&pwd&doit=96&whichsign=4");
+    }
+
+    if (!have($item`homemade robot gear`) && get("commaFamiliar") !== $familiar`Homemade Robot`) {
+        useFamiliar($familiar`Homemade Robot`);
+        resources.clipArt($item`box of Familiar Jacks`);
+        use($item`box of Familiar Jacks`);
+    }
+
+    if (have($item`homemade robot gear`) && get("commaFamiliar") !== $familiar`Homemade Robot`) {
+        useFamiliar($familiar`Comma Chameleon`);
+        visitUrl(
+            `inv_equip.php?which=2&action=equip&whichitem=${toInt($item`homemade robot gear`)}&pwd`
+        );
+        visitUrl("charpane.php");
     }
 
     famweightOutfit();

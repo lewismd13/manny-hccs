@@ -121,6 +121,11 @@ export function coilPrep() {
         runChoice(4);
     }
 
+    // S.I.T. course voucher, insectologist for aftercore
+    if (!get("_sitCourseCompleted")) {
+        use($item`S.I.T. Course Completion Certificate`);
+    }
+
     // Vote.
     if (get("_voteModifier") === "") {
         visitUrl("place.php?whichplace=town_right&action=townright_vote");

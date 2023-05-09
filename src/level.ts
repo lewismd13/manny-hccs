@@ -23,9 +23,7 @@ import {
     setAutoAttack,
     setLocation,
     storageAmount,
-    sweetSynthesis,
     toUrl,
-    totalFreeRests,
     use,
     useFamiliar,
     useSkill,
@@ -190,10 +188,12 @@ export function level(): void {
     }
 */
     // synthesis: smart
+
+    /*
     if (haveEffect($effect`Synthesis: Smart`) === 0) {
         sweetSynthesis($item`bag of many confections`, $item`Chubby and Plump bar`);
     }
-
+    */
     cliExecute("briefcase enchantment spell hot");
     equip($slot`offhand`, $item`familiar scrapbook`);
 
@@ -251,6 +251,7 @@ export function level(): void {
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`Stevedave's Shanty of Superiority`);
     ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
+    tryEnsureEffect($effect`Party Soundtrack`);
 
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
@@ -274,18 +275,31 @@ export function level(): void {
 
     SourceTerminal.educate($skill`Portscan`);
 
+    if (!have($item`green mana`) && !have($effect`Giant Growth`)) resources.deck("Forest");
+
     while (get("_speakeasyFreeFights") < 3) {
-        useDefaultFamiliar();
-        adventureMacroAuto(
-            $location`An Unusually Quiet Barroom Brawl`,
-            Macro.externalIf(
-                !have($item`government cheese`),
-                Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
-            )
-                .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
-                .attack()
-                .repeat()
-        );
+        if (have($item`government cheese`) && !have($effect`Nanobrainy`)) {
+            useFamiliar($familiar`Nanorhino`);
+            adventureMacroAuto(
+                $location`An Unusually Quiet Barroom Brawl`,
+                Macro.trySkill($skill`Entangling Noodles`)
+                    .trySkill($skill`Giant Growth`)
+                    .attack()
+                    .repeat()
+            );
+        } else {
+            useDefaultFamiliar();
+            adventureMacroAuto(
+                $location`An Unusually Quiet Barroom Brawl`,
+                Macro.externalIf(
+                    !have($item`government cheese`),
+                    Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
+                )
+                    .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
+                    .attack()
+                    .repeat()
+            );
+        }
     }
 
     const missingOintment =
@@ -538,6 +552,9 @@ export function level(): void {
             }
         }
 
+        // TODO: once mafia isn't buggy, only cincho 9(?) times
+        if (have($effect`Inner Elf`)) equip($item`Cincho de Mayo`, $slot`acc2`);
+
         // NEP noncombat. Fight.
         propertyManager.setChoices({ [1324]: 5 });
         if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
@@ -548,10 +565,17 @@ export function level(): void {
                 get("_cosmicBowlingSkillsUsed") < 3,
                 Macro.trySkill($skill`Bowl Sideways`)
             )
-                .if_($effect`Inner Elf`, Macro.trySkill($skill`Feel Pride`))
+                .if_(
+                    $effect`Inner Elf`,
+                    Macro.trySkill($skill`Feel Pride`).trySkill(
+                        $skill`Cincho: Confetti Extravaganza`
+                    )
+                )
                 .kill()
         );
     }
+
+    libramBurn();
 
     // now do the mob hit fight
     if (!get("_gingerbreadMobHitUsed")) {

@@ -65,6 +65,10 @@ propertyManager.setChoices({
     1475: 1,
 });
 
+if (globalOptions.debug) {
+    propertyManager.set({ logPreferenceChange: true });
+}
+
 Clan.join("Alliance From Heck");
 try {
     assertTest(CommunityService.CoilWire.run(coilPrep, 60), "Coil Wire");

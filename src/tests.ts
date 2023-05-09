@@ -431,6 +431,9 @@ export function famWtPrep() {
     ensureEffect($effect`Billiards Belligerence`);
     tryEnsureEffect($effect`Shortly Stacked`);
 
+    if (itemAmount($item`love song of icy revenge`) >= 2 && !have($effect`Cold Hearted`))
+        use($item`love song of icy revenge`, 2);
+
     // NC reward
     ensureEffect($effect`Robot Friends`);
 

@@ -12,10 +12,9 @@ import {
     getProperty,
     handlingChoice,
     haveEffect,
-    itemAmount,
+    inHardcore,
     logprint,
     maximize,
-    mpCost,
     myBasestat,
     myBuffedstat,
     myClass,
@@ -433,9 +432,6 @@ export function famWtPrep() {
     ensureEffect($effect`Billiards Belligerence`);
     tryEnsureEffect($effect`Shortly Stacked`);
 
-    if (itemAmount($item`love song of icy revenge`) >= 2 && !have($effect`Cold Hearted`))
-        use($item`love song of icy revenge`, 2);
-
     // NC reward
     ensureEffect($effect`Robot Friends`);
 
@@ -499,24 +495,24 @@ export function famWtPrep() {
     }
 
     // try to get a green heart
-    if (!have($item`green candy heart`) && !have($effect`Heart of Green`)) {
-        while (mpCost($skill`Summon Candy Heart`) <= myMp() && !have($item`green candy heart`)) {
-            useSkill($skill`Summon Candy Heart`);
-        }
-
-        if (myMp() < mpCost($skill`Summon Candy Heart`) && !have($item`green candy heart`)) {
-            ensureMpSausage(1);
-
-            while (
-                mpCost($skill`Summon Candy Heart`) <= myMp() &&
-                !have($item`green candy heart`)
-            ) {
-                useSkill($skill`Summon Candy Heart`);
-            }
-        }
+    libramBurn();
+    if (
+        (!have($item`green candy heart`) && !have($effect`Heart of Green`)) ||
+        (!have($item`love song of icy revenge`) && !have($effect`Cold Hearted`))
+    ) {
+        ensureMpSausage(1);
+        libramBurn();
     }
 
     tryEnsureEffect($effect`Heart of Green`);
+
+    if (have($item`love song of icy revenge`) && !have($effect`Cold Hearted`)) {
+        use($item`love song of icy revenge`);
+    } else if (!get("_madTeaParty")) {
+        visitUrl("clan_viplounge.php?action=lookingglass&whichfloor=2");
+        retrieveItem($item`sombrero-mounted sparkler`);
+        ensureEffect($effect`You Can Really Taste the Dormouse`);
+    }
 
     if (mySign() !== "Platypus" && !get("moonTuned")) {
         unequip($item`hewn moon-rune spoon`);
@@ -638,7 +634,6 @@ export function WeaponPrep() {
 }
 
 export function spellPrep() {
-    ensureEffect($effect`Simmering`);
     ensureEffect($effect`Song of Sauce`);
     ensureEffect($effect`Carol of the Hells`);
     tryEnsureEffect($effect`Arched Eyebrow of the Archmage`);
@@ -650,6 +645,20 @@ export function spellPrep() {
     }
 
     ensureEffect($effect`Pisces in the Skyces`);
+
+    // TODO: Maybe don't do this. or make it more robust. Make this a 1/70 option, I think
+    if (globalOptions.seventy) {
+        pawWish($effect`Witch Breaded`);
+        resources.wish($effect`Sparkly!`);
+        if (!have($effect`AAA-Charged`) && !have($item`battery (AAA)`)) {
+            // Manually pull a single battery off the tree
+            visitUrl("inv_use.php?pwd&whichitem=10738");
+            visitUrl("choice.php?pwd&whichchoice=1448&option=1&pp=1");
+        }
+        ensureEffect($effect`AAA-Charged`);
+    } else {
+        ensureEffect($effect`Simmering`);
+    }
 
     // Pool buff
     if (get("_poolGames") < 3) ensureEffect($effect`Mental A-cue-ity`);
@@ -696,14 +705,15 @@ export function spellPrep() {
 
     if (availableAmount($item`LOV Elixir #6`) > 0) ensureEffect($effect`The Magic of LOV`);
 
+    resources.pull($item`Gene Tonic: Elf`, 14000);
+    tryEnsureEffect($effect`Human-Elf Hybrid`);
+
     // Get flimsy hardwood scraps.
+
     visitUrl("shop.php?whichshop=lathe");
-    if (availableAmount($item`flimsy hardwood scraps`) > 0) {
+    if (availableAmount($item`flimsy hardwood scraps`) > 0 && inHardcore()) {
         retrieveItem(1, $item`weeping willow wand`);
     }
-
-    // TODO: Maybe don't do this. or make it more robust.
-    pawWish($effect`Witch Breaded`);
 
     useFamiliar($familiar`Left-Hand Man`);
 

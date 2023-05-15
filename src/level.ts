@@ -251,7 +251,7 @@ export function level(): void {
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`Stevedave's Shanty of Superiority`);
     ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
-    tryEnsureEffect($effect`Party Soundtrack`);
+    // tryEnsureEffect($effect`Party Soundtrack`);
 
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
 
@@ -364,8 +364,7 @@ export function level(): void {
         );
     }
 
-    cliExecute("fold makeshift garbage shirt");
-    uniform($item`makeshift garbage shirt`);
+    uniform();
 
     tryEnsureEffect($effect`Wisdom of Others`);
 
@@ -410,6 +409,9 @@ export function level(): void {
     }
 
     libramBurn();
+
+    cliExecute("fold makeshift garbage shirt");
+    uniform($item`makeshift garbage shirt`);
 
     //witchess fights
     if (get("_witchessFights") < 5) {
@@ -504,6 +506,9 @@ export function level(): void {
     tryEnsureEffect($effect`Wisdom of Others`);
     libramBurn();
 
+    cliExecute("fold makeshift garbage shirt");
+    uniform($item`makeshift garbage shirt`);
+
     while (get("_machineTunnelsAdv") < 5) {
         // DMT noncombat. Run.
         propertyManager.setChoices({ [1119]: 5 });
@@ -527,8 +532,6 @@ export function level(): void {
 
     libramBurn();
 
-    cliExecute("fold makeshift garbage shirt");
-    uniform($item`makeshift garbage shirt`);
     tryEnsureEffect($effect`Wisdom of Others`);
     // 10 normal free NEP fights
     while (get("_neverendingPartyFreeTurns") < 10) {
@@ -553,10 +556,12 @@ export function level(): void {
         }
 
         // TODO: once mafia isn't buggy, only cincho 9(?) times
-        if (have($effect`Inner Elf`)) equip($item`Cincho de Mayo`, $slot`acc2`);
+        if (have($effect`Inner Elf`) && get("_cinchUsed", 0) < 45) {
+            equip($item`Cincho de Mayo`, $slot`acc2`);
+        }
 
         // NEP noncombat. Fight.
-        propertyManager.setChoices({ [1324]: 5 });
+        else propertyManager.setChoices({ [1324]: 5 });
         if (sausageFightGuaranteed()) equip($item`Kramco Sausage-o-Matic™`);
         else equip($item`unbreakable umbrella`);
         adventureMacroAuto(
@@ -567,8 +572,9 @@ export function level(): void {
             )
                 .if_(
                     $effect`Inner Elf`,
-                    Macro.trySkill($skill`Feel Pride`).trySkill(
-                        $skill`Cincho: Confetti Extravaganza`
+                    Macro.trySkill($skill`Feel Pride`).externalIf(
+                        get("_cinchUsed", 0) < 45,
+                        Macro.trySkill($skill`Cincho: Confetti Extravaganza`)
                     )
                 )
                 .kill()

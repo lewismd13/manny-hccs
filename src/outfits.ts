@@ -165,7 +165,7 @@ export function withOutfit<T>(outfit: Outfit, callback: () => T): T {
 export default function uniform(...changes: (Item | [Item, Slot])[]): void {
     cliExecute("parka spikolodon");
     const defaultUniform = {
-        hat: $item`Iunion Crown`,
+        hat: $item`Daylight Shavings Helmet`,
         shirt: $items`Jurassic Parka, fresh coat of paint`,
         pants: $items`designer sweatpants, Cargo Cultist Shorts, old sweatpants`,
         weapon:
@@ -349,7 +349,7 @@ export function famweightOutfit(): void {
     if (!inHardcore()) {
         if (storageAmount($item`repaid diaper`)) resources.pull($item`repaid diaper`, 0);
         else resources.pull($item`Great Wolf's beastly trousers`, 0);
-        resources.pull($item`Stephen's lab coat`, 0);
+        // resources.pull($item`Stephen's lab coat`, 0);
     }
 
     Outfit.doYourBest(

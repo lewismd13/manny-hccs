@@ -32,7 +32,7 @@ import {
 
 const args = Args.create("hccsAscend", "Manny's script to ascend into a CS loop", {
     core: Args.string({
-        help: "Hardcore or softcore",
+        help: "Hardcore or softcore. Hardcore hasn't been tested in a while and might be broken",
         options: [
             ["hard", "Ascend HCCS"],
             ["soft", "Ascend SCCS"],

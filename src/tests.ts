@@ -576,6 +576,7 @@ export function WeaponPrep() {
     if (myClass() !== $class`Turtle Tamer`) ensureEffect($effect`Disdain of the War Snapper`);
     ensureEffect($effect`Tenacity of the Snapper`);
     ensureSong($effect`Jackasses' Symphony of Destruction`);
+    tryEnsureEffect($effect`Imported Strength`);
 
     ensureEffect($effect`Billiards Belligerence`);
 

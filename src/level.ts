@@ -272,13 +272,13 @@ export function level(): void {
 
     // back to saber now that we're done cleavering
     uniform();
-
+    if (globalOptions.debug) print("DEBUG: this is the portscan/map/whatever spot");
     SourceTerminal.educate($skill`Portscan`);
 
     if (!have($item`green mana`) && !have($effect`Giant Growth`)) resources.deck("Forest");
 
     while (get("_speakeasyFreeFights") < 3) {
-        if (have($item`government cheese`) && !have($effect`Nanobrainy`)) {
+        if (!have($effect`Nanobrainy`)) {
             useFamiliar($familiar`Nanorhino`);
             adventureMacroAuto(
                 $location`An Unusually Quiet Barroom Brawl`,
@@ -288,17 +288,29 @@ export function level(): void {
                     .repeat()
             );
         } else {
-            useDefaultFamiliar();
-            adventureMacroAuto(
-                $location`An Unusually Quiet Barroom Brawl`,
-                Macro.externalIf(
-                    !have($item`government cheese`),
-                    Macro.if_(`!monstername "government agent"`, Macro.trySkill($skill`Portscan`))
-                )
-                    .if_(`monstername "Government agent"`, Macro.skill($skill`Feel Envy`))
-                    .attack()
-                    .repeat()
-            );
+            if (
+                (!have($item`government cheese`) || !have($item`imported taffy`)) &&
+                get("_speakeasyFreeFights") < 2
+            ) {
+                useDefaultFamiliar();
+                resources.mapMacro(
+                    $location`An Unusually Quiet Barroom Brawl`,
+                    $monster`goblin flapper`,
+                    Macro.trySkill($skill`Portscan`)
+                        .attack()
+                        .repeat()
+                );
+
+                adventureMacroAuto(
+                    $location`An Unusually Quiet Barroom Brawl`,
+                    Macro.if_(
+                        `monstername "Government agent"`,
+                        Macro.skill($skill`Feel Nostalgic`).skill($skill`Feel Envy`)
+                    )
+                        .attack()
+                        .repeat()
+                );
+            }
         }
     }
 

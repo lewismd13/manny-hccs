@@ -635,18 +635,6 @@ export function WeaponPrep() {
 }
 
 export function spellPrep() {
-    ensureEffect($effect`Song of Sauce`);
-    ensureEffect($effect`Carol of the Hells`);
-    tryEnsureEffect($effect`Arched Eyebrow of the Archmage`);
-    ensureSong($effect`Jackasses' Symphony of Destruction`);
-
-    if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
-        useSkill(1, $skill`Summon Alice's Army Cards`);
-        buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
-    }
-
-    ensureEffect($effect`Pisces in the Skyces`);
-
     // TODO: Maybe don't do this. or make it more robust. Make this a 1/70 option, I think
     if (globalOptions.seventy) {
         pawWish($effect`Witch Breaded`);
@@ -660,6 +648,18 @@ export function spellPrep() {
     } else {
         ensureEffect($effect`Simmering`);
     }
+
+    ensureEffect($effect`Song of Sauce`);
+    ensureEffect($effect`Carol of the Hells`);
+    tryEnsureEffect($effect`Arched Eyebrow of the Archmage`);
+    ensureSong($effect`Jackasses' Symphony of Destruction`);
+
+    if (!get("grimoire3Summons") && have($skill`Summon Alice's Army Cards`)) {
+        useSkill(1, $skill`Summon Alice's Army Cards`);
+        buy($coinmaster`Game Shoppe Snacks`, 1, $item`tobiko marble soda`);
+    }
+
+    ensureEffect($effect`Pisces in the Skyces`);
 
     // Pool buff
     if (get("_poolGames") < 3) ensureEffect($effect`Mental A-cue-ity`);

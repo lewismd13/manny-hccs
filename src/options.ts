@@ -1,6 +1,6 @@
 export const globalOptions = {
     levelAggressively: false,
-    debug: true,
+    debug: false,
     workshed: `Asdon`,
     halloween: false,
     seventy: false,

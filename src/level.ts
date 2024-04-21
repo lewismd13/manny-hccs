@@ -16,6 +16,7 @@ import {
     myClass,
     myLevel,
     myPrimestat,
+    numericModifier,
     print,
     retrieveItem,
     runChoice,
@@ -379,6 +380,12 @@ export function level(): void {
     uniform();
 
     tryEnsureEffect($effect`Wisdom of Others`);
+
+    print(
+        `lovdebug: I am about to start tunnel of lov and my itemdrop is currently ${numericModifier(
+            "item drop"
+        )}`
+    );
 
     // LOV Tunnel
     if (!TunnelOfLove.isUsed()) {

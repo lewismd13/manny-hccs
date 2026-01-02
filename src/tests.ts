@@ -326,6 +326,8 @@ export function nonCombatPrep() {
     ensureEffect($effect`Invisible Avatar`);
     ensureEffect($effect`Silent Running`);
     ensureEffect($effect`Feeling Lonely`);
+    // eslint-disable-next-line libram/verify-constants
+    tryEnsureEffect($effect`Hiding from Seekers`);
 
     useFamiliar($familiar`Disgeist`);
 
@@ -425,6 +427,8 @@ export function famWtPrep() {
     ensureEffect($effect`Blood Bond`);
     ensureEffect($effect`Leash of Linguini`);
     ensureEffect($effect`Empathy`);
+    // eslint-disable-next-line libram/verify-constants
+    ensureEffect($effect`Only Dogs Love a Drunken Sailor`);
 
     // These should have fallen through all the way from leveling.
     ensureEffect($effect`Do I Know You From Somewhere?`);
@@ -753,7 +757,8 @@ export function itemPrep() {
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`The Spirit of Taking`);
     tryEnsureEffect($effect`Heart of Lavender`);
-
+    // eslint-disable-next-line libram/verify-constants
+    ensureEffect($effect`Who's Going to Pay This Drunken Sailor?`);
     ensureEffect($effect`Nearly All-Natural`);
 
     if (globalOptions.workshed === "Asdon") AsdonMartin.drive($effect`Driving Observantly`, 1);

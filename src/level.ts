@@ -252,6 +252,8 @@ export function level(): void {
     ensureEffect($effect`Singer's Faithful Ocelot`);
     ensureEffect($effect`Stevedave's Shanty of Superiority`);
     ensureEffect($effect`Ur-Kel's Aria of Annoyance`);
+    // eslint-disable-next-line libram/verify-constants
+    ensureEffect($effect`I'm Smarter Than a Drunken Sailor`);
     // tryEnsureEffect($effect`Party Soundtrack`);
 
     if (myPrimestat() === $stat`Mysticality`) ensureEffect($effect`Inscrutable Gaze`);
@@ -492,7 +494,7 @@ export function level(): void {
     libramBurn();
 
     if (
-        storageAmount($item`magical sausage casing`) < 200 ||
+        storageAmount($item`magical sausage casing`) < 2000 ||
         globalOptions.levelAggressively ||
         globalOptions.halloween
     ) {
